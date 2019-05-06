@@ -19,6 +19,14 @@
           type="error"
           show-icon :closable="false">
         </el-alert>
+        <el-alert
+          v-show="activating"
+          title="账户未激活,是否激活"
+          type="error"
+          close-text="激活"
+          @close="sendMail"
+          show-icon>
+        </el-alert>
         <el-input
           type="email"
           placeholder="邮箱"
@@ -42,7 +50,9 @@
           type="error"
           show-icon :closable="false">
         </el-alert>
-        <h3><a href="">忘记密码？</a></h3>
+        <!--<h3><a href="">忘记密码？</a></h3>-->
+        <div v-loading.fullscreen.lock="fullscreenLoading" element-loading-text="提交中">
+        </div>
         <div class="lr-btn colors-bg" @click="login">登录</div>
         <div class="otherLogin">
           <a href="#"><i class="fa fa-fw fa-wechat"></i></a>
@@ -119,7 +129,7 @@
 </template>
 
 <script>
-  import {login, register} from '../api/api.js'
+  import {login, register,send} from '../api/api.js'
 
   export default {
     name: 'Login',
@@ -132,10 +142,11 @@
         newEmail: '',//新用户注册邮箱
         newPassword: '',//新用户注册密码
         newPassword2: '',//新用户注册重复密码
-        loginStatus: 0,//是否已经登录
+        loginStatus: 1,//是否已经登录
         emailErr: false,//登录邮箱格式错误
         passwordErr: false,//密码错误
         loginErr: false,//登录错误
+        activating: false,
         loginTitle: '用户名或密码错误',
         newUsernameErr: false,//新用户注册用户名错误
         newEmailErr: false,//新用户注册邮箱错误
@@ -149,12 +160,16 @@
 
 
     methods: {
-      changeStatus: function (val) {
-        Object.assign(this.$data, this.$options.data());
+
+      routeChange: function () {
+        let that = this;
         //获取传参的login
-        this.loginStatus = val;
+        that.loginStatus = that.$route.query.loginStatus === undefined ? 1 : parseInt(that.$route.query.loginStatus);
       },
 
+      changeStatus(val) {
+        this.loginStatus = val;
+      } ,
 
       loginEnterFun: function (e) {
         let keyCode = window.event ? e.keyCode : e.which;
@@ -186,8 +201,7 @@
               this.loginErr = true;
               this.loginTitle = '邮箱或密码错误';
             } else if (res.code === 1002) {//邮箱注册码未激活
-              this.loginErr = true;
-              this.loginTitle = '该邮箱注册码未激活，请前往邮箱激活';
+              this.activating= true;
             } else {
               this.loginErr = true;
               this.loginTitle = '登录失败';
@@ -196,6 +210,24 @@
           });
         }
       },
+
+      sendMail: function () {
+        let that = this;
+        that.fullscreenLoading = true;
+        let param = {
+          param: this.email,
+        };
+        send(param).then((res) => {
+          if (res.code === 0) {
+            setTimeout(function () {//注册中
+              that.fullscreenLoading = false;
+              that.$router.push({path: '/msg?urlState=default&email=' + that.email});
+            }, 1500);
+          }
+        }, () => {
+        });
+      },
+
 
       //注册
       registerEnterFun: function (e) {
@@ -258,15 +290,14 @@
 
     },
     watch: {
-      status(val){
-        this.loginStatus = val;
-      }
+      // 如果路由有变化，会再次执行该方法
+      '$route': 'routeChange'
     },
-    computed: {
-      status() {
-        return this.loginStatus;
-      }
-    },
+
+    //生命周期函数
+    created() {
+      this.routeChange();
+    }
   }
 </script>
 
@@ -348,7 +379,6 @@
   .loginBox .otherLogin {
     max-width: 320px;
     padding: 30px 40px;
-    background: #ddd;
     text-align: center;
     margin-left: -40px;
     margin-right: -40px;

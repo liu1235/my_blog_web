@@ -36,7 +36,7 @@
 </template>
 
 <script>
-  import {activation} from '../api/api.js'
+  import {activation, sendMail} from '../api/api.js'
 
   export default {
     name: 'Login',
@@ -44,7 +44,7 @@
       return {
         err2005: false,//是否展示注册进度条状态
         step: 1,//注册进度
-        stepStatus: '',
+        stepStatus: 'error',
         urlState: 'default',//重新注册
         email:'',//邮箱
       }
@@ -53,18 +53,19 @@
     methods: {
       //事件处理器
       routeChange: function () {
-        Object.assign(this.$data, this.$options.data());
+
         //获取传参的urlState状态码
         this.urlState = this.$route.query.urlState === undefined ? 'default' : this.$route.query.urlState;
         this.email = this.$route.query.email === undefined ? '' : this.$route.query.email;
         if (this.urlState === 'default') {
           this.err2005 = true;
           this.step = 1;
+          this.stepStatus = "";
         } else if (this.urlState === 'urlInvalid') {
           let param = this.$route.query.param === undefined ? '' : this.$route.query.param;
           //去后端进行激活操作
           if (param === null || param === '' || param === undefined) {
-            this.$router.push({path: '/msg?urlState=emailErr'});
+            this.$router.push({path: '/msg?urlState=emailErr&param=' + param});
           }
           let params = {
             param: param,
@@ -72,7 +73,7 @@
           activation(params).then((res) => {
             if (res.code === 0) {
               this.err2005 = true;
-              this.step = 1
+              this.step = 1;
               this.stepStatus = "success";
             } else if (res.code === 1003) {
               this.$router.push({path: '/msg?urlState=urlErr'});
@@ -111,9 +112,23 @@
       },
 
       //重新激活
-      activating: function () {
-        // this.err2005 = false;
-        // this.$router.push({path: '/login?loginStatus=0'});
+      activating(param) {
+        this.err2005 = true;
+        sendMail(param).then((res) => {
+          if (res.code === 0) {
+            this.err2005 = true;
+            this.step = 1;
+            this.stepStatus = "success";
+          } else {
+            this.$message({
+              message: "发送邮件失败",
+              type: 'error'
+            })
+           }
+        }, () => {
+        });
+
+        this.$router.push({path: '/msg?urlState=Illegal'});
       }
 
     },

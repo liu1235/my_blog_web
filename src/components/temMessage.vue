@@ -273,7 +273,7 @@
           }).then(() => {//确定，跳转至登录页面
             //储存当前页面路径，登录成功后跳回来
             localStorage.setItem('logUrl', this.$route.fullPath);
-            this.$router.push({path: '/login?login=1'});
+            this.$router.push({path: '/login?loginStatus=1'});
           }).catch(() => {
 
           });

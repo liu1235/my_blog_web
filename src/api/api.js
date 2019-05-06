@@ -69,6 +69,13 @@ export const logout = params => {
   return axios.post(`${base}/logout`, params).then(res => res.data);
 };
 
+
+//重新发送激活邮件
+export const send = params => {
+  return axios.post(`${base}/sendMail`, params).then(res => res.data);
+};
+
+
 //注册
 export const register = params => {
   return axios.post(`${base}/user/register`, params).then(res => res.data);
@@ -77,6 +84,11 @@ export const register = params => {
 //激活
 export const activation = params => {
   return axios.post(`${base}/user/activation`, params).then(res => res.data);
+};
+
+//重新发送激活邮件
+export const sendMail = params => {
+  return axios.post(`${base}/user/sendMail`, params).then(res => res.data);
 };
 
 
