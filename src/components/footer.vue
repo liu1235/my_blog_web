@@ -1,7 +1,7 @@
 <!-- 底部公用 -->
 <template>
   <!-- Aimee的 -->
-  <div v-if="this.$store.state.themeObj.user_start !== 0" class="footBack footBackQian">
+  <div  class="footBack footBackQian">
     <div class="footer-img"
          :style="{background:this.$store.state.themeObj.bottom_img?'url('+this.$store.state.themeObj.bottom_img+') no-repeat 50%':'url(static/img/footer01.png) no-repeat 50%'}">
     </div>
@@ -25,32 +25,6 @@
     </div>
     
   </div>
-  <!-- Qinlh的 -->
-  <div v-else class="footBack footBackHui">
-    <div class="footer-img">
-      <img :src="this.$store.state.themeObj.bottom_img ? this.$store.state.themeObj.bottom_img : '/static/img/footer01.png'"
-           alt="">
-    </div>
-    <div class="fContainer">
-      <p>
-        博客已萌萌哒运行<span v-html='longTime'>{{longTime}}</span><span class="timeJump">(●'◡'●)ﾉ♥</span>
-      </p>
-      <p>
-        托管于 <a href="https://gitee.com/qinlh/" target="_blank">GitHub</a>. <a
-        href="https://www.aliyun.com/?spm=a2c49.11131515.0.0.5Z9AkR" target="_blank">阿里云</a> 提供静态文件云存储服务. <a
-        href="https://tongji.baidu.com/web/welcome/login" target="_blank">百度统计</a> 提供网站统计服务. <a
-        href="https://www.cloudxns.net/Order/index.html" target="_blank">CloudXNS</a> 提供 DNS 解析服务.
-      </p>
-      <p>
-        © 2018 <a href="#">QinlhBlog</a>. 由 <a href="https://cn.vuejs.org/" target="_blank">Vue</a> 强力驱动. Theme By <a
-        href="https://diygod.me/" target="_blank">diygod.me</a>. 京ICP备17071595号-1.
-      </p>
-      <p>
-        <span>Made with</span> <img class="fHeart" src="/static/img/heart02.png" alt=""/> <span>by Qinlh.</span>
-      </p>
-    </div>
-  </div>
-
 </template>
 
 <script>
@@ -63,7 +37,7 @@
     },
     methods: { //事件处理器
       runTime: function () {//运行倒计时
-        let that = this;
+
         let oldTime = new Date('2016/06/01 00:00:00');
         let timer = setInterval(function () {
           let nowTime = new Date();
@@ -72,7 +46,7 @@
           let hours = parseInt(longTime / 1000 / 60 / 60 % 24, 10); //计算剩余的小时
           let minutes = parseInt(longTime / 1000 / 60 % 60, 10);//计算剩余的分钟
           let seconds = parseInt(longTime / 1000 % 60, 10);//计算剩余的秒数
-          that.longTime = days + "天" + hours + "小时" + minutes + "分" + seconds + "秒";
+          this.longTime = days + "天" + hours + "小时" + minutes + "分" + seconds + "秒";
         }, 1000)
       }
     },
@@ -81,8 +55,8 @@
     },
     created() { //生命周期函数
       //替换底部图片
-      let that = this;
-      that.runTime();
+
+      this.runTime();
     }
   }
 </script>

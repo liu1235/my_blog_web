@@ -75,12 +75,12 @@
 
     //生命周期函数
     created() {
-      let that = this;
+
       //获取用户赞赏数据
       AdmireData(function (msg) {
         // console.log(msg);
-        that.tableData = msg.data;
-        that.rewardData = msg.admire_code;
+        this.tableData = msg.data;
+        this.rewardData = msg.admire_code;
       })
     }
   }

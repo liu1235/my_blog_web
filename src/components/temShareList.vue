@@ -104,43 +104,43 @@
 
       //展示数据
       showSearchShowList: function (initPage) {
-        let that = this;
-        that.classId = (that.$route.query.classId === undefined ? 0 : parseInt(that.$route.query.classId));//获取传参的classId
+
+        this.classId = (this.$route.query.classId === undefined ? 0 : parseInt(this.$route.query.classId));//获取传参的classId
         //获取传参的keywords
-        that.keywords = that.$store.state.keywords;
-        that.classTwoId = that.$route.query.classTwoId === undefined ? '' : parseInt(that.$route.query.classTwoId);//获取传参的classtwoId
-        that.sendId = that.classTwoId ? that.classTwoId : that.classId;
-        that.level = that.keywords ? 0 : that.classTwoId ? 0 : 1;
+        this.keywords = this.$store.state.keywords;
+        this.classTwoId = this.$route.query.classTwoId === undefined ? '' : parseInt(this.$route.query.classTwoId);//获取传参的classtwoId
+        this.sendId = this.classTwoId ? this.classTwoId : this.classId;
+        this.level = this.keywords ? 0 : this.classTwoId ? 0 : 1;
 
         ArtClassData(function (msg) {
-          that.shareClass = msg;
+          this.shareClass = msg;
         });
 
 
         //判断当前显示的分类名称 以及子分类
-        for (let i = 0; i < that.shareClass.length; i++) {
-          if (that.classId === that.shareClass[i].class_id) {
-            that.className = that.shareClass[i].cate_name;
-            if (that.shareClass[i].childsSon && that.shareClass[i].childsSon.length > 0) {
-              that.sonClassList = that.shareClass[i].childsSon;
+        for (let i = 0; i < this.shareClass.length; i++) {
+          if (this.classId === this.shareClass[i].class_id) {
+            this.className = this.shareClass[i].cate_name;
+            if (this.shareClass[i].childsSon && this.shareClass[i].childsSon.length > 0) {
+              this.sonClassList = this.shareClass[i].childsSon;
             } else {
-              that.sonClassList = '';
+              this.sonClassList = '';
             }
           }
         }
 
 
         //初始化 文章id为0开始
-        that.artId = initPage ? 0 : that.artId;
-        ShowArticleAll(that.artId, that.sendId, that.keywords, that.level, (result) => {
+        this.artId = initPage ? 0 : this.artId;
+        ShowArticleAll(this.artId, this.sendId, this.keywords, this.level, (result) => {
           if (result.code === 1001) {
             let msg = result.data;
-            that.hasMore = !(msg.length > 0 && msg.length < 10);
-            that.articleList = initPage ? msg : that.articleList.concat(msg);
-            that.artId = msg[msg.length - 1].id;
+            this.hasMore = !(msg.length > 0 && msg.length < 10);
+            this.articleList = initPage ? msg : this.articleList.concat(msg);
+            this.artId = msg[msg.length - 1].id;
           } else {
-            that.hasMore = false;
-            that.articleList = initPage ? [] : that.articleList;
+            this.hasMore = false;
+            this.articleList = initPage ? [] : this.articleList;
           }
         })
       },
@@ -166,8 +166,8 @@
 
     created() { //生命周期函数
       // console.log(this.$route);
-      let that = this;
-      that.routeChange();
+
+      this.routeChange();
     }
   }
 </script>

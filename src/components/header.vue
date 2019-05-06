@@ -180,43 +180,38 @@
 
       //用户登录和注册跳转
       loginFun: function (msg) {
-        // console.log(msg);
         localStorage.setItem('logUrl', this.$route.fullPath);
-        // console.log(666,this.$router.currentRoute.fullPath);
         if (msg === 0) {
           this.$router.push({
-            path: '/login?login=0'
+            path: '/login?loginStatus=0'
           });
         } else {
           this.$router.push({
-            path: '/login?login=1'
+            path: '/login?loginStatus=1'
           });
         }
       },
 
       // 用户退出登录
       userLogout: function () {
-        let that = this;
         this.$confirm('是否确认退出?', '退出提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          // console.log(that.$route.path);
-          LoginOut(localStorage.getItem('accessToken'), function () {
-            //    console.log(result);
+          LoginOut(localStorage.getItem('x-access-token'), function () {
             if (localStorage.getItem('userInfo')) {
               localStorage.removeItem('userInfo');
-              that.hasLogin = false;
-              //    that.$router.replace({path:that.$route.fullPath});
+              this.hasLogin = false;
+              //    this.$router.replace({path:this.$route.fullPath});
               window.location.reload();
-              that.$message({
+              this.$message({
                 type: 'success',
                 message: '退出成功!'
               });
             }
-            if (that.$route.path === '/userInfo') {
-              that.$router.push({
+            if (this.$route.path === '/userInfo') {
+              this.$router.push({
                 path: '/'
               });
             }
@@ -228,27 +223,27 @@
       },
 
       routeChange: function () {
-        let that = this;
-        that.pMenu = true;
+
+        this.pMenu = true;
         this.activeIndex = this.$route.path === '/' ? '/home' : this.$route.path;
         if (localStorage.getItem('userInfo')) { //存储用户信息
-          that.hasLogin = true;
-          that.userInfo = JSON.parse(localStorage.getItem('userInfo'));
-          // console.log(that.userInfo);
+          this.hasLogin = true;
+          this.userInfo = JSON.parse(localStorage.getItem('userInfo'));
+          // console.log(this.userInfo);
         } else {
-          that.hasLogin = false;
+          this.hasLogin = false;
         }
 
         //文章分类
         ArtClassData(function (msg) {
           // console.log(msg);
-          that.classListObj = msg;
+          this.classListObj = msg;
         });
 
         //实验室项目列表获取
         navMenList(function (msg) {
           // console.log('实验室',msg);
-          that.projectList = msg;
+          this.projectList = msg;
         });
 
         if ((this.$route.name === "Share" || this.$route.name === "Home") && this.$store.state.keywords) {
@@ -270,7 +265,7 @@
 
     created() { //生命周期函数
       //判断当前页面是否被隐藏
-      let that = this;
+
       let hiddenProperty = 'hidden' in document ? 'hidden' :
         'webkitHidden' in document ? 'webkitHidden' :
           'mozHidden' in document ? 'mozHidden' :
@@ -282,8 +277,8 @@
           document.title = '藏好啦(つд⊂)';
         } else {
           document.title = '被发现啦(*´∇｀*)'; //当前窗口打开
-          if (that.$route.path !== '/detailShare') {
-            that.hasLogin = !!localStorage.getItem('userInfo');
+          if (this.$route.path !== '/detailShare') {
+            this.hasLogin = !!localStorage.getItem('userInfo');
           }
         }
       };
@@ -294,23 +289,23 @@
       //设置主题
       changeTheme(function (msg) {
         // console.log(msg);
-        that.$store.state.themeObj = msg;
-        // console.log('主题',that.$store.state.themeObj );
+        this.$store.state.themeObj = msg;
+        // console.log('主题',this.$store.state.themeObj );
       });
 
       //关于我的信息
       AboutMeData(function (msg) {
         // console.log('关于我',msg);
-        that.$store.state.aboutMeObj = msg
+        this.$store.state.aboutMeObj = msg
       })
     },
 
     //页面元素加载完成
     mounted() {
-      let that = this;
+
       let timer = setTimeout(function () {
         //打字机效果
-        Typeit(that.$store.state.themeObj.user_start, "#luke");
+        Typeit(this.$store.state.themeObj.user_start, "#luke");
         clearTimeout(timer);
       }, 500);
     }

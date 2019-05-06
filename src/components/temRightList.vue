@@ -121,21 +121,21 @@
     methods: { //事件处理器
       //do you like me  点击
       likeMeFun: function () {
-        let that = this;
+
         if (!this.likeMe) {
-          that.likeNum += 1;
+          this.likeNum += 1;
           GetLike(1, function () {
           })
         }
         this.likeMe = true;
         let timer = setTimeout(function () {
-          that.likeMe = false;
+          this.likeMe = false;
           clearTimeout(timer);
         }, 3000)
       },
 
       toTopFun: function () {
-        let that = this;
+
         this.gotoTop = false;
         this.going = true;
         let timer = setInterval(function () {
@@ -145,7 +145,7 @@
           document.documentElement.scrollTop = document.body.scrollTop = osTop + speed;
           //到达顶部，清除定时器
           if (osTop === 0) {
-            that.going = false;
+            this.going = false;
             clearInterval(timer);
             timer = null;
           }
@@ -157,31 +157,31 @@
     },
 
     created() { //生命周期函数
-      let that = this;
+
       window.onscroll = function () {
         let t = document.documentElement.scrollTop || document.body.scrollTop;
         // console.log(t);
-        if (!that.going) {
-          that.gotoTop = t > 600;
+        if (!this.going) {
+          this.gotoTop = t > 600;
         }
-        that.fixDo = t > 1200;
+        this.fixDo = t > 1200;
 
       };
 
       //查询浏览量最多的10篇文章数据
       ShowBrowseCount(function (data) {
         // console.log('浏览最多10文章数据',data);
-        that.browseList = data;
+        this.browseList = data;
       });
 
       //查询文章评论量最大的10篇文章
       ShowArtCommentCount(function (data) {
         // console.log('评论最多10文章数据',data);
-        that.artCommentList = data;
+        this.artCommentList = data;
       });
 
       showLikeData(function (data) {
-        that.likeNum = that.initLikeNum = data;
+        this.likeNum = this.initLikeNum = data;
       })
 
     }

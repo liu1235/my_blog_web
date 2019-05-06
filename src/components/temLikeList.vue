@@ -75,39 +75,39 @@
       },
 
       cancelLikeCollect: function (id) {
-        let that = this;
+
         // console.log(id);
-        getArtLikeCollect(that.userId, id, that.like, function (msg) {
+        getArtLikeCollect(this.userId, id, this.like, function (msg) {
           // console.log('取消成功',msg);
-          that.routeChange();
+          this.routeChange();
         })
       },
 
       //展示数据
       showLikeCollectList: function (initPage) {
-        let that = this;
+
         if (localStorage.getItem('userInfo')) {
-          that.userInfo = JSON.parse(localStorage.getItem('userInfo'));
-          that.userId = that.userInfo.userId;
-          // console.log(that.userInfo);
+          this.userInfo = JSON.parse(localStorage.getItem('userInfo'));
+          this.userId = this.userInfo.userId;
+          // console.log(this.userInfo);
         }
-        that.like = that.$route.query.like === undefined ? 1 : parseInt(that.$route.query.like);
-        that.articleName = that.$store.state.keywords;
-        // console.log(that.classId);
+        this.like = this.$route.query.like === undefined ? 1 : parseInt(this.$route.query.like);
+        this.articleName = this.$store.state.keywords;
+        // console.log(this.classId);
         if (initPage) {//初始化 文章id为0开始
-          that.artId = 0;
-          that.articleList = [];
+          this.artId = 0;
+          this.articleList = [];
         }
-        getLikeCollectList(that.userId, that.artId, that.articleName, that.like, (result) => {
+        getLikeCollectList(this.userId, this.artId, this.articleName, this.like, (result) => {
           if (result.code === 1001) {
             let msg = result.data;
             // console.log(result.data);
-            that.hasMore = !(msg.length > 0 && msg.length < 8);
-            that.articleList = that.articleList.concat(msg);
-            that.artId = msg[msg.length - 1].id;
-            // console.log(that.artId);
+            this.hasMore = !(msg.length > 0 && msg.length < 8);
+            this.articleList = this.articleList.concat(msg);
+            this.artId = msg[msg.length - 1].id;
+            // console.log(this.artId);
           } else if (result.code === 1003) {
-            that.hasMore = false;
+            this.hasMore = false;
           }
         })
       },
@@ -134,8 +134,8 @@
     //生命周期函数
     created() {
       // console.log(this.$route);
-      let that = this;
-      that.routeChange();
+
+      this.routeChange();
     }
   }
 </script>

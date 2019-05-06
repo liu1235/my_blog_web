@@ -19,14 +19,17 @@ export default new Router({
 			}
 		}
 	},
-	routes: [{
+	routes: [
+    //首页
+	  {
 			path: '/',
 			component: resolve => require(['../pages/Home.vue'], resolve),
 			meta: {
 				auth: true
 			},
 			name: 'Home'
-		}, //首页
+		},
+    //首页
 		{
 			path: '/home',
 			component: resolve => require(['../pages/Home.vue'], resolve),
@@ -34,7 +37,9 @@ export default new Router({
 				auth: true
 			},
 			name: 'Home'
-		}, //首页
+		},
+
+    //分类
 		{
 			path: '/share',
 			component: resolve => require(['../pages/Share.vue'], resolve),
@@ -42,7 +47,9 @@ export default new Router({
 				auth: true
 			},
 			name: 'Share'
-		}, //分类
+		},
+
+    //分享详情
 		{
 			path: '/detailShare',
 			component: resolve => require(['../pages/DetailShare.vue'], resolve),
@@ -50,7 +57,9 @@ export default new Router({
 				auth: true
 			},
 			name: 'DetailShare'
-		}, //分享详情
+		},
+
+    //赞赏
 		{
 			path: '/reward',
 			component: resolve => require(['../pages/Reward.vue'], resolve),
@@ -58,7 +67,9 @@ export default new Router({
 				auth: true
 			},
 			name: 'Reward'
-		}, //赞赏
+		},
+
+    //伙伴
 		{
 			path: '/friendsLink',
 			component: resolve => require(['../pages/FriendsLink.vue'], resolve),
@@ -66,7 +77,9 @@ export default new Router({
 				auth: true
 			},
 			name: 'FriendsLink'
-		}, //伙伴
+		},
+
+    //留言板
 		{
 			path: '/message',
 			component: resolve => require(['../pages/Message.vue'], resolve),
@@ -74,7 +87,9 @@ export default new Router({
 				auth: true
 			},
 			name: 'Message'
-		}, //留言板
+		},
+
+    //关于
 		{
 			path: '/about',
 			component: resolve => require(['../pages/About.vue'], resolve),
@@ -82,7 +97,9 @@ export default new Router({
 				auth: true
 			},
 			name: 'About'
-		}, //关于
+		},
+
+    //注册登录
 		{
 			path: '/login',
 			component: resolve => require(['../pages/Login.vue'], resolve),
@@ -90,7 +107,19 @@ export default new Router({
 				auth: false
 			},
 			name: 'Login'
-		}, //注册登录
+		},
+
+    //注册消息
+    {
+      path: '/msg',
+      component: resolve => require(['../pages/Msg.vue'], resolve),
+      meta: {
+        auth: false
+      },
+      name: 'Msg'
+    },
+
+    //用户个人中心
 		{
 			path: '/userInfo',
 			component: resolve => require(['../pages/UserInfo.vue'], resolve),
@@ -98,7 +127,9 @@ export default new Router({
 				auth: true
 			},
 			name: 'UserInfo'
-		}, //用户个人中心
+		},
+
+
 		{
 			path: '/likeCollect',
 			component: resolve => require(['../pages/LikeCollect.vue'], resolve),
@@ -106,6 +137,6 @@ export default new Router({
 				auth: true
 			},
 			name: 'LikeCollect'
-		} //用户个人中心
+		}
 	]
 })

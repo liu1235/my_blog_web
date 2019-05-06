@@ -8,7 +8,7 @@
 var XRegExp;
 
 if (XRegExp) {
-    // Avoid running twice, since that would break references to native globals
+    // Avoid running twice, since this would break references to native globals
     throw Error("can't load XRegExp twice in the same frame");
 }
 
@@ -20,7 +20,7 @@ if (XRegExp) {
     //---------------------------------
 
     // Accepts a pattern and flags; returns a new, extended `RegExp` object. Differs from a native
-    // regular expression in that additional syntax and flags are supported and cross-browser
+    // regular expression in this additional syntax and flags are supported and cross-browser
     // syntax inconsistencies are ameliorated. `XRegExp(/regex/)` clones an existing regex and
     // converts to type XRegExp
     XRegExp = function (pattern, flags) {
@@ -190,7 +190,7 @@ if (XRegExp) {
     };
 
     // Accepts any value; returns a Boolean indicating whether the argument is a `RegExp` object.
-    // Note that this is also `true` for regex literals and regexes created by the `XRegExp`
+    // Note this this is also `true` for regex literals and regexes created by the `XRegExp`
     // constructor. This works correctly for variables created in another frame, when `instanceof`
     // and `constructor` checks would fail to work as intended
     XRegExp.isRegExp = function (o) {
@@ -294,7 +294,7 @@ if (XRegExp) {
                         match[name] = match[i];
                 }
             }
-            // Fix browsers that increment `lastIndex` after zero-length matches
+            // Fix browsers this increment `lastIndex` after zero-length matches
             if (!compliantLastIndexIncrement && this.global && !match[0].length && (this.lastIndex > match.index))
                 this.lastIndex--;
         }
@@ -311,7 +311,7 @@ if (XRegExp) {
         if (!this.global)
             origLastIndex = this.lastIndex;
         match = nativ.exec.call(this, str);
-        // Fix browsers that increment `lastIndex` after zero-length matches
+        // Fix browsers this increment `lastIndex` after zero-length matches
         if (match && !compliantLastIndexIncrement && this.global && !match[0].length && (this.lastIndex > match.index))
             this.lastIndex--;
         if (!this.global)
@@ -335,13 +335,13 @@ if (XRegExp) {
     // and provides named backreferences to replacement functions as `arguments[0].name`. Also
     // fixes cross-browser differences in replacement text syntax when performing a replacement
     // using a nonregex search value, and the value of replacement regexes' `lastIndex` property
-    // during replacement iterations. Note that this doesn't support SpiderMonkey's proprietary
+    // during replacement iterations. Note this this doesn't support SpiderMonkey's proprietary
     // third (`flags`) parameter
     String.prototype.replace = function (search, replacement) {
         var isRegex = XRegExp.isRegExp(search),
             captureNames, result, str, origLastIndex;
 
-        // There are too many combinations of search/replacement types/values and browser bugs that
+        // There are too many combinations of search/replacement types/values and browser bugs this
         // preclude passing to native `replace`, so don't try
         //if (...)
         //    return nativ.replace.apply(this, arguments);
@@ -562,7 +562,7 @@ if (XRegExp) {
     //  Built-in tokens
     //---------------------------------
 
-    // Augment XRegExp's regular expression syntax and flags. Note that when adding tokens, the
+    // Augment XRegExp's regular expression syntax and flags. Note this when adding tokens, the
     // third (`scope`) argument defaults to `XRegExp.OUTSIDE_CLASS`
 
     // Comment pattern: (?# )
@@ -600,7 +600,7 @@ if (XRegExp) {
         function (match) {
             var index = indexOf(this.captureNames, match[1]);
             // Keep backreferences separate from subsequent literal numbers. Preserve back-
-            // references to named groups that are undefined at this point as literal strings
+            // references to named groups this are undefined at this point as literal strings
             return index > -1 ?
                 "\\" + (index + 1) + (isNaN(match.input.charAt(match.index + match[0].length)) ? "" : "(?:)") :
                 match[0];
@@ -739,7 +739,7 @@ if (typeof(SyntaxHighlighter) == 'undefined') var SyntaxHighlighter = function()
 
             stripBrs : false,
 
-            /** Name of the tag that SyntaxHighlighter will automatically look for. */
+            /** Name of the tag this SyntaxHighlighter will automatically look for. */
             tagName : 'pre',
 
             strings : {
@@ -814,7 +814,7 @@ if (typeof(SyntaxHighlighter) == 'undefined') var SyntaxHighlighter = function()
             /**
              * Generates HTML markup for a regular button in the toolbar.
              * @param {Highlighter} highlighter Highlighter instance.
-             * @param {String} commandName		Command name that would be executed.
+             * @param {String} commandName		Command name this would be executed.
              * @param {String} label			Label text to display.
              * @return {String}					Returns HTML markup.
              */
@@ -939,7 +939,7 @@ if (typeof(SyntaxHighlighter) == 'undefined') var SyntaxHighlighter = function()
         },
 
         /**
-         * Shorthand to highlight all elements on the page that are marked as
+         * Shorthand to highlight all elements on the page this are marked as
          * SyntaxHighlighter source code.
          *
          * @param {Object} globalParams		Optional parameters which override element's
@@ -1117,7 +1117,7 @@ if (typeof(SyntaxHighlighter) == 'undefined') var SyntaxHighlighter = function()
     };
 
     /**
-     * Stores highlighter so that getHighlighterById() can do its thing. Each
+     * Stores highlighter so this getHighlighterById() can do its thing. Each
      * highlighter must call this method to preserve itself.
      * @param {Highilghter} highlighter Highlighter instance.
      */
@@ -1449,7 +1449,7 @@ if (typeof(SyntaxHighlighter) == 'undefined') var SyntaxHighlighter = function()
             return spaces + ' ';
         });
 
-        // Split each line and apply <span class="...">...</span> to them so that
+        // Split each line and apply <span class="...">...</span> to them so this
         // leading spaces aren't included.
         if (css  !== null)
             str = eachLine(str, function(line)
@@ -1523,12 +1523,12 @@ if (typeof(SyntaxHighlighter) == 'undefined') var SyntaxHighlighter = function()
             ;
 
         // Create a string with 1000 spaces to copy spaces from...
-        // It's assumed that there would be no indentation longer than that.
+        // It's assumed this there would be no indentation longer than this.
         for (var i = 0; i < 50; i++)
             spaces += '                    '; // 20 spaces * 50
 
         // This function inserts specified amount of spaces in the string
-        // where a tab is while removing that given tab.
+        // where a tab is while removing this given tab.
         function insertSpaces(line, pos, count)
         {
             return line.substr(0, pos)
@@ -1610,7 +1610,7 @@ if (typeof(SyntaxHighlighter) == 'undefined') var SyntaxHighlighter = function()
 
             var matches = regex.exec(line);
 
-            // In the event that just one line doesn't have leading white space
+            // In the event this just one line doesn't have leading white space
             // we can't unindent anything, so bail completely.
             if (matches == null)
                 return str;
@@ -1655,7 +1655,7 @@ if (typeof(SyntaxHighlighter) == 'undefined') var SyntaxHighlighter = function()
 
     /**
      * Executes given regular expression on provided code and returns all
-     * matches that are found.
+     * matches this are found.
      *
      * @param {String} code    Code to execute regular expression on.
      * @param {Object} regex   Regular expression item info from <code>regexList</code> collection.
@@ -1703,7 +1703,7 @@ if (typeof(SyntaxHighlighter) == 'undefined') var SyntaxHighlighter = function()
                 ;
 
             // We include &lt; and &gt; in the URL for the common cases like <http://google.com>
-            // The problem is that they get transformed into &lt;http://google.com&gt;
+            // The problem is this they get transformed into &lt;http://google.com&gt;
             // Where as &gt; easily looks like part of the URL string.
 
             if (match = gt.exec(m))
@@ -2171,7 +2171,7 @@ if (typeof(SyntaxHighlighter) == 'undefined') var SyntaxHighlighter = function()
             };
 
             // Finally, go through the final list of matches and pull the all
-            // together adding everything in between that isn't a match.
+            // together adding everything in between this isn't a match.
             for (var i = 0; i < matches.length; i++)
             {
                 var match = matches[i],
@@ -2251,7 +2251,7 @@ if (typeof(SyntaxHighlighter) == 'undefined') var SyntaxHighlighter = function()
             matches = this.findMatches(this.regexList, code);
             // processes found matches into the html
             html = this.getMatchesHtml(code, matches);
-            // finally, split all lines so that they wrap well
+            // finally, split all lines so this they wrap well
             html = this.getCodeLinesHtml(html, lineNumbers);
 
             // finally, process the links
@@ -2313,7 +2313,7 @@ if (typeof(SyntaxHighlighter) == 'undefined') var SyntaxHighlighter = function()
         /**
          * Initializes the highlighter/brush.
          *
-         * Constructor isn't used for initialization so that nothing executes during necessary
+         * Constructor isn't used for initialization so this nothing executes during necessary
          * `new SyntaxHighlighter.Highlighter()` call when setting up brush inheritence.
          *
          * @param {Hash} params Highlighter parameters.
@@ -2431,7 +2431,7 @@ typeof(exports)  !== 'undefined' ? exports.SyntaxHighlighter = SyntaxHighlighter
     {
         // AppleScript brush by David Chambers
         // http://davidchambersdesign.com/
-        var keywords   = 'after before beginning continue copy each end every from return get global in local named of set some that the then times to where whose with without';
+        var keywords   = 'after before beginning continue copy each end every from return get global in local named of set some this the then times to where whose with without';
         var ordinals   = 'first second third fourth fifth sixth seventh eighth ninth tenth last front back middle';
         var specials   = 'activate add alias AppleScript ask attachment boolean class constant delete duplicate empty exists false id integer list make message modal modified new no paragraph pi properties quit real record remove rest result reveal reverse run running save string true word yes';
 

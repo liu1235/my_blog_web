@@ -221,34 +221,34 @@
 
       //发送留言
       sendMsg: function () {//留言
-        let that = this;
-        if (that.textarea) {
-          that.sendTip = '咻~~';
-          if (that.leaveId === 0) {
-            //   console.log(that.textarea,that.userId,that.aid,that.leavePid,that.pid);
-            setArticleComment(that.textarea, that.userId, that.aid, that.leavePid, that.pid, function (msg) {
+
+        if (this.textarea) {
+          this.sendTip = '咻~~';
+          if (this.leaveId === 0) {
+            //   console.log(this.textarea,this.userId,this.aid,this.leavePid,this.pid);
+            setArticleComment(this.textarea, this.userId, this.aid, this.leavePid, this.pid, function (msg) {
               //   console.log(msg);
-              that.textarea = '';
-              that.routeChange();
-              that.removeRespond();
+              this.textarea = '';
+              this.routeChange();
+              this.removeRespond();
               let timer02 = setTimeout(function () {
-                that.sendTip = '发送~';
+                this.sendTip = '发送~';
                 clearTimeout(timer02);
               }, 1000)
             })
           } else {
             //其他模块留言回复
-            setOuthComment(that.textarea, that.userId, that.aid, that.leaveId, that.leavePid, that.pid, function (msg) {
+            setOuthComment(this.textarea, this.userId, this.aid, this.leaveId, this.leavePid, this.pid, function (msg) {
               //   console.log(msg);
-              that.textarea = '';
-              that.removeRespond();
-              that.routeChange();
+              this.textarea = '';
+              this.removeRespond();
+              this.routeChange();
             })
           }
         } else {
-          that.sendTip = '内容不能为空~';
+          this.sendTip = '内容不能为空~';
           let timer = setTimeout(function () {
-            that.sendTip = '发送~';
+            this.sendTip = '发送~';
             clearTimeout(timer);
           }, 3000)
         }
@@ -257,7 +257,7 @@
       //回复留言
       respondMsg: function (leavePid, pid) {
         // console.log(leavePid,pid);
-        let that = this;
+
         if (localStorage.getItem('userInfo')) {
           let dom = event.currentTarget;
           dom = dom.parentNode;
@@ -266,14 +266,14 @@
           this.pid = pid;
           dom.appendChild(this.$refs.respondBox);
         } else {
-          that.$confirm('登录后即可点赞和收藏，是否前往登录页面?', '提示', {
+          this.$confirm('登录后即可点赞和收藏，是否前往登录页面?', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {//确定，跳转至登录页面
             //储存当前页面路径，登录成功后跳回来
-            localStorage.setItem('logUrl', that.$route.fullPath);
-            that.$router.push({path: '/login?login=1'});
+            localStorage.setItem('logUrl', this.$route.fullPath);
+            this.$router.push({path: '/login?login=1'});
           }).catch(() => {
 
           });
@@ -286,50 +286,50 @@
         this.$refs.tMsgBox.insertBefore(this.$refs.respondBox, this.$refs.listDom);
       },
       showCommentList: function (initData) {//评论列表
-        let that = this;
-        that.aid = that.$route.query.aid === undefined ? 1 : parseInt(that.$route.query.aid);//获取传参的aid
+
+        this.aid = this.$route.query.aid === undefined ? 1 : parseInt(this.$route.query.aid);//获取传参的aid
         //判断当前用户是否登录
         if (localStorage.getItem('userInfo')) {
-          that.hasLogin = true;
-          that.userInfo = JSON.parse(localStorage.getItem('userInfo'));
-          that.userId = that.userInfo.userId;
-          //   console.log(that.userInfo);
+          this.hasLogin = true;
+          this.userInfo = JSON.parse(localStorage.getItem('userInfo'));
+          this.userId = this.userInfo.userId;
+          //   console.log(this.userInfo);
         } else {
-          that.hasLogin = false;
+          this.hasLogin = false;
         }
         //是否重新加载数据 还是累计加载
-        that.pageId = initData ? 0 : that.pageId;
+        this.pageId = initData ? 0 : this.pageId;
 
         //公用设置数据方法
         function setData(result) {
           if (result.code === 1001) {//查询数据
             let msg = result.data;
             //   console.log("留言数据",result.data);
-            that.hasMore = !(msg.length > 0 && msg.length < 8);
-            that.commentList = initData ? msg : that.commentList.concat(msg);
-            that.pageId = msg[msg.length - 1].comment_id;
+            this.hasMore = !(msg.length > 0 && msg.length < 8);
+            this.commentList = initData ? msg : this.commentList.concat(msg);
+            this.pageId = msg[msg.length - 1].comment_id;
           } else {//查询数据为空
-            that.hasMore = false;
-            that.commentList = initData ? [] : that.commentList
+            this.hasMore = false;
+            this.commentList = initData ? [] : this.commentList
           }
         }
 
-        if (that.$route.name === 'DetailShare') {//文章列表的评论
-          that.leaveId = 0;
-          ArticleComment(that.aid, that.pageId, function (result) {//查询列表
+        if (this.$route.name === 'DetailShare') {//文章列表的评论
+          this.leaveId = 0;
+          ArticleComment(this.aid, this.pageId, function (result) {//查询列表
             setData(result);
           })
         } else {//其他评论
-          if (that.$route.name === 'Reward') {//（1：赞赏 2：友情链接 3：留言板 4：关于我）
-            that.leaveId = 1
-          } else if (that.$route.name === 'FriendsLink') {
-            that.leaveId = 2
-          } else if (that.$route.name === 'Message') {
-            that.leaveId = 3
-          } else if (that.$route.name === 'Aboutme') {
-            that.leaveId = 4
+          if (this.$route.name === 'Reward') {//（1：赞赏 2：友情链接 3：留言板 4：关于我）
+            this.leaveId = 1
+          } else if (this.$route.name === 'FriendsLink') {
+            this.leaveId = 2
+          } else if (this.$route.name === 'Message') {
+            this.leaveId = 3
+          } else if (this.$route.name === 'Aboutme') {
+            this.leaveId = 4
           }
-          OtherComment(that.leaveId, that.pageId, function (result) {
+          OtherComment(this.leaveId, this.pageId, function (result) {
             setData(result);
           })
 
@@ -358,8 +358,8 @@
 
     //生命周期函数
     created() {
-      let that = this;
-      that.routeChange();
+
+      this.routeChange();
     },
     mounted() {//页面加载完成后
 

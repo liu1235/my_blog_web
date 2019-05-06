@@ -29,10 +29,10 @@ export default {
 
     },
     created() { //生命周期函数
-        let that = this;
+
         FriendUrlData(function(msg){
             // console.log(msg);
-            that.friendsLink = msg;
+            this.friendsLink = msg;
         })
     }
 }

@@ -87,73 +87,73 @@
         return initDate(date, full);
       },
       likecollectHandle: function (islike) {//用户点击喜欢0,用户点击收藏1
-        let that = this;
+
         if (localStorage.getItem('userInfo')) {//判断是否登录
           let tip = '';
           if (islike === 1) {
-            if (!that.likeArt) {
-              that.likeCount += 1;
-              that.likeArt = true;
+            if (!this.likeArt) {
+              this.likeCount += 1;
+              this.likeArt = true;
               tip = '已点赞';
             } else {
-              that.likeCount -= 1;
-              that.likeArt = false;
+              this.likeCount -= 1;
+              this.likeArt = false;
               tip = '已取消点赞'
             }
 
           } else {
-            if (!that.collectArt) {
-              that.collectCount += 1;
-              that.collectArt = true;
+            if (!this.collectArt) {
+              this.collectCount += 1;
+              this.collectArt = true;
               tip = '已收藏';
             } else {
-              that.collectCount -= 1;
-              that.collectArt = false;
+              this.collectCount -= 1;
+              this.collectArt = false;
               tip = '已取消收藏';
             }
           }
-          getArtLikeCollect(that.userId, that.aid, islike, function (msg) {
+          getArtLikeCollect(this.userId, this.aid, islike, function (msg) {
             // console.log('喜欢收藏成功',msg);
-            that.$message({
+            this.$message({
               message: tip,
               type: 'success'
             });
           })
         } else {//未登录 前去登录。
-          that.$confirm('登录后即可点赞和收藏，是否前往登录页面?', '提示', {
+          this.$confirm('登录后即可点赞和收藏，是否前往登录页面?', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {//确定，跳转至登录页面
             //储存当前页面路径，登录成功后跳回来
-            localStorage.setItem('logUrl', that.$route.fullPath);
-            that.$router.push({path: '/login?login=1'});
+            localStorage.setItem('logUrl', this.$route.fullPath);
+            this.$router.push({path: '/login?login=1'});
           }).catch(() => {//取消关闭弹窗
 
           });
         }
       },
       routeChange: function () {
-        let that = this;
-        that.aid = that.$route.query.aid === undefined ? 1 : parseInt(that.$route.query.aid);//获取传参的aid
+
+        this.aid = this.$route.query.aid === undefined ? 1 : parseInt(this.$route.query.aid);//获取传参的aid
         //判断用户是否存在
         if (localStorage.getItem('userInfo')) {
-          that.hasLogin = true;
-          that.userInfo = JSON.parse(localStorage.getItem('userInfo'));
-          that.userId = that.userInfo.userId;
-          // console.log(that.userInfo);
+          this.hasLogin = true;
+          this.userInfo = JSON.parse(localStorage.getItem('userInfo'));
+          this.userId = this.userInfo.userId;
+          // console.log(this.userInfo);
         } else {
-          that.hasLogin = false;
+          this.hasLogin = false;
         }
         //获取详情接口
-        getArticleInfo(that.aid, that.userId, function (msg) {
+        getArticleInfo(this.aid, this.userId, function (msg) {
           // console.log('文章详情',msg);
-          that.detailObj = msg;
-          that.likeCount = msg.like_count ? msg.like_count : 0;
-          that.collectCount = msg.collect_count ? msg.collect_count : 0;
-          that.likeArt = msg.user_like_start === 0 ? false : true;
-          that.collectArt = msg.user_collect_start === 0 ? false : true;
-          that.create_time = initDate(that.detailObj.create_time, 'all');
+          this.detailObj = msg;
+          this.likeCount = msg.like_count ? msg.like_count : 0;
+          this.collectCount = msg.collect_count ? msg.collect_count : 0;
+          this.likeArt = msg.user_like_start === 0 ? false : true;
+          this.collectArt = msg.user_collect_start === 0 ? false : true;
+          this.create_time = initDate(this.detailObj.create_time, 'all');
         })
       }
     },

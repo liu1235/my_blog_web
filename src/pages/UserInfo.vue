@@ -246,53 +246,53 @@
 
       //保存编辑的用户信息
       saveInfoFun: function () {
-        let that = this;
 
-        if (!that.userInfoObj.username) { //昵称为必填
-          that.$message.error('昵称为必填项，请填写昵称');
+
+        if (!this.userInfoObj.username) { //昵称为必填
+          this.$message.error('昵称为必填项，请填写昵称');
           return;
         }
-        if (that.state) {
+        if (this.state) {
           let pattern = /(http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?/;
-          // console.log(pattern.test(that.userInfoObj.url));
-          if (!that.userInfoObj.url || !pattern.test(that.userInfoObj.url)) {//如果展示友链 网址为必填项
-            that.$message.error('请正确填写网址，如http://www.xxx.com');
+          // console.log(pattern.test(this.userInfoObj.url));
+          if (!this.userInfoObj.url || !pattern.test(this.userInfoObj.url)) {//如果展示友链 网址为必填项
+            this.$message.error('请正确填写网址，如http://www.xxx.com');
             return;
           }
-          if (!that.userInfoObj.name) {//如果展示友链 网址为必填项
-            that.$message.error('请填写网站名称');
+          if (!this.userInfoObj.name) {//如果展示友链 网址为必填项
+            this.$message.error('请填写网站名称');
             return;
           }
-          if (!that.userInfoObj.description) {//如果展示友链 网址为必填项
-            that.$message.error('请填写网站简介');
+          if (!this.userInfoObj.description) {//如果展示友链 网址为必填项
+            this.$message.error('请填写网站简介');
             return;
           }
 
         }
-        that.userInfoObj.state = Number(that.state);
-        UserInfoSave(that.userInfoObj, function (result) {//保存信息接口，返回展示页
-          that.$message.success('保存成功！');
-          that.isEdit = false;
-          that.routeChange();
+        this.userInfoObj.state = Number(this.state);
+        UserInfoSave(this.userInfoObj, function (result) {//保存信息接口，返回展示页
+          this.$message.success('保存成功！');
+          this.isEdit = false;
+          this.routeChange();
         })
 
       },
 
       //展示页面信息
       routeChange: function () {
-        let that = this;
+
         if (localStorage.getItem('userInfo')) {
-          that.hasLogin = true;
-          that.userInfo = JSON.parse(localStorage.getItem('userInfo'));
-          that.userId = that.userInfo.userId;
-          getUserInfo(that.userId, function (msg) {
-            that.userInfoObj = msg.data;
-            that.userInfoObj.head_start = 0;
-            that.userInfoObj.logo_start = 0;
-            that.state = msg.data.state === 1;
+          this.hasLogin = true;
+          this.userInfo = JSON.parse(localStorage.getItem('userInfo'));
+          this.userId = this.userInfo.userId;
+          getUserInfo(this.userId, function (msg) {
+            this.userInfoObj = msg.data;
+            this.userInfoObj.head_start = 0;
+            this.userInfoObj.logo_start = 0;
+            this.state = msg.data.state === 1;
           })
         } else {
-          that.hasLogin = false;
+          this.hasLogin = false;
         }
 
       }
