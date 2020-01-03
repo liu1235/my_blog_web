@@ -9,11 +9,11 @@
             <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect"
                      :router="true">
               <el-menu-item index="/home"><i class="fa fa-wa fa-home"></i> 首页</el-menu-item>
-              <el-submenu index="/share">
+              <el-submenu index="/blog">
                 <template slot="title"><i class="fa fa-wa fa-archive"></i> 分类</template>
                 <el-menu-item v-for="(item,index) in classListObj"
                               :key="'class1' + index"
-                              :index="'/share?classId=' + item.class_id">
+                              :index="'/blog?classId=' + item.class_id">
                   {{item.cate_name}}
                 </el-menu-item>
               </el-submenu>
@@ -30,7 +30,7 @@
               <el-menu-item index="/about"><i class="fa fa-wa fa-vcard"></i> 关于</el-menu-item>
               <div class="pcSearchBox">
                 <i class="el-icon-search pcSearchIcon"></i>
-                <div class="pcSearchInput" :class="input?'hasSearched':''">
+                <div class="pcSearchInput" :class="input ? 'hasSearched' : ''">
                   <el-input placeholder="搜索" icon="search" v-model="input" :on-icon-click="searchEnterFun"
                             @keyup.enter.native="searchEnterFun" @change="searchChangeFun">
                   </el-input>
@@ -70,10 +70,10 @@
                          @close="handleClose"
                          :unique-opened="true" :router="true">
                   <el-menu-item index="/home"><i class="fa fa-wa fa-home"></i> 首页</el-menu-item>
-                  <el-submenu index="/share">
+                  <el-submenu index="/blog">
                     <template slot="title"><i class="fa fa-wa fa-archive"></i> 分类</template>
                     <el-menu-item v-for="(item,index) in classListObj" :key="'class1'+index"
-                                  :index="'/share?classId='+item.class_id">{{item.cate_name}}
+                                  :index="'/blog?classId='+item.class_id">{{item.cate_name}}
                     </el-menu-item>
                   </el-submenu>
                   <!--<el-submenu index="2">-->
@@ -169,7 +169,7 @@
       searchEnterFun: function () {
         if (this.input) {
           this.$store.state.keywords = this.input;
-          this.$router.push({path: '/share?keywords=' + this.input});
+          this.$router.push({path: '/blog?keywords=' + this.input});
         }
       },
 
@@ -236,17 +236,15 @@
 
         //文章分类
         ArtClassData(function (msg) {
-          // console.log(msg);
           this.classListObj = msg;
         });
 
         //实验室项目列表获取
         navMenList(function (msg) {
-          // console.log('实验室',msg);
           this.projectList = msg;
         });
 
-        if ((this.$route.name === "Share" || this.$route.name === "Home") && this.$store.state.keywords) {
+        if ((this.$route.name === "blog" || this.$route.name === "Home") && this.$store.state.keywords) {
           this.input = this.$store.state.keywords;
         } else {
           this.input = '';

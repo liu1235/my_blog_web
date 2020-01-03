@@ -21,7 +21,7 @@
                     </span>
       </h2>
       <div class="ui label">
-        <a :href="'/share?classId='+detailObj.class_id">{{detailObj.cate_name}}</a>
+        <a :href="'/blog?classId='+detailObj.class_id">{{detailObj.cate_name}}</a>
       </div>
     </header>
     <div class="article-content" v-html="detailObj.content"></div>

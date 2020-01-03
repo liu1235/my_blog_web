@@ -5,7 +5,7 @@
     <div class="container">
       <el-row :gutter="30">
         <el-col :sm="24" :md="16" style="transition:all .5s ease-out;margin-bottom:30px;">
-          <wbc-shareList/>
+          <blog-list/>
         </el-col>
         <el-col :sm="24" :md="8">
           <wbc-rightList/>
@@ -19,7 +19,7 @@
 <script>
   import header from '../components/header.vue'
   import footer from '../components/footer.vue'
-  import temShareList from '../components/temShareList.vue'
+  import blog from '../components/blog.vue'
   import temRightList from '../components/temRightList.vue'
 
   export default {
@@ -32,7 +32,7 @@
     },
     components: { //定义组件
       'wbc-nav': header,
-      'wbc-shareList': temShareList,
+      'blog-list': blog,
       'wbc-rightList': temRightList,
       'wbc-footer': footer
     },

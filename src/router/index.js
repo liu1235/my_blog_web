@@ -20,12 +20,12 @@ let routes = [
 
   //分类
   {
-    path: '/share',
+    path: '/blog',
     component: resolve => require(['../pages/Share.vue'], resolve),
     meta: {
       auth: true
     },
-    name: 'Share'
+    name: 'blog'
   },
 
   //分享详情
