@@ -61,6 +61,7 @@
 
 <script>
   import {ArtClassData, initDate, ShowArticleAll} from '../utils/server.js'
+  import {getBlogList} from '../api/api.js'
 
   export default {
     name: 'Share',
@@ -165,8 +166,6 @@
     },
 
     created() { //生命周期函数
-      // console.log(this.$route);
-
       this.routeChange();
     }
   }

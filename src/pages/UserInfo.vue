@@ -1,7 +1,7 @@
 <!-- 用户中心 -->
 <template>
   <div>
-    <wbc-nav></wbc-nav>
+    <wbc-nav/>
     <div class="container">
       <div v-show="isEdit" class="commonBox">
         <header>
@@ -165,7 +165,7 @@
         </section>
       </div>
     </div>
-    <wbc-footer></wbc-footer>
+    <wbc-footer/>
   </div>
 </template>
 
@@ -173,7 +173,7 @@
   import header from '../components/header.vue'
   import footer from '../components/footer.vue'
   import {getUserInfo, UserInfoSave} from '../utils/server.js' //获取用户信息，保存用户信息
-  
+
   export default {
     name: 'UserInfo',
     data() { //选项 / 数据

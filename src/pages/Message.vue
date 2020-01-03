@@ -1,19 +1,19 @@
 <!-- 留言板 -->
 <template>
   <div>
-    <wbc-nav></wbc-nav>
+    <wbc-nav/>
     <div class="container">
       <el-row :gutter="30">
         <el-col :sm="24" :md="16" style="transition:all .5s ease-out;margin-bottom:30px;">
           <wbc-msg></wbc-msg>
-          <wbc-message></wbc-message>
+          <wbc-message/>
         </el-col>
         <el-col :sm="24" :md="8">
-          <wbc-rightList></wbc-rightList>
+          <wbc-rightList/>
         </el-col>
       </el-row>
     </div>
-    <wbc-footer></wbc-footer>
+    <wbc-footer/>
   </div>
 </template>
 

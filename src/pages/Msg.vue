@@ -46,7 +46,7 @@
         step: 1,//注册进度
         stepStatus: 'error',
         urlState: 'default',//重新注册
-        email:'',//邮箱
+        email: '',//邮箱
       }
     },
 
@@ -124,7 +124,7 @@
               message: "发送邮件失败",
               type: 'error'
             })
-           }
+          }
         }, () => {
         });
 

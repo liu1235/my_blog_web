@@ -1,9 +1,9 @@
 <!-- 用户喜欢和收藏列表 -->
 <template>
   <div>
-    <wbc-nav></wbc-nav>
-    <wbc-like></wbc-like>
-    <wbc-footer></wbc-footer>
+    <wbc-nav/>
+    <wbc-like/>
+    <wbc-footer/>
   </div>
 </template>
 

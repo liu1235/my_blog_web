@@ -129,7 +129,7 @@
 </template>
 
 <script>
-  import {login, register,send} from '../api/api.js'
+  import {login, register, send} from '../api/api.js'
 
   export default {
     name: 'Login',
@@ -169,7 +169,7 @@
 
       changeStatus(val) {
         this.loginStatus = val;
-      } ,
+      },
 
       loginEnterFun: function (e) {
         let keyCode = window.event ? e.keyCode : e.which;
@@ -201,7 +201,7 @@
               this.loginErr = true;
               this.loginTitle = '邮箱或密码错误';
             } else if (res.code === 1002) {//邮箱注册码未激活
-              this.activating= true;
+              this.activating = true;
             } else {
               this.loginErr = true;
               this.loginTitle = '登录失败';

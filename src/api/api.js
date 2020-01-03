@@ -92,3 +92,8 @@ export const sendMail = params => {
 };
 
 
+//获取博客列表数据
+
+export const getBlogList = params => {
+  return axios.post(`${base}/blog/list`, params).then(res => res.data);
+};
