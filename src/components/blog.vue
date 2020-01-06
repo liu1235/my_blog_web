@@ -20,8 +20,8 @@
             </span>
       <header>
         <h1>
-          <a :href="'/detailShare?aid='+ item.id" target="_blank">
-            {{item.title}}
+          <a href="#" target="_blank">
+            <router-link :to = '{path:"/detailShare",query:{bid: item.id}}'>{{item.title}}</router-link>
           </a>
         </h1>
         <h2>
@@ -48,8 +48,8 @@
         </p>
       </div>
       <div class="viewDetail">
-        <a class="colors-bg" :href="'/detailShare?aid='+item.id" target="_blank">
-          阅读全文>>
+        <a class="colors-bg" href="#" target="_blank">
+          <router-link :to = '{path:"/detailShare",query:{bid: item.id}}'>阅读全文>></router-link>
         </a>
       </div>
     </el-col>

@@ -2,9 +2,9 @@
 <template>
   <!-- Aimee的 -->
   <div  class="footBack footBackQian">
-    <div class="footer-img"
-         :style="{background:this.$store.state.themeObj.bottom_img?'url('+this.$store.state.themeObj.bottom_img+') no-repeat 50%':'url(static/img/footer01.png) no-repeat 50%'}">
-    </div>
+<!--    <div class="footer-img"-->
+<!--         :style="{background:this.$store.state.themeObj.bottom_img?'url('+this.$store.state.themeObj.bottom_img+') no-repeat 50%':'url(static/img/footer01.png) no-repeat 50%'}">-->
+<!--    </div>-->
     <div class="fContainer">
       <p>
         博客已萌萌哒运行<span v-html='longTime'>{{longTime}}</span><span class="timeJump">(●'◡'●)ﾉ♥</span>
@@ -23,7 +23,7 @@
         <span>Made with</span> <img class="fHeart" src="/static/img/heart02.png" alt=""/> <span>by Aimee.</span>
       </p>
     </div>
-    
+
   </div>
 </template>
 
@@ -31,7 +31,6 @@
   export default {
     data() { //选项 / 数据
       return {
-        footBg: "url(static/img/footer01.png) no-repeat 50%",//底部图片
         longTime: '',
       }
     },

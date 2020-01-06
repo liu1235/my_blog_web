@@ -111,7 +111,7 @@
         pBody: true,//表情打开控制
         commentList: '',//评论列表数据
         pageId: 0,//当前第几页
-        aid: 0,//文章id
+        bid: 0,//文章id
         hasMore: true,
         hasLogin: false,
         userId: '',//用户id
@@ -225,8 +225,8 @@
         if (this.textarea) {
           this.sendTip = '咻~~';
           if (this.leaveId === 0) {
-            //   console.log(this.textarea,this.userId,this.aid,this.leavePid,this.pid);
-            setArticleComment(this.textarea, this.userId, this.aid, this.leavePid, this.pid, function (msg) {
+            //   console.log(this.textarea,this.userId,this.bid,this.leavePid,this.pid);
+            setArticleComment(this.textarea, this.userId, this.bid, this.leavePid, this.pid, function (msg) {
               //   console.log(msg);
               this.textarea = '';
               this.routeChange();
@@ -238,7 +238,7 @@
             })
           } else {
             //其他模块留言回复
-            setOuthComment(this.textarea, this.userId, this.aid, this.leaveId, this.leavePid, this.pid, function (msg) {
+            setOuthComment(this.textarea, this.userId, this.bid, this.leaveId, this.leavePid, this.pid, function (msg) {
               //   console.log(msg);
               this.textarea = '';
               this.removeRespond();
@@ -287,7 +287,7 @@
       },
       showCommentList: function (initData) {//评论列表
 
-        this.aid = this.$route.query.aid === undefined ? 1 : parseInt(this.$route.query.aid);//获取传参的aid
+        this.bid = this.$route.query.bid === undefined ? 1 : parseInt(this.$route.query.bid);//获取传参的aid
         //判断当前用户是否登录
         if (localStorage.getItem('userInfo')) {
           this.hasLogin = true;
@@ -316,7 +316,7 @@
 
         if (this.$route.name === 'DetailShare') {//文章列表的评论
           this.leaveId = 0;
-          ArticleComment(this.aid, this.pageId, function (result) {//查询列表
+          ArticleComment(this.bid, this.pageId, function (result) {//查询列表
             setData(result);
           })
         } else {//其他评论

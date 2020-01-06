@@ -1,5 +1,7 @@
 import axios from 'axios'
 import {Message} from 'element-ui'
+import router from '../router/index'
+import global from '../Global'
 
 let base = "http://127.0.0.1:9000";
 //响应时间
@@ -33,12 +35,7 @@ axios.interceptors.response.use((res) => {
     });
     return Promise.reject(res);
   } else {
-    //错误
-    if (res.data.code === 1 || res.data.code === -1) {
-      Message.error({
-        message: res.data.message
-      });
-    }
+    processResponseData(res.data);
   }
   return res;
 
@@ -52,6 +49,26 @@ axios.interceptors.response.use((res) => {
   });
   return Promise.reject(error);
 });
+
+
+/**
+ * 错误信息提示
+ */
+export function processResponseData(data) {
+  if (data.code === global.RESP_CODE.LOGIN_FAIL) { //没有登录
+    sessionStorage.removeItem('user');
+    Message.error(data.message);
+    router.replace({path: 'login'})
+  } else if (data.code === global.RESP_CODE.ERROR) { //错误
+    Message.error(data.message);
+  } else if (data.code === global.RESP_CODE.VALID_FAIL) { //验证失败
+    Message.error(data.message);
+  } else if (data.code === global.RESP_CODE.AUTH_FAIL) { //无权限
+    Message.error(data.message);
+  } else if (data.code === global.RESP_CODE.PARAM_FAIL) { //统一接口部分参数为空
+    Message.error(data.message);
+  }
+}
 
 
 export function getUploadImgUrl() {
@@ -93,7 +110,35 @@ export const sendMail = params => {
 
 
 //获取博客列表数据
-
 export const getBlogList = params => {
   return axios.post(`${base}/blog/list`, params).then(res => res.data);
 };
+//获取博客列表数据
+export const getBlogDetail = params => {
+  return axios.post(`${base}/blog/detail`, params).then(res => res.data);
+};
+//获取最热的十条博客
+export const topBlogList = params => {
+  return axios.post(`${base}/blog/top-blog-list`, params).then(res => res.data);
+};
+
+
+//点赞博客
+export const like = params => {
+  return axios.post(`${base}/like-collect/like`, params).then(res => res.data);
+};
+//收藏博客
+export const collect = params => {
+  return axios.post(`${base}/like-collect/collect`, params).then(res => res.data);
+};
+
+//展示喜欢我统计数据
+export const likeMeData = params => {
+  return axios.post(`${base}/like-collect/like-me`, params).then(res => res.data);
+};
+
+//新增喜欢我统计数据
+export const addLikeMeData = params => {
+  return axios.post(`${base}/like-collect/add-like-me`, params).then(res => res.data);
+};
+

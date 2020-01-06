@@ -11,10 +11,10 @@ const router = new VueRouter({
 let routerApi = ['/userInfo'];
 
 router.beforeEach((to, from, next) => {
+  let user = JSON.parse(sessionStorage.getItem('userInfo'));
   if (to.path === '/login') {
     sessionStorage.removeItem('userInfo');
   }
-  let user = JSON.parse(sessionStorage.getItem('userInfo'));
   if (!user && to.path !== '/login') {
     if(routerApi.indexOf(to.path) > -1) {
       next({ path: '/login' });

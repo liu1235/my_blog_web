@@ -3,11 +3,9 @@
   <div class="rightListBox">
     <section>
       <div class="r1-head">
-        <img
-          :src="this.$store.state.themeObj.center_smailimg ? this.$store.state.themeObj.center_smailimg : 'static/img/headtou02.jpg'"
-          alt="">
-        <h1 v-if="this.$store.state.themeObj.user_start !== 0">
-          <span>女王</span>Aimee
+        <img src="static/img/headtou02.jpg" alt="">
+        <h1>
+          <span>liuzw</span>
         </h1>
       </div>
       <div class="r1-body">
@@ -57,7 +55,7 @@
       </h2>
       <ul class="rs3-textWidget">
         <li class="rs3-item" v-for="(item,index) in artCommentList" :key="'artCommentList'+index">
-          <a :href="'/detailShare?aid='+item.id" target="_blank">
+          <a :href="'/detailShare?bid='+item.id" target="_blank">
             <div class="rs3-photo">
               <img :src="item.avatar" :onerror="$store.state.errorImg" alt="">
             </div>
@@ -74,27 +72,24 @@
         大家都排队来看这些
       </h2>
       <ul>
-        <li v-for="(item,index) in browseList" :key="'browseList'+index">
-          <a :href="'/detailShare?aid='+item.id" target="_blank">{{item.title}}</a> —— {{item.browse_count}} 次围观
+        <li v-for="(item,index) in topBlogList" :key="'topBlogList'+ index">
+          <a href="#" target="_blank">
+            <router-link :to='{path:"/detailShare", query:{bid: item.id}}'>{{item.title}}</router-link>
+          </a> —— {{item.browse_count}} 次围观
         </li>
       </ul>
     </section>
     <!-- 右侧上滑小图片 -->
-    <div v-if="this.$store.state.themeObj.user_start !==0" :class="gotoTop?'toTop hidden':'toTop goTop hidden'"
+    <div :class="gotoTop ? 'toTop hidden':'toTop goTop hidden'"
          @click="toTopFun">
-      <img :src="this.$store.state.themeObj.right_img?this.$store.state.themeObj.right_img:'static/img/scroll.png'"
-           alt="">
-    </div>
-    <div v-else :class="gotoTop?'toTophui hidden':'toTophui goTophui hidden'" @click="toTopFun">
-      <img :src="this.$store.state.themeObj.right_img?this.$store.state.themeObj.right_img:'static/img/scroll.png'"
-           alt="">
+      <img src="static/img/scroll.png" alt="">
     </div>
   </div>
 </template>
 
 
 <script>
-  import {GetLike, ShowArtCommentCount, ShowBrowseCount, showLikeData} from '../utils/server.js'
+  import {addLikeMeData, likeMeData, topBlogList} from '../api/api.js'
 
   export default {
     data() { //选项 / 数据
@@ -103,7 +98,7 @@
         likeMe: false,
         gotoTop: false,//返回顶部
         going: false,//是否正在执行上滑动作
-        browseList: '',//浏览量最多
+        topBlogList: '',//浏览量最多
         artCommentList: '',//评论量最多
         likeNum: 0,//do you like me 点击量
         initLikeNum: 0,//初始化喜欢数量
@@ -121,35 +116,35 @@
     methods: { //事件处理器
       //do you like me  点击
       likeMeFun: function () {
-
         if (!this.likeMe) {
+          this.likeMe = true;
           this.likeNum += 1;
-          GetLike(1, function () {
-          })
+          addLikeMeData({}).then(() => {
+          });
+        } else {
+          let that = this;
+          setTimeout(function () {
+            that.likeMe = false;
+          }, 3000);
         }
-        this.likeMe = true;
-        let timer = setTimeout(function () {
-          this.likeMe = false;
-          clearTimeout(timer);
-        }, 3000)
+
       },
 
       toTopFun: function () {
-
         this.gotoTop = false;
         this.going = true;
-        let timer = setInterval(function () {
-          //获取滚动条距离顶部高度
-          let osTop = document.documentElement.scrollTop || document.body.scrollTop;
-          let speed = Math.floor(-osTop / 7);
-          document.documentElement.scrollTop = document.body.scrollTop = osTop + speed;
-          //到达顶部，清除定时器
-          if (osTop === 0) {
-            this.going = false;
-            clearInterval(timer);
-            timer = null;
-          }
-        }, 30);
+        // let timer = setInterval(function () {
+        //   //获取滚动条距离顶部高度
+        //   let osTop = document.documentElement.scrollTop || document.body.scrollTop;
+        //   let speed = Math.floor(-osTop / 7);
+        //   document.documentElement.scrollTop = document.body.scrollTop = osTop + speed;
+        //   //到达顶部，清除定时器
+        //   if (osTop === 0) {
+        //     this.gotoTop = false;
+        //     clearInterval(timer);
+        //     timer = null;
+        //   }
+        // }, 30);
       },
     },
     components: { //定义组件
@@ -160,29 +155,31 @@
 
       window.onscroll = function () {
         let t = document.documentElement.scrollTop || document.body.scrollTop;
-        // console.log(t);
         if (!this.going) {
           this.gotoTop = t > 600;
         }
         this.fixDo = t > 1200;
-
       };
 
       //查询浏览量最多的10篇文章数据
-      ShowBrowseCount(function (data) {
-        // console.log('浏览最多10文章数据',data);
-        this.browseList = data;
+      topBlogList().then((res) => {
+        if (this.GLOBAL.isResponseSuccess(res)) {
+          this.topBlogList = res.data;
+        }
       });
 
       //查询文章评论量最大的10篇文章
-      ShowArtCommentCount(function (data) {
-        // console.log('评论最多10文章数据',data);
-        this.artCommentList = data;
-      });
+      // ShowArtCommentCount(function (data) {
+      //   // console.log('评论最多10文章数据',data);
+      //   this.artCommentList = data;
+      // });
 
-      showLikeData(function (data) {
-        this.likeNum = this.initLikeNum = data;
-      })
+      //
+      likeMeData({}).then((res) => {
+        if (this.GLOBAL.isResponseSuccess(res)) {
+          this.likeNum = res.data;
+        }
+      });
 
     }
   }
@@ -406,6 +403,7 @@
 
   /*回到顶部*/
   /*返回到顶部*/
+
   .toTop {
     position: fixed;
     right: 40px;
@@ -421,39 +419,9 @@
     top: -950px;
   }
 
-  .toTop img, .toTophui img {
+  .toTop img {
     width: 100%;
     height: auto;
   }
 
-  .toTophui {
-    position: fixed;
-    right: 10px;
-    bottom: 80px;
-    z-index: 99;
-    width: 120px;
-    height: 120px;
-    transition: all .5s 0.3s ease-in-out;
-    cursor: pointer;
-    animation: toflow 2s ease-in-out infinite;
-  }
-
-  @keyframes toflow {
-    0% {
-      /*top:400px;*/
-      transform: scale(0.95) translate(0, 10px);
-    }
-    50% {
-      /*top:410px;*/
-      transform: scale(1) translate(0, 0px);
-    }
-    100% {
-      /*top:400px;*/
-      transform: scale(0.95) translate(0, 10px);
-    }
-  }
-
-  .goTophui {
-    bottom: 120vh;
-  }
 </style>

@@ -2,26 +2,26 @@
 <template>
   <div class="detailBox commonBox">
             <span class="s-round-date">
-                <span class="month" v-html="showInitDate(detailObj.create_time,'month')+'月'"></span>
-                <span class="day" v-html="showInitDate(detailObj.create_time,'date')"></span>
+                <span class="month" v-html="showInitDate(detailObj.createDate,'month')+'月'"></span>
+                <span class="day" v-html="showInitDate(detailObj.createDate,'date')"></span>
             </span>
     <header>
       <h1>
-        <a :href="'/detailShare?aid='+detailObj.id" target="_blank">
+        <a :href="'/detailShare?bid=' + detailObj.id" target="_blank">
           {{detailObj.title}}
         </a>
       </h1>
       <h2>
-        <i class="fa fa-fw fa-user"></i>发表于 <span>{{create_time}}</span> •
-        <i class="fa fa-fw fa-eye"></i>{{detailObj.browse_count}} 次围观 •
-        <i class="fa fa-fw fa-comments"></i>活捉 {{detailObj.comment_count}} 条 •
+        <i class="fa fa-fw fa-user"></i>发表于 <span>{{detailObj.createDate}}</span> •
+        <i class="fa fa-fw fa-eye"></i>{{detailObj.readCount}} 次围观 •
+        <i class="fa fa-fw fa-comments"></i>活捉 {{detailObj.commentCount}} 条 •
         <span class="rateBox">
-                        <i class="fa fa-fw fa-heart"></i>{{likeCount}}点赞
-                        <i class="fa fa-fw fa-star"></i>{{collectCount}}收藏
+                        <i class="fa fa-fw fa-heart"></i>{{detailObj.likeCount}}点赞
+                        <i class="fa fa-fw fa-star"></i>{{detailObj.collectCount}}收藏
                     </span>
       </h2>
       <div class="ui label">
-        <a :href="'/blog?classId='+detailObj.class_id">{{detailObj.cate_name}}</a>
+        <a :href="'/blog?classId='+detailObj.classId">{{detailObj.className}}</a>
       </div>
     </header>
     <div class="article-content" v-html="detailObj.content"></div>
@@ -31,77 +31,101 @@
       <a href="#" class="ds-qq fa fa-fw fa-qq" data-cmd="tqq"></a>
       <a href="#" class="ds-wechat fa fa-fw fa-wechat" data-cmd="weixin"></a>
       <div class="dlikeColBox">
-        <div class="dlikeBox" @click="likecollectHandle(1)">
-          <i :class="likeArt?'fa fa-fw fa-heart':'fa fa-fw fa-heart-o'"></i>喜欢 | {{likeCount}}
+        <div class="dlikeBox" @click="likeBlog">
+          <i :class="likeArt?'fa fa-fw fa-heart':'fa fa-fw fa-heart-o'"></i>喜欢 | {{detailObj.likeCount}}
         </div>
-        <div class="dcollectBox" @click="likecollectHandle(2)">
-          <i :class="collectArt?'fa fa-fw fa-star':'fa fa-fw fa-star-o'"></i>收藏 | {{collectCount}}
+        <div class="dcollectBox" @click="collectBlog">
+          <i :class="collectArt ? 'fa fa-fw fa-star':'fa fa-fw fa-star-o'"></i>收藏 | {{detailObj.collectCount}}
         </div>
       </div>
     </div>
-    <div class="donate">
-      <div class="donate-word">
-        <span @click="pdonate=!pdonate">赞赏</span>
-      </div>
-      <el-row :class="pdonate?'donate-body':'donate-body donate-body-show'" :gutter="30">
-        <el-col :span="12" class="donate-item">
-          <div class="donate-tip">
-            <img :src="detailObj.wechat_image?detailObj.wechat_image: 'static/img/tou.jpg'"
-                 :onerror="$store.state.errorImg"/>
-            <span>微信扫一扫，向我赞赏</span>
-          </div>
-        </el-col>
-        <el-col :span="12" class="donate-item">
-          <div class="donate-tip">
-            <img :src="detailObj.alipay_image?detailObj.alipay_image:'static/img/tou.jpg'"
-                 :onerror="$store.state.errorImg"/>
-            <span>支付宝扫一扫，向我赞赏</span>
-          </div>
-        </el-col>
-      </el-row>
-    </div>
+<!--    <div class="donate">-->
+<!--      <div class="donate-word">-->
+<!--        <span @click="pdonate=!pdonate">赞赏</span>-->
+<!--      </div>-->
+<!--      <el-row :class="pdonate?'donate-body':'donate-body donate-body-show'" :gutter="30">-->
+<!--        <el-col :span="12" class="donate-item">-->
+<!--          <div class="donate-tip">-->
+<!--            <img :src="detailObj.wechat_image?detailObj.wechat_image: 'static/img/tou.jpg'"-->
+<!--                 :onerror="$store.state.errorImg"/>-->
+<!--            <span>微信扫一扫，向我赞赏</span>-->
+<!--          </div>-->
+<!--        </el-col>-->
+<!--        <el-col :span="12" class="donate-item">-->
+<!--          <div class="donate-tip">-->
+<!--            <img :src="detailObj.alipay_image?detailObj.alipay_image:'static/img/tou.jpg'"-->
+<!--                 :onerror="$store.state.errorImg"/>-->
+<!--            <span>支付宝扫一扫，向我赞赏</span>-->
+<!--          </div>-->
+<!--        </el-col>-->
+<!--      </el-row>-->
+<!--    </div>-->
   </div>
 </template>
 
 <script>
-  import {getArticleInfo, getArtLikeCollect, initDate} from '../utils/server.js'
+  import {initDate} from '../utils/server.js'
+  import {getBlogDetail, like, collect} from '../api/api.js'
 
   export default {
     data() { //选项 / 数据
       return {
-        aid: '',//文章ID
-        pdonate: true,//打开赞赏控制,
+        // pdonate: true,//打开赞赏控制,
         detailObj: '',//返回详情数据
         likeArt: false,//是否点赞
-        likeCount: 400,//点赞数量
-        collectCount: 500,//收藏数量
+        likeCount: 0,//点赞数量
+        collectCount: 0,//收藏数量
         collectArt: false,//是否收藏
-        hasLogin: false,//是否已经登录
-        userId: '',//用户id
-        create_time: ''
       }
     },
     methods: { //事件处理器
+
       showInitDate: function (date, full) {//年月日的编辑
-        // console.log(detailObj.create_time,date,full);
         return initDate(date, full);
       },
-      likecollectHandle: function (islike) {//用户点击喜欢0,用户点击收藏1
 
-        if (localStorage.getItem('userInfo')) {//判断是否登录
+
+      /**
+       * 点赞
+       */
+      likeBlog: function () {
+        //判断是否登录
+        if (localStorage.getItem('userInfo')) {
           let tip = '';
-          if (islike === 1) {
-            if (!this.likeArt) {
-              this.likeCount += 1;
-              this.likeArt = true;
-              tip = '已点赞';
-            } else {
-              this.likeCount -= 1;
-              this.likeArt = false;
-              tip = '已取消点赞'
-            }
-
+          if (!this.likeArt) {
+            this.likeCount += 1;
+            this.likeArt = true;
+            tip = '已点赞';
           } else {
+            this.likeCount -= 1;
+            this.likeArt = false;
+            tip = '已取消点赞'
+          }
+          let param = {
+            id: this.detailObj.id,
+            status: this.likeArt ? 1 : 0
+          };
+          like(param).then((res) => {
+            if (this.GLOBAL.isResponseSuccess(res)) {
+              this.$message({
+                message: tip,
+                type: 'success'
+              });
+            }
+          });
+        } else {//未登录 前去登录。
+          this.noLogin();
+        }
+      },
+
+
+      /**
+       * 收藏
+       */
+      collectBlog: function () {
+        //判断是否登录
+        if (localStorage.getItem('userInfo')) {
+          let tip = '';
             if (!this.collectArt) {
               this.collectCount += 1;
               this.collectArt = true;
@@ -111,61 +135,66 @@
               this.collectArt = false;
               tip = '已取消收藏';
             }
-          }
-          getArtLikeCollect(this.userId, this.aid, islike, function (msg) {
-            // console.log('喜欢收藏成功',msg);
-            this.$message({
-              message: tip,
-              type: 'success'
+            let param = {
+              id: this.detailObj.id,
+              status: this.collectArt ? 1 : 0
+            };
+            collect(param).then((res) => {
+              if (this.GLOBAL.isResponseSuccess(res)) {
+                this.$message({
+                  message: tip,
+                  type: 'success'
+                });
+              }
             });
-          })
         } else {//未登录 前去登录。
-          this.$confirm('登录后即可点赞和收藏，是否前往登录页面?', '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: 'warning'
-          }).then(() => {//确定，跳转至登录页面
-            //储存当前页面路径，登录成功后跳回来
-            localStorage.setItem('logUrl', this.$route.fullPath);
-            this.$router.push({path: '/login?login=1'});
-          }).catch(() => {//取消关闭弹窗
-
-          });
+          this.noLogin();
         }
+
       },
-      routeChange: function () {
 
-        this.aid = this.$route.query.aid === undefined ? 1 : parseInt(this.$route.query.aid);//获取传参的aid
-        //判断用户是否存在
-        if (localStorage.getItem('userInfo')) {
-          this.hasLogin = true;
-          this.userInfo = JSON.parse(localStorage.getItem('userInfo'));
-          this.userId = this.userInfo.userId;
-          // console.log(this.userInfo);
-        } else {
-          this.hasLogin = false;
-        }
+
+      //未登录时
+      noLogin: function () {
+        this.$confirm('登录后即可点赞和收藏，是否前往登录页面?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {//确定，跳转至登录页面
+          //储存当前页面路径，登录成功后跳回来
+          localStorage.setItem('logUrl', this.$route.fullPath);
+          this.$router.push({path: '/login?login=1'});
+        }).catch(() => {//取消关闭弹窗
+        });
+      },
+
+
+      detail: function () {
+        //获取博客id
+        let bid = this.$route.query.bid === undefined ? 1 : parseInt(this.$route.query.bid);
         //获取详情接口
-        getArticleInfo(this.aid, this.userId, function (msg) {
-          // console.log('文章详情',msg);
-          this.detailObj = msg;
-          this.likeCount = msg.like_count ? msg.like_count : 0;
-          this.collectCount = msg.collect_count ? msg.collect_count : 0;
-          this.likeArt = msg.user_like_start === 0 ? false : true;
-          this.collectArt = msg.user_collect_start === 0 ? false : true;
-          this.create_time = initDate(this.detailObj.create_time, 'all');
-        })
+        getBlogDetail({id: bid}).then((res) => {
+          if (this.GLOBAL.isResponseSuccess(res)) {
+            this.detailObj = res.data.blog;
+            //点赞状态(1:点赞；0：未点赞)
+            this.likeArt = res.data.like.likeStatus === 1;
+            //收藏状态(1:收藏；0：未收藏)
+            this.collectArt = res.data.like.collectStatus === 1;
+          }
+        });
       }
+
+
     },
     watch: {
       // 如果路由有变化，会再次执行该方法
-      '$route': 'routeChange'
+      '$route': 'detail'
     },
     components: { //定义组件
 
     },
     created() { //生命周期函数
-      this.routeChange();
+      this.detail();
     },
 
   }

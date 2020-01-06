@@ -189,7 +189,7 @@
             password: this.password
           };
           login(param).then((res) => {
-            if (res.code === 0) {
+            if (this.GLOBAL.isResponseSuccess(data)) {
               localStorage.setItem('userInfo', JSON.stringify(res.data));
               localStorage.setItem('x-access-token', res.data.token);
               if (localStorage.getItem('logUrl')) {
@@ -197,10 +197,10 @@
               } else {
                 this.$router.push({path: '/'});
               }
-            } else if (res.code === 1001) {//邮箱或密码错误
+            } else if (this.GLOBAL.USERNAME_OR_PASSWORD_IS_WRONG === 1001) {//邮箱或密码错误
               this.loginErr = true;
               this.loginTitle = '邮箱或密码错误';
-            } else if (res.code === 1002) {//邮箱注册码未激活
+            } else if (this.GLOBAL.EMAIL_NOT_ACTIVATED === 1002) {//邮箱注册码未激活
               this.activating = true;
             } else {
               this.loginErr = true;
