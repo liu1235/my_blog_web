@@ -1,27 +1,27 @@
 <!-- 文章列表 -->
 <template>
   <el-row class="shareListBox">
-    <div  class="shareTitle">
+    <div class="shareTitle" v-if="className !== ''">
       <div class="ui label">
-        <a href="#" @click="searchData()">{{className}}啊啊啊啊啊</a>
+        <a href="#" @click="searchByClassId()">{{className}}</a>
       </div>
-      <ul  class="shareClassTwo">
+      <ul class="shareClassTwo">
         <li v-for="item in sonClassList">
-          <a href="#" @click="searchData(item.classId)"
-             :class="item.classId === classTwoId?'active':''">{{item.className}}</a>
+          <a href="#" @click="searchByClassId(item.classId)"
+             class="active">{{item.className}}</a>
         </li>
       </ul>
     </div>
 
-    <el-col :span="24" class="s-item commonBox" v-for="item in list" :key="'blog' + item.id">
+    <el-col :span="24" class="s-item commonBox" v-for="(item, index) in list" :key="'blog' + index">
             <span class="s-round-date">
                 <span class="month" v-html="showInitDate(item.createDate,'month')+'月'"></span>
                 <span class="day" v-html="showInitDate(item.createDate,'date')"></span>
             </span>
       <header>
         <h1>
-          <a href="#" target="_blank">
-            <router-link :to = '{path:"/detailShare",query:{bid: item.id}}'>{{item.title}}</router-link>
+          <a href="#">
+            <router-link target="_blank" :to='{path:"/detail",query:{bid: item.id}}'>{{item.title}}</router-link>
           </a>
         </h1>
         <h2>
@@ -36,7 +36,7 @@
                     </span>
         </h2>
         <div class="ui label">
-          <a href="#" @click="searchData(item.classId)">{{item.className}} {{item.classId}}</a>
+          <a href="#" @click="searchByClassId(item.classId)">{{item.className}}</a>
         </div>
       </header>
       <div class="article-content">
@@ -48,21 +48,21 @@
         </p>
       </div>
       <div class="viewDetail">
-        <a class="colors-bg" href="#" target="_blank">
-          <router-link :to = '{path:"/detailShare",query:{bid: item.id}}'>阅读全文>></router-link>
+        <a class="colors-bg" href="#">
+          <router-link target="_blank" :to='{path:"/detail",query:{bid: item.id}}'>阅读全文>></router-link>
         </a>
       </div>
     </el-col>
     <el-col class="viewMore">
       <a v-show="hasMore" class="colors-bg" href="#" @click="showMore">点击加载更多</a>
-      <a v-show="!hasMore" class="colors-bg" href="#">暂无更多数据</a>
+      <a v-show="!hasMore" class="colors-bg" href="javascript:void(0);">暂无更多数据</a>
     </el-col>
   </el-row>
 </template>
 
 <script>
   import {initDate} from '../utils/server.js'
-  import {getBlogList} from '../api/api.js'
+  import {getBlogList,getSecondClass} from '../api/api.js'
 
   export default {
     name: 'blog',
@@ -71,25 +71,8 @@
         classId: 0,
         className: '',
         sonClassList: '',//二级分类
-        classTwoId: 5,
         keywords: '',
         hasMore: true,
-        shareClass: [
-          {
-            classId: 1, className: '技术分享', detShare: [
-              {classId: 5, className: '移动端H5', pid: 1},
-              {classId: 6, className: 'pc端web', pid: 1},
-              {classId: 7, className: '小程序', pid: 1},
-              {classId: 8, className: 'php', pid: 1},
-              {classId: 9, className: 'nodejs', pid: 1},
-              {classId: 10, className: '软件', pid: 1},
-              {classId: 11, className: '其他', pid: 1}
-            ]
-          },
-          {classId: 2, className: '闲言碎语'},
-          {classId: 3, className: '事件簿'},
-          {classId: 4, className: '创作集'}
-        ],
         list: [], //博客列表
         pageNum: 1, //当前页码
         pageSize: 10,//页数
@@ -105,7 +88,7 @@
       //展示博客列表数据数据
       showBlogList: function () {
         let param = {
-          classId: this.$route.query.classId === undefined ? null : parseInt(this.$route.query.classId),
+          classId: this.$route.query.classId === undefined ? null : this.$route.query.classId,
           pageNum: this.pageNum,
           pageSize: this.pageSize,
           title: this.$store.state.keywords
@@ -114,20 +97,32 @@
         getBlogList(param).then((res) => {
           if (this.GLOBAL.isResponseSuccess(res)) {
             let dataList = res.data.list;
-            console.info("------", dataList)
-            this.hasMore = !(dataList.length > 0 && dataList.length < 10);
-            this.list = this.list.concat(dataList);
+            if (dataList !== null) {
+              this.hasMore = !(dataList.length > 0 && dataList.length < 10);
+              this.list = this.list.concat(dataList);
+            } else {
+              this.hasMore = false;
+              this.list = [];
+            }
           }
         });
       },
 
-      //搜索
-      searchData(classId) {
+      //根据分类id获取数据
+      searchByClassId(classId) {
         this.pageNum = 1;
         this.list = [];
         this.$route.query.classId = classId;
         this.showBlogList();
       },
+
+      //根据关键词搜索
+      searchByKeywords() {
+        this.pageNum = 1;
+        this.list = [];
+        this.showBlogList();
+      },
+
 
       //查看更多
       showMore: function () {
@@ -136,6 +131,16 @@
       },
 
       routeChange: function () {
+        let classId = this.$route.query.classId;
+        if (classId !== undefined) {
+          this.classId = classId;
+          getSecondClass({id: classId}).then((res) => {
+            if (this.GLOBAL.isResponseSuccess(res)) {
+              this.sonClassList = res.data.child;
+              this.className = res.data.className
+            }
+          });
+        }
         this.showBlogList();
       }
     },
@@ -145,7 +150,7 @@
     watch: {
       // 如果路由有变化，会再次执行该方法
       '$route': 'routeChange',
-      '$store.state.keywords': 'searchData'
+      '$store.state.keywords': 'searchByKeywords'
     },
 
     created() { //生命周期函数

@@ -7,7 +7,7 @@
             </span>
     <header>
       <h1>
-        <a :href="'/detailShare?bid=' + detailObj.id" target="_blank">
+        <a :href="'/detail?bid=' + detailObj.id" target="_blank">
           {{detailObj.title}}
         </a>
       </h1>

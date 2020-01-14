@@ -142,3 +142,13 @@ export const addLikeMeData = params => {
   return axios.post(`${base}/like-collect/add-like-me`, params).then(res => res.data);
 };
 
+
+//获取一级分类
+export const getFirstClass = params => {
+  return axios.post(`${base}/class/first`, params).then(res => res.data);
+};
+
+//获取二级分类
+export const getSecondClass = params => {
+  return axios.post(`${base}/class/second`, params).then(res => res.data);
+};

@@ -55,7 +55,7 @@
       </h2>
       <ul class="rs3-textWidget">
         <li class="rs3-item" v-for="(item,index) in artCommentList" :key="'artCommentList'+index">
-          <a :href="'/detailShare?bid='+item.id" target="_blank">
+          <a :href="'/detail?bid='+item.id" target="_blank">
             <div class="rs3-photo">
               <img :src="item.avatar" :onerror="$store.state.errorImg" alt="">
             </div>
@@ -74,7 +74,7 @@
       <ul>
         <li v-for="(item,index) in topBlogList" :key="'topBlogList'+ index">
           <a href="#" target="_blank">
-            <router-link :to='{path:"/detailShare", query:{bid: item.id}}'>{{item.title}}</router-link>
+            <router-link :to='{path:"/detail", query:{bid: item.id}}'>{{item.title}}</router-link>
           </a> —— {{item.browse_count}} 次围观
         </li>
       </ul>

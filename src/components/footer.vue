@@ -1,13 +1,9 @@
 <!-- 底部公用 -->
 <template>
-  <!-- Aimee的 -->
   <div  class="footBack footBackQian">
-<!--    <div class="footer-img"-->
-<!--         :style="{background:this.$store.state.themeObj.bottom_img?'url('+this.$store.state.themeObj.bottom_img+') no-repeat 50%':'url(static/img/footer01.png) no-repeat 50%'}">-->
-<!--    </div>-->
     <div class="fContainer">
       <p>
-        博客已萌萌哒运行<span v-html='longTime'>{{longTime}}</span><span class="timeJump">(●'◡'●)ﾉ♥</span>
+        博客已运行<span>{{longTime}}</span><span class="timeJump">(●'◡'●)ﾉ♥</span>
       </p>
       <p>
         托管于 <a href="https://github.com/Aimee1608/myblogvue" target="_blank">GitHub</a>. <a
@@ -16,7 +12,7 @@
         href="https://www.cloudxns.net/Order/index.html" target="_blank">CloudXNS</a> 提供 DNS 解析服务.
       </p>
       <p>
-        © 2018 <a href="#">Mango Ya</a>. 由 <a href="https://cn.vuejs.org/" target="_blank">Vue</a> 强力驱动. Theme By <a
+        © 2019 <a href="#">Mango Ya</a>. 由 <a href="https://cn.vuejs.org/" target="_blank">Vue</a> 强力驱动. Theme By <a
         href="https://diygod.me/" target="_blank">diygod.me</a>. 京ICP备17071595号-1.
       </p>
       <p>
@@ -36,25 +32,23 @@
     },
     methods: { //事件处理器
       runTime: function () {//运行倒计时
-
-        let oldTime = new Date('2016/06/01 00:00:00');
-        let timer = setInterval(function () {
+        let oldTime = new Date('2020/01/01 00:00:00');
+        setInterval(function () {
           let nowTime = new Date();
-          let longTime = nowTime - oldTime;
-          let days = parseInt(longTime / 1000 / 60 / 60 / 24, 10); //计算剩余的天数
-          let hours = parseInt(longTime / 1000 / 60 / 60 % 24, 10); //计算剩余的小时
-          let minutes = parseInt(longTime / 1000 / 60 % 60, 10);//计算剩余的分钟
-          let seconds = parseInt(longTime / 1000 % 60, 10);//计算剩余的秒数
+          let time = nowTime - oldTime;
+          let days = parseInt(time / 1000 / 60 / 60 / 24, 10); //计算剩余的天数
+          let hours = parseInt(time / 1000 / 60 / 60 % 24, 10); //计算剩余的小时
+          let minutes = parseInt(time / 1000 / 60 % 60, 10);//计算剩余的分钟
+          let seconds = parseInt(time / 1000 % 60, 10);//计算剩余的秒数
           this.longTime = days + "天" + hours + "小时" + minutes + "分" + seconds + "秒";
         }, 1000)
+
       }
     },
     components: { //定义组件
 
     },
     created() { //生命周期函数
-      //替换底部图片
-
       this.runTime();
     }
   }

@@ -3,7 +3,7 @@
   <div class="rewardBox commonBox">
     <header>
       <h1>
-        <a href="/detailShare" target="_blank">
+        <a href="/detail" target="_blank">
           赞赏
         </a>
       </h1>

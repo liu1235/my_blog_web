@@ -25,7 +25,7 @@
   import temMessage from '../components/temMessage.vue'
 
   export default {
-    name: 'DetailShare',
+    name: 'Detail',
     data() { //选项 / 数据
       return {}
     },

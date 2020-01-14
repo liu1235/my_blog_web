@@ -15,7 +15,7 @@ let routes = [
     meta: {
       auth: true
     },
-    name: 'Home'
+    name: 'Home1'
   },
 
   //分类
@@ -30,12 +30,12 @@ let routes = [
 
   //分享详情
   {
-    path: '/detailShare',
-    component: resolve => require(['../pages/DetailShare.vue'], resolve),
+    path: '/detail',
+    component: resolve => require(['../pages/Detail.vue'], resolve),
     meta: {
       auth: true
     },
-    name: 'DetailShare'
+    name: 'detail'
   },
 
   //赞赏

@@ -14,7 +14,7 @@
                     </span>
           <header>
             <h1>
-              <a :href="'/detailShare?bid='+item.id" target="_blank">
+              <a :href="'/detail?bid='+item.id" target="_blank">
                 {{item.title}}
               </a>
             </h1>
@@ -40,7 +40,7 @@
           <div class="viewDetail">
             <a class="cancelBtn colors-bg" href="#" @click="cancelLikeCollect(item.id)">取消{{like ===
               1?'喜欢':'收藏'}}</a>&nbsp;&nbsp;&nbsp;&nbsp;
-            <a class="colors-bg" :href="'/detailShare?bid='+item.id" target="_blank">
+            <a class="colors-bg" :href="'/detail?bid='+item.id" target="_blank">
               阅读全文>>
             </a>
           </div>

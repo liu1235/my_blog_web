@@ -413,35 +413,4 @@
     background: #ff763b;
   }
 
-  /*登录成功*/
-  .registerSuc {
-    padding: 40px;
-    margin: 0 auto;
-  }
-
-  .registerSuc .sucIcon {
-    text-align: center;
-    margin-bottom: 30px;
-    padding-left: 60px;
-  }
-
-
-  .registerSuc .sucContent p {
-    margin-top: 10px;
-    font-size: 13px;
-    color: #999;
-  }
-
-  .registerSuc .sucContent .lastbtn {
-    display: inline-block;
-    font-size: 14px;
-    padding: 3px 10px;
-    border-radius: 5px;
-    color: #fff;
-    cursor: pointer;
-  }
-
-  .registerSuc .sucContent .el-icon-close {
-    fong-size: 13px;
-  }
 </style>

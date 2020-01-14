@@ -386,7 +386,7 @@ import Vue from 'vue'
 
 
 //调用
-const Typeit = (isAimee,emId) =>{
+const Typeit = (emId) =>{
     let theater = new TheaterJS();
         //使用TheaterJS，你可以建立多个角色，每个角色都有自己的“经验”，它们使用这些“经验”可以互相“交谈”。
         //上面的代码描述了一个新的角色，名字叫“Vader”，它的“经验”值为0.8（必须是0-1之间），它的voice是“#vader”。voice将用于打印的文字，Vader是一个html元素。
@@ -398,13 +398,7 @@ const Typeit = (isAimee,emId) =>{
             prevChar：前一个字符。
             speech：所有的speech。
          ***/
-         if(isAimee !==0){
-             let world = "Aimee";
-         }else{
-             let world = "Qinlh";
-         }
         theater.describe("Luke", .9, emId);
-        // conosle.log()
         theater.on("*", function (eventName, originalEvent, sceneName, arg) {//做点什么
 
                 })
@@ -419,21 +413,10 @@ const Typeit = (isAimee,emId) =>{
 
         theater
                 .write("Luke:Hello!",1000)
-//                .write("Vader:I am your father.", toggleClass)
-                .write("Luke:Hi,"+world, 500)
+                .write("Luke:Hi,liuzw" , 500)
                 .write({ name: "call", args: [kill, true] })
                 .write(function () { theater.play(true); });
         function kill () {
-//             let self    = this,
-//                     delay   = 500,
-//                     i       = 0,
-//                     timeout = setTimeout(function blink () {
-// //                        toggleClass("blood");
-// //                        if (++i < 6) timeout = setTimeout(blink, delay);
-// //                        else self.next();
-//                         clearTimeout(timeout);
-//                     }, delay);
-
             return self;
         }
 }

@@ -22,7 +22,6 @@ router.beforeEach((to, from, next) => {
       next();
     }
   } else {
-    alert(to.path)
       if (to.path) {
         next();
       } else {

@@ -11,28 +11,22 @@
               <el-menu-item index="/home"><i class="fa fa-wa fa-home"></i> 首页</el-menu-item>
               <el-submenu index="/blog">
                 <template slot="title"><i class="fa fa-wa fa-archive"></i> 分类</template>
-                <el-menu-item v-for="(item,index) in classListObj"
-                              :key="'class1' + index"
-                              :index="'/blog?classId=' + item.class_id">
-                  {{item.cate_name}}
+                <el-menu-item v-for="item in classList"
+                              :key="'class' + item.classId"
+                              :index="'/blog?classId=' + item.classId">
+                  {{item.className}}
                 </el-menu-item>
               </el-submenu>
-              <!--<el-submenu index="about">-->
-                <!--<template slot="title"><i class="fa fa-wa fa-flask"></i> 实验室</template>-->
-                <!--<el-menu-item v-for="(item,index) in projectList"-->
-                              <!--:key="'class2' + index" index="">-->
-                  <!--<a :href="item.nav_url" target="_blank">{{item.nav_name}}</a>-->
-                <!--</el-menu-item>-->
-              <!--</el-submenu>-->
-              <!--<el-menu-item index="/reward"><i class="fa fa-wa fa-cny"></i> 赞赏</el-menu-item>-->
-              <el-menu-item index="/friendsLink"><i class="fa fa-wa fa-users"></i> 伙伴</el-menu-item>
+              <el-menu-item index="/reward"><i class="fa fa-wa fa-cny"></i> 赞赏</el-menu-item>
+              <!--              <el-menu-item index="/friendsLink"><i class="fa fa-wa fa-users"></i> 伙伴</el-menu-item>-->
               <el-menu-item index="/message"><i class="fa fa-wa fa-pencil"></i> 留言板</el-menu-item>
               <el-menu-item index="/about"><i class="fa fa-wa fa-vcard"></i> 关于</el-menu-item>
               <div class="pcSearchBox">
                 <i class="el-icon-search pcSearchIcon"></i>
                 <div class="pcSearchInput" :class="input ? 'hasSearched' : ''">
-                  <el-input placeholder="搜索" icon="search" v-model="input" :on-icon-click="searchEnterFun"
-                            @keyup.enter.native="searchEnterFun" @change="searchChangeFun">
+                  <el-input placeholder="请按回车搜索" v-model="input"
+                            @keyup.enter.native="searchEnterFun">
+                    <i slot="suffix" class="el-input__icon el-icon-search"></i>
                   </el-input>
                 </div>
               </div>
@@ -44,13 +38,13 @@
                   <i class="fa fa-fw fa-user-circle userImg"></i>
                   <ul class="hasLogin-info">
                     <li>
-                      <a href="/userInfo">个人中心</a>
+                      <a href="/#/userInfo">个人中心</a>
                     </li>
                     <li>
-                      <a href="/likeCollect?like=1">喜欢列表</a>
+                      <a href="/#/likeCollect?like=1">喜欢列表</a>
                     </li>
                     <li>
-                      <a href="/likeCollect?like=2">收藏列表</a>
+                      <a href="/#/likeCollect?like=2">收藏列表</a>
                     </li>
                     <li>
                       <a href="#" @click="userLogout">退出登录</a>
@@ -60,28 +54,25 @@
               </div>
             </el-menu>
           </div>
+
+
           <!-- 移动端导航 -->
           <div class="mobileBox">
             <div class="hideMenu">
               <i @click="pMenu=!pMenu" class="el-icon-menu"></i>
               <el-collapse-transition>
                 <el-menu :default-active="activeIndex" class="listMenu"
-                         v-show="!pMenu" theme="dark" @open="handleOpen"
+                         v-show="!pMenu" @open="handleOpen"
                          @close="handleClose"
                          :unique-opened="true" :router="true">
                   <el-menu-item index="/home"><i class="fa fa-wa fa-home"></i> 首页</el-menu-item>
                   <el-submenu index="/blog">
                     <template slot="title"><i class="fa fa-wa fa-archive"></i> 分类</template>
-                    <el-menu-item v-for="(item,index) in classListObj" :key="'class1'+index"
-                                  :index="'/blog?classId='+item.class_id">{{item.cate_name}}
+                    <el-menu-item v-for="item in classList" :key="'class'+ item.classId"
+                                  :index="'/blog?classId='+item.classId">{{item.className}}
                     </el-menu-item>
                   </el-submenu>
-                  <!--<el-submenu index="2">-->
-                    <!--<template slot="title"><i class="fa fa-wa fa-flask"></i> 实验室</template>-->
-                    <!--<el-menu-item v-for="(item,index) in projectList" :key="'class2'+index" index=""><a-->
-                      <!--:href="item.nav_url" target="_blank">{{item.nav_name}}</a></el-menu-item>-->
-                  <!--</el-submenu>-->
-                  <!--<el-menu-item index="/reward"><i class="fa fa-wa fa-cny"></i> 赞赏</el-menu-item>-->
+                  <el-menu-item index="/reward"><i class="fa fa-wa fa-cny"></i> 赞赏</el-menu-item>
                   <!--<el-menu-item index="/friendsLink"><i class="fa fa-wa fa-users"></i> 伙伴</el-menu-item>-->
                   <el-menu-item index="/message"><i class="fa fa-wa fa-pencil"></i>留言板</el-menu-item>
                   <el-menu-item index="/about"><i class="fa fa-wa fa-vcard"></i>关于</el-menu-item>
@@ -97,8 +88,8 @@
                 </el-menu>
               </el-collapse-transition>
               <div class="searchBox">
-                <el-input placeholder="" icon="search" v-model="input" @keyup.enter.native="searchEnterFun"
-                          :on-icon-click="searchEnterFun" @change="searchChangeFun">
+                <el-input placeholder="" v-model="input" @keyup.enter.native="searchEnterFun">
+                  <i slot="suffix" class="el-input__icon el-icon-search"></i>
                 </el-input>
               </div>
             </div>
@@ -107,27 +98,23 @@
       </el-row>
     </div>
     <div class="headImgBox"
-         :style="{backgroundImage:this.$store.state.themeObj.top_image?'url('+this.$store.state.themeObj.top_image+')':'url(static/img/headbg05.jpg)'}">
+         :style="{backgroundImage:'url(static/img/headbg05.jpg)'}">
       <div class="scene">
         <div><span id="luke"></span></div>
       </div>
       <div class="h-information">
-        <a href="/about">
-          <img
-            :src="this.$store.state.themeObj.head_portrait ? this.$store.state.themeObj.head_portrait : '/static/img/tou.png'"
-            alt="">
+        <a href="/#/about">
+          <img src="/static/img/tou.png" alt="">
         </a>
         <h2 class="h-description">
-          <a href="/about">
-            {{this.$store.state.themeObj.autograph ? this.$store.state.themeObj.autograph : "Write the Code. Change the World."}}
-          </a>
+          <a href="/#/about">Write the Code. Change the World.</a>
         </h2>
       </div>
     </div>
   </div>
 </template>
 <script>
-  import {AboutMeData, ArtClassData, changeTheme, LoginOut, navMenList} from '../utils/server.js'
+  import {getFirstClass, logout} from '../api/api.js'
   import {Typeit} from '../utils/plug.js'
 
   export default {
@@ -136,14 +123,13 @@
       return {
         userInfo: '', //用户信息
         hasLogin: false, //是否已登录
-        classListObj: '', //技术分类
+        classList: '', //技术分类
         activeIndex: '/', //当前选择的路由模块
         state: '', //icon点击状态
         pMenu: true, //手机端菜单打开
         input: '', //input输入内容
         headBg: 'url(static/img/headbg05.jpg)', //头部背景图
         headTou: '', //头像
-        projectList: '' //项目列表
       }
     },
 
@@ -157,20 +143,9 @@
         // console.log(key, keyPath);
       },
 
-      //input change 事件
-      searchChangeFun() {
-        if (this.input === '') {
-          this.$store.state.keywords = '';
-          this.$router.push({path: '/'});
-        }
-      },
-
       //input 输入 enter
       searchEnterFun: function () {
-        if (this.input) {
-          this.$store.state.keywords = this.input;
-          this.$router.push({path: '/blog?keywords=' + this.input});
-        }
+        this.$store.state.keywords = this.input;
       },
 
       //pc菜单选择
@@ -199,49 +174,39 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          LoginOut(localStorage.getItem('x-access-token'), function () {
-            if (localStorage.getItem('userInfo')) {
+          logout().then((res) => {
+            if (this.GLOBAL.isResponseSuccess(res)) {
               localStorage.removeItem('userInfo');
               this.hasLogin = false;
-              //    this.$router.replace({path:this.$route.fullPath});
               window.location.reload();
               this.$message({
                 type: 'success',
                 message: '退出成功!'
               });
-            }
-            if (this.$route.path === '/userInfo') {
               this.$router.push({
                 path: '/'
               });
             }
-          })
-        }).catch(() => {
-          //
+          });
         });
 
       },
 
       routeChange: function () {
-
         this.pMenu = true;
         this.activeIndex = this.$route.path === '/' ? '/home' : this.$route.path;
         if (localStorage.getItem('userInfo')) { //存储用户信息
           this.hasLogin = true;
           this.userInfo = JSON.parse(localStorage.getItem('userInfo'));
-          // console.log(this.userInfo);
         } else {
           this.hasLogin = false;
         }
 
         //文章分类
-        ArtClassData(function (msg) {
-          this.classListObj = msg;
-        });
-
-        //实验室项目列表获取
-        navMenList(function (msg) {
-          this.projectList = msg;
+        getFirstClass({}).then((res) => {
+          if (this.GLOBAL.isResponseSuccess(res)) {
+            this.classList = res.data;
+          }
         });
 
         if ((this.$route.name === "blog" || this.$route.name === "Home") && this.$store.state.keywords) {
@@ -275,35 +240,21 @@
           document.title = '藏好啦(つд⊂)';
         } else {
           document.title = '被发现啦(*´∇｀*)'; //当前窗口打开
-          if (this.$route.path !== '/detailShare') {
+          if (this.$route.path !== '/detail') {
             this.hasLogin = !!localStorage.getItem('userInfo');
           }
         }
       };
 
       document.addEventListener(visibilityChangeEvent, onVisibilityChange);
-      // console.log();
       this.routeChange();
-      //设置主题
-      changeTheme(function (msg) {
-        // console.log(msg);
-        this.$store.state.themeObj = msg;
-        // console.log('主题',this.$store.state.themeObj );
-      });
-
-      //关于我的信息
-      AboutMeData(function (msg) {
-        // console.log('关于我',msg);
-        this.$store.state.aboutMeObj = msg
-      })
     },
 
     //页面元素加载完成
     mounted() {
-
       let timer = setTimeout(function () {
         //打字机效果
-        Typeit(this.$store.state.themeObj.user_start, "#luke");
+        Typeit("#luke");
         clearTimeout(timer);
       }, 500);
     }

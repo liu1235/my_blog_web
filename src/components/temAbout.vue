@@ -3,7 +3,7 @@
   <div class="commonBox">
     <header>
       <h1>
-        <a href="/detailShare" target="_blank">
+        <a href="/detail" target="_blank">
           关于我
         </a>
       </h1>
