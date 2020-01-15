@@ -3,12 +3,12 @@ import {Message} from 'element-ui'
 import router from '../router/index'
 import global from '../Global'
 
-let base = "http://127.0.0.1:9000";
+let base = "/api";
 //响应时间
 axios.defaults.timeout = 60 * 1000;
 
 function getUserToken() {
-  let user = sessionStorage.getItem('user');
+  let user = sessionStorage.getItem('userInfo');
   let userToken = "";
   if (user) {
     user = JSON.parse(user);
@@ -20,7 +20,6 @@ function getUserToken() {
 axios.interceptors.request.use(
   config => {
     config.headers['x-access-token'] = getUserToken();
-    config.headers['x-access-type'] = 'web';
     return config;
   },
   err => {
@@ -56,9 +55,9 @@ axios.interceptors.response.use((res) => {
  */
 export function processResponseData(data) {
   if (data.code === global.RESP_CODE.LOGIN_FAIL) { //没有登录
-    sessionStorage.removeItem('user');
+    sessionStorage.removeItem('userInfo');
     Message.error(data.message);
-    router.replace({path: 'login'})
+    router.replace({path: '/login'})
   } else if (data.code === global.RESP_CODE.ERROR) { //错误
     Message.error(data.message);
   } else if (data.code === global.RESP_CODE.VALID_FAIL) { //验证失败
@@ -113,10 +112,12 @@ export const sendMail = params => {
 export const getBlogList = params => {
   return axios.post(`${base}/blog/list`, params).then(res => res.data);
 };
-//获取博客列表数据
+
+//获取博客列表详情
 export const getBlogDetail = params => {
   return axios.post(`${base}/blog/detail`, params).then(res => res.data);
 };
+
 //获取最热的十条博客
 export const topBlogList = params => {
   return axios.post(`${base}/blog/top-blog-list`, params).then(res => res.data);
@@ -151,4 +152,14 @@ export const getFirstClass = params => {
 //获取二级分类
 export const getSecondClass = params => {
   return axios.post(`${base}/class/second`, params).then(res => res.data);
+};
+
+//获取评论内容
+export const getCommentList = params => {
+  return axios.post(`${base}/comment/list`, params).then(res => res.data);
+};
+
+//添加评论
+export const addComment = params => {
+  return axios.post(`${base}/comment/add`, params).then(res => res.data);
 };

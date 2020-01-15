@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <keep-alive :include="['Aboutme', 'Message', 'FriendsLink', 'Reward']">
+    <keep-alive :include="['AboutMe', 'Message', 'FriendsLink', 'Reward']">
       <router-view></router-view>
     </keep-alive>
   </div>
@@ -13,25 +13,12 @@
 </script>
 
 <style lang="less">
-  // 原博客主提色
+
   @colors: #97dffd; //按钮和标签颜色
   @tcolorm: #64609E; //分类的选中的颜色
   @tcolord: #48456D; //按钮hover 的颜色
 
-  // /***** 粉红色主题****/
-  // @colors:#97dffd;//按钮和标签颜色
-  // @tcolorm:#64609E;//分类的选中的颜色
-  // @tcolord:#48456D;//按钮hover 的颜色
-  //
-  // /******淡黄色主题*****/
-  // @colors:#97dffd;//按钮和标签颜色
-  // @tcolorm:#64609E;//分类的选中的颜色
-  // @tcolord:#48456D;//按钮hover 的颜色
-  //
-  // /****** 淡紫色主题 ****/
-  // @colors:#97dffd;//按钮和标签颜色
-  // @tcolorm:#64609E;//分类的选中的颜色
-  // @tcolord:#48456D;//按钮hover 的颜色
+
 
   /*reset*/
   html, body, div, span, applet, object, iframe,
@@ -243,21 +230,16 @@
     border-radius: 5px;
   }
 
-  .viewMore {
-    text-align: center;
-    width: 100%;
-  }
-
-  .viewMore a {
-    /*background:  #97dffd;*/
-    /*padding:6px 0;*/
+  .page {
+    background: #fff;
+    padding: 10px;
+    white-space: normal;
+    word-wrap: break-word;
+    word-break: break-all;
+    position: relative;
     border-radius: 5px;
-    text-align: center;
-    font-size: 14px;
-    color: #fff;
-    height: 30px;
-    line-height: 30px;
-    display: block;
+    margin-bottom: 40px;
+    font-size: 15px;
   }
 
   @media screen and (max-width: 500px) {

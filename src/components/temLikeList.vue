@@ -7,27 +7,31 @@
           <h1 v-show="like ===  1"><i class="fa fa-wa fa-heart"></i>喜欢的文章</h1>
           <h1 v-show="like !== 1"><i class="fa fa-wa fa-star"></i>收藏的文章</h1>
         </div>
-        <el-col :span="24" class="s-item tCommonBox" v-for="(item,index) in articleList" :key="'like'+index">
+        <el-col :span="24" class="s-item commonBox" v-for="(item,index) in articleList" :key="'like'+index">
                     <span class="s-round-date">
-                        <span class="month">{{showInitDate(item.create_time,'month')}}月</span>
-                        <span class="day">{{showInitDate(item.create_time,'date')}}</span>
-                    </span>
+                <span class="month" v-html="showInitDate(item.createDate,'month')+'月'"></span>
+                <span class="day" v-html="showInitDate(item.createDate,'date')"></span>
+            </span>
           <header>
             <h1>
-              <a :href="'/detail?bid='+item.id" target="_blank">
-                {{item.title}}
+              <a href="#">
+                <router-link target="_blank" :to='{path:"/detail",query:{bid: item.id}}'>{{item.title}}</router-link>
               </a>
             </h1>
             <h2>
               <i class="fa fa-fw fa-user"></i>发表于
-              <i class="fa fa-fw fa-clock-o"></i>{{showInitDate(item.create_time,'newDate')}} •
-              <i class="fa fa-fw fa-eye"></i>{{item.browse_count}} 次围观 •
-              <i class="fa fa-fw fa-comments"></i>活捉 {{item.comment_count}} 条 •
+              <i class="fa fa-fw fa-clock-o"></i>
+              <span>{{showInitDate(item.createDate,'all')}}</span>•
+              <i class="fa fa-fw fa-eye"></i>{{item.readCount}} 次围观 •
+              <i class="fa fa-fw fa-comments"></i>活捉 {{item.commentCount}} 条 •
               <span class="rateBox">
-                                <i class="fa fa-fw fa-heart"></i>{{item.like_count?item.like_count:0}}点赞 •
-                                <i class="fa fa-fw fa-star"></i>{{item.collect_count?item.collect_count:0}}收藏
-                            </span>
+              <i class="fa fa-fw fa-heart"></i>{{item.likeCount}}点赞 •
+              <i class="fa fa-fw fa-star"></i>{{item.collectCount}}收藏
+          </span>
             </h2>
+            <div class="ui label">
+              <a href="#" @click="searchByClassId(item.classId)">{{item.className}}</a>
+            </div>
           </header>
           <div class="article-content">
             <p style="text-indent:2em;">
@@ -40,14 +44,23 @@
           <div class="viewDetail">
             <a class="cancelBtn colors-bg" href="#" @click="cancelLikeCollect(item.id)">取消{{like ===
               1?'喜欢':'收藏'}}</a>&nbsp;&nbsp;&nbsp;&nbsp;
-            <a class="colors-bg" :href="'/detail?bid='+item.id" target="_blank">
-              阅读全文>>
+            <a class="colors-bg" href="#">
+              <router-link target="_blank" :to='{path:"/detail",query:{bid: item.id}}'>阅读全文>></router-link>
             </a>
           </div>
         </el-col>
-        <el-col class="viewMore">
-          <a v-show="hasMore" class="colors-bg" href="#" @click="addMoreFun">点击加载更多</a>
-          <a v-show="!hasMore" class="colors-bg" href="#">暂无更多数据</a>
+        <el-col class="page">
+          <!--工具条-->
+          <el-pagination
+            background
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="pageNum"
+            :page-sizes="[10, 20, 30, 40]"
+            :page-size="pageSize"
+            layout="total, sizes, prev, pager, next"
+            :total="total" style="float: right">
+          </el-pagination>
         </el-col>
       </el-row>
     </div>
@@ -55,17 +68,18 @@
 </template>
 
 <script>
-  import {getArtLikeCollect, getLikeCollectList, initDate} from '../utils/server.js'
+  import {} from '../api/api.js'
+  import {initDate} from '../utils/server.js'
 
   export default {
     data() { //选项 / 数据
       return {
-        artId: 0,//文章id
-        hasMore: true,//是否还有更多数据
         articleList: '',//文章列表
         like: 1,//
         articleName: '',
-        userId: ''
+        total: 0,//总页数
+        pageNum: 1, //当前页码
+        pageSize: 10,//页数
       }
     },
     methods: {
@@ -86,8 +100,8 @@
       //展示数据
       showLikeCollectList: function (initPage) {
 
-        if (localStorage.getItem('userInfo')) {
-          this.userInfo = JSON.parse(localStorage.getItem('userInfo'));
+        if (sessionStorage.getItem('userInfo')) {
+          this.userInfo = JSON.parse(sessionStorage.getItem('userInfo'));
           this.userId = this.userInfo.userId;
           // console.log(this.userInfo);
         }
@@ -164,4 +178,5 @@
   .cancelBtn {
     background: #ddd;
   }
+
 </style>

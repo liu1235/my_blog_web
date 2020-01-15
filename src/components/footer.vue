@@ -1,20 +1,20 @@
 <!-- 底部公用 -->
 <template>
-  <div  class="footBack footBackQian">
+  <div class="footBack footBackQian">
     <div class="fContainer">
       <p>
-        博客已运行<span>{{longTime}}</span><span class="timeJump">(●'◡'●)ﾉ♥</span>
+        博客已运行<span>{{longTime}}</span>
       </p>
       <p>
-        托管于 <a href="https://github.com/Aimee1608/myblogvue" target="_blank">GitHub</a>. <a
-        href="https://www.aliyun.com/?spm=a2c49.11131515.0.0.5Z9AkR" target="_blank">阿里云</a> 提供静态文件云存储服务. <a
-        href="https://tongji.baidu.com/web/welcome/login" target="_blank">百度统计</a> 提供网站统计服务. <a
-        href="https://www.cloudxns.net/Order/index.html" target="_blank">CloudXNS</a> 提供 DNS 解析服务.
+        托管于<a href="https://github.com/liu1235/my_blog_web" target="_blank">GitHub</a>.
+        <a href="https://www.aliyun.com/?spm=a2c49.11131515.0.0.5Z9AkR" target="_blank">阿里云</a>提供静态文件云存储服务.
+<!--        <a href="https://tongji.baidu.com/web/welcome/login" target="_blank">百度统计</a>提供网站统计服务.-->
+<!--        <a href="https://www.cloudxns.net/Order/index.html" target="_blank">CloudXNS</a> 提供 DNS 解析服务.-->
       </p>
-      <p>
-        © 2019 <a href="#">Mango Ya</a>. 由 <a href="https://cn.vuejs.org/" target="_blank">Vue</a> 强力驱动. Theme By <a
-        href="https://diygod.me/" target="_blank">diygod.me</a>. 京ICP备17071595号-1.
-      </p>
+<!--      <p>-->
+<!--        © 2019 <a href="#">Mango Ya</a>. 由 <a href="https://cn.vuejs.org/" target="_blank">Vue</a> 强力驱动. Theme By-->
+<!--        <a href="https://diygod.me/" target="_blank">diygod.me</a>. 京ICP备17071595号-1.-->
+<!--      </p>-->
       <p>
         <span>Made with</span> <img class="fHeart" src="/static/img/heart02.png" alt=""/> <span>by Aimee.</span>
       </p>
@@ -27,11 +27,13 @@
   export default {
     data() { //选项 / 数据
       return {
-        longTime: '',
+        longTime: null,
       }
     },
-    methods: { //事件处理器
-      runTime: function () {//运行倒计时
+    methods: {
+
+      runTime() {//运行倒计时
+        let that = this;
         let oldTime = new Date('2020/01/01 00:00:00');
         setInterval(function () {
           let nowTime = new Date();
@@ -40,7 +42,7 @@
           let hours = parseInt(time / 1000 / 60 / 60 % 24, 10); //计算剩余的小时
           let minutes = parseInt(time / 1000 / 60 % 60, 10);//计算剩余的分钟
           let seconds = parseInt(time / 1000 % 60, 10);//计算剩余的秒数
-          this.longTime = days + "天" + hours + "小时" + minutes + "分" + seconds + "秒";
+          that.longTime = days + "天" + hours + "小时" + minutes + "分" + seconds + "秒";
         }, 1000)
 
       }

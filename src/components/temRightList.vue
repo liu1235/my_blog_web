@@ -97,7 +97,6 @@
         fixDo: false,
         likeMe: false,
         gotoTop: false,//返回顶部
-        going: false,//是否正在执行上滑动作
         topBlogList: '',//浏览量最多
         artCommentList: '',//评论量最多
         likeNum: 0,//do you like me 点击量
@@ -132,19 +131,17 @@
 
       toTopFun: function () {
         this.gotoTop = false;
-        this.going = true;
-        // let timer = setInterval(function () {
-        //   //获取滚动条距离顶部高度
-        //   let osTop = document.documentElement.scrollTop || document.body.scrollTop;
-        //   let speed = Math.floor(-osTop / 7);
-        //   document.documentElement.scrollTop = document.body.scrollTop = osTop + speed;
-        //   //到达顶部，清除定时器
-        //   if (osTop === 0) {
-        //     this.gotoTop = false;
-        //     clearInterval(timer);
-        //     timer = null;
-        //   }
-        // }, 30);
+        let timer = null;
+        cancelAnimationFrame(timer);
+        timer = requestAnimationFrame(function fn() {
+          let oTop = document.body.scrollTop || document.documentElement.scrollTop;
+          if (oTop > 0) {
+            scrollBy(0, -50);
+            timer = requestAnimationFrame(fn);
+          } else {
+            cancelAnimationFrame(timer);
+          }
+        });
       },
     },
     components: { //定义组件
@@ -152,13 +149,11 @@
     },
 
     created() { //生命周期函数
-
+      let that = this;
       window.onscroll = function () {
         let t = document.documentElement.scrollTop || document.body.scrollTop;
-        if (!this.going) {
-          this.gotoTop = t > 600;
-        }
-        this.fixDo = t > 1200;
+        that.gotoTop = t > 1000;
+        that.fixDo = t > 1200;
       };
 
       //查询浏览量最多的10篇文章数据

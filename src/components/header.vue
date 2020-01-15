@@ -155,7 +155,7 @@
 
       //用户登录和注册跳转
       loginFun: function (msg) {
-        localStorage.setItem('logUrl', this.$route.fullPath);
+        sessionStorage.setItem('returnUrl', this.$route.fullPath);
         if (msg === 0) {
           this.$router.push({
             path: '/login?loginStatus=0'
@@ -176,7 +176,7 @@
         }).then(() => {
           logout().then((res) => {
             if (this.GLOBAL.isResponseSuccess(res)) {
-              localStorage.removeItem('userInfo');
+              sessionStorage.removeItem('userInfo');
               this.hasLogin = false;
               window.location.reload();
               this.$message({
@@ -195,19 +195,14 @@
       routeChange: function () {
         this.pMenu = true;
         this.activeIndex = this.$route.path === '/' ? '/home' : this.$route.path;
-        if (localStorage.getItem('userInfo')) { //存储用户信息
+        if (sessionStorage.getItem('userInfo')) { //存储用户信息
           this.hasLogin = true;
-          this.userInfo = JSON.parse(localStorage.getItem('userInfo'));
+          this.userInfo = JSON.parse(sessionStorage.getItem('userInfo'));
         } else {
           this.hasLogin = false;
         }
-
         //文章分类
-        getFirstClass({}).then((res) => {
-          if (this.GLOBAL.isResponseSuccess(res)) {
-            this.classList = res.data;
-          }
-        });
+        this.getFirstClassList();
 
         if ((this.$route.name === "blog" || this.$route.name === "Home") && this.$store.state.keywords) {
           this.input = this.$store.state.keywords;
@@ -215,7 +210,23 @@
           this.input = '';
           this.$store.state.keywords = '';
         }
+      },
+
+      //获取一级分类列表
+      getFirstClassList() {
+        let firstClassList = sessionStorage.getItem("first-class-list");
+        if (firstClassList) {
+          this.classList = JSON.parse(firstClassList);
+        } else {
+          getFirstClass({}).then((res) => {
+            if (this.GLOBAL.isResponseSuccess(res)) {
+              this.classList = res.data;
+              sessionStorage.setItem("first-class-list", JSON.stringify(res.data));
+            }
+          });
+        }
       }
+
     },
 
     components: { //定义组件
@@ -241,7 +252,7 @@
         } else {
           document.title = '被发现啦(*´∇｀*)'; //当前窗口打开
           if (this.$route.path !== '/detail') {
-            this.hasLogin = !!localStorage.getItem('userInfo');
+            this.hasLogin = !!sessionStorage.getItem('userInfo');
           }
         }
       };
@@ -279,7 +290,6 @@
   }
 
   .headBox li.is-active {
-    /*background: #48456C;*/
     background: rgba(73, 69, 107, 0.7);
   }
 

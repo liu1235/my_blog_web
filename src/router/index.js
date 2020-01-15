@@ -35,7 +35,7 @@ let routes = [
     meta: {
       auth: true
     },
-    name: 'detail'
+    name: 'Detail'
   },
 
   //赞赏

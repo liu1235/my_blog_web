@@ -20,7 +20,7 @@ export const state = {
     },
   host: "http://" + window.location.host,//接口路径
   keywords: '',//关键词
-  errorImg: 'this.onerror=null;this.src="' + require('../../static/img/tou.jpg') + '"'
+  errorImg: 'this.onerror=null;this.src="../../static/img/tou.jpg"'
 };
 
 export default new Vuex.Store({

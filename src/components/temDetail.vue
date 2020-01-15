@@ -90,7 +90,7 @@
        */
       likeBlog: function () {
         //判断是否登录
-        if (localStorage.getItem('userInfo')) {
+        if (sessionStorage.getItem('userInfo')) {
           let tip = '';
           if (!this.likeArt) {
             this.likeCount += 1;
@@ -102,7 +102,7 @@
             tip = '已取消点赞'
           }
           let param = {
-            id: this.detailObj.id,
+            blogId: this.detailObj.id,
             status: this.likeArt ? 1 : 0
           };
           like(param).then((res) => {
@@ -124,7 +124,7 @@
        */
       collectBlog: function () {
         //判断是否登录
-        if (localStorage.getItem('userInfo')) {
+        if (sessionStorage.getItem('userInfo')) {
           let tip = '';
             if (!this.collectArt) {
               this.collectCount += 1;
@@ -162,7 +162,7 @@
           type: 'warning'
         }).then(() => {//确定，跳转至登录页面
           //储存当前页面路径，登录成功后跳回来
-          localStorage.setItem('logUrl', this.$route.fullPath);
+          sessionStorage.setItem('returnUrl', this.$route.fullPath);
           this.$router.push({path: '/login?login=1'});
         }).catch(() => {//取消关闭弹窗
         });

@@ -26,14 +26,14 @@
         </h1>
         <h2>
           <i class="fa fa-fw fa-user"></i>发表于
-          <i class="fa fa-fw fa-clock-o"></i><span v-html="showInitDate(item.createDate,'all')">{{showInitDate(item.createDate,'all')}}</span>
-          •
+          <i class="fa fa-fw fa-clock-o"></i>
+          <span>{{showInitDate(item.createDate,'all')}}</span> •
           <i class="fa fa-fw fa-eye"></i>{{item.readCount}} 次围观 •
           <i class="fa fa-fw fa-comments"></i>活捉 {{item.commentCount}} 条 •
           <span class="rateBox">
-                        <i class="fa fa-fw fa-heart"></i>{{item.likeCount}}点赞 •
-                        <i class="fa fa-fw fa-star"></i>{{item.collectCount}}收藏
-                    </span>
+              <i class="fa fa-fw fa-heart"></i>{{item.likeCount}}点赞 •
+              <i class="fa fa-fw fa-star"></i>{{item.collectCount}}收藏
+          </span>
         </h2>
         <div class="ui label">
           <a href="#" @click="searchByClassId(item.classId)">{{item.className}}</a>
@@ -53,16 +53,26 @@
         </a>
       </div>
     </el-col>
-    <el-col class="viewMore">
-      <a v-show="hasMore" class="colors-bg" href="#" @click="showMore">点击加载更多</a>
-      <a v-show="!hasMore" class="colors-bg" href="javascript:void(0);">暂无更多数据</a>
+
+    <el-col :span="24" class="s-item page">
+      <!--工具条-->
+      <el-pagination
+        background
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="pageNum"
+        :page-sizes="[10, 20, 30, 40]"
+        :page-size="pageSize"
+        layout="total, sizes, prev, pager, next"
+        :total="total" style="float: right">
+      </el-pagination>
     </el-col>
   </el-row>
 </template>
 
 <script>
   import {initDate} from '../utils/server.js'
-  import {getBlogList,getSecondClass} from '../api/api.js'
+  import {getBlogList, getSecondClass} from '../api/api.js'
 
   export default {
     name: 'blog',
@@ -72,8 +82,8 @@
         className: '',
         sonClassList: '',//二级分类
         keywords: '',
-        hasMore: true,
         list: [], //博客列表
+        total: 0,//总页数
         pageNum: 1, //当前页码
         pageSize: 10,//页数
       }
@@ -85,25 +95,30 @@
         return initDate(oldDate, full)
       },
 
-      //展示博客列表数据数据
-      showBlogList: function () {
-        let param = {
-          classId: this.$route.query.classId === undefined ? null : this.$route.query.classId,
-          pageNum: this.pageNum,
-          pageSize: this.pageSize,
-          title: this.$store.state.keywords
-        };
+      //切换页数
+      handleCurrentChange(val) {
+        this.pageNum = val;
+        this.toTopFun();
+        this.showBlogList();
+      },
+      //处理分页条数
+      handleSizeChange(val) {
+        this.pageSize = val;
+        this.toTopFun();
+        this.showBlogList();
 
-        getBlogList(param).then((res) => {
-          if (this.GLOBAL.isResponseSuccess(res)) {
-            let dataList = res.data.list;
-            if (dataList !== null) {
-              this.hasMore = !(dataList.length > 0 && dataList.length < 10);
-              this.list = this.list.concat(dataList);
-            } else {
-              this.hasMore = false;
-              this.list = [];
-            }
+      },
+
+      toTopFun: function () {
+        let timer = null;
+        cancelAnimationFrame(timer);
+        timer = requestAnimationFrame(function fn() {
+          let oTop = document.body.scrollTop || document.documentElement.scrollTop;
+          if (oTop > 0) {
+            scrollBy(0, -50);
+            timer = requestAnimationFrame(fn);
+          } else {
+            cancelAnimationFrame(timer);
           }
         });
       },
@@ -124,11 +139,23 @@
       },
 
 
-      //查看更多
-      showMore: function () {
-        this.pageNum = this.pageNum + 1;
-        this.showBlogList()
+      //展示博客列表数据数据
+      showBlogList: function () {
+        let param = {
+          classId: this.$route.query.classId === undefined ? null : this.$route.query.classId,
+          pageNum: this.pageNum,
+          pageSize: this.pageSize,
+          title: this.$store.state.keywords
+        };
+
+        getBlogList(param).then((res) => {
+          if (this.GLOBAL.isResponseSuccess(res)) {
+            this.list = res.data.list;
+            this.total = res.data.total;
+          }
+        });
       },
+
 
       routeChange: function () {
         let classId = this.$route.query.classId;
@@ -207,7 +234,4 @@
   }
 
 
-  /*.shareListBox .viewMore a:hover,.s-item .viewDetail a:hover{
-      background: #48456C;
-  }*/
 </style>

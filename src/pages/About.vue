@@ -25,7 +25,7 @@
   import temMessage from '../components/temMessage.vue'
 
   export default {
-    name: 'Aboutme',
+    name: 'AboutMe',
     components: { //定义组件
       'wbc-nav': header,
       'wbc-message': temMessage,
