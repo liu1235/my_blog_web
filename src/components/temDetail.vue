@@ -27,7 +27,7 @@
     <div class="article-content" v-html="detailObj.content"></div>
     <div class="dShareBox bdsharebuttonbox" data-tag="share_1">
       分享到:
-      <a href="#" class="ds-weibo fa fa-fw fa-weibo" data-cmd="tsina"></a>
+      <a href="" class="ds-weibo fa fa-fw fa-weibo" data-cmd="tsina"></a>
       <a href="#" class="ds-qq fa fa-fw fa-qq" data-cmd="tqq"></a>
       <a href="#" class="ds-wechat fa fa-fw fa-wechat" data-cmd="weixin"></a>
       <div class="dlikeColBox">
@@ -90,7 +90,7 @@
        */
       likeBlog: function () {
         //判断是否登录
-        if (sessionStorage.getItem('userInfo')) {
+        if (localStorage.getItem('userInfo')) {
           let tip = '';
           if (!this.likeArt) {
             this.likeCount += 1;
@@ -124,7 +124,7 @@
        */
       collectBlog: function () {
         //判断是否登录
-        if (sessionStorage.getItem('userInfo')) {
+        if (localStorage.getItem('userInfo')) {
           let tip = '';
             if (!this.collectArt) {
               this.collectCount += 1;
@@ -162,7 +162,7 @@
           type: 'warning'
         }).then(() => {//确定，跳转至登录页面
           //储存当前页面路径，登录成功后跳回来
-          sessionStorage.setItem('returnUrl', this.$route.fullPath);
+          localStorage.setItem('returnUrl', this.$route.fullPath);
           this.$router.push({path: '/login?login=1'});
         }).catch(() => {//取消关闭弹窗
         });

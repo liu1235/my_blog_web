@@ -3,7 +3,7 @@
   <div class="tMsgBox commonBox">
     <header>
       <h1>
-        <a href="/detail" target="_blank">
+        <a href="javaScript:void(0)">
           留言板
         </a>
       </h1>

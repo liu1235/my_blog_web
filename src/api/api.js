@@ -8,7 +8,7 @@ let base = "/api";
 axios.defaults.timeout = 60 * 1000;
 
 function getUserToken() {
-  let user = sessionStorage.getItem('userInfo');
+  let user = localStorage.getItem('userInfo');
   let userToken = "";
   if (user) {
     user = JSON.parse(user);
@@ -55,7 +55,7 @@ axios.interceptors.response.use((res) => {
  */
 export function processResponseData(data) {
   if (data.code === global.RESP_CODE.LOGIN_FAIL) { //没有登录
-    sessionStorage.removeItem('userInfo');
+    localStorage.removeItem('userInfo');
     Message.error(data.message);
     router.replace({path: '/login'})
   } else if (data.code === global.RESP_CODE.ERROR) { //错误
@@ -123,6 +123,11 @@ export const topBlogList = params => {
   return axios.post(`${base}/blog/top-blog-list`, params).then(res => res.data);
 };
 
+//获取最新十条评论的博客
+export const topBlogCommentList = params => {
+  return axios.post(`${base}/blog/top-blog-comment-list`, params).then(res => res.data);
+};
+
 
 //点赞博客
 export const like = params => {
@@ -162,4 +167,9 @@ export const getCommentList = params => {
 //添加评论
 export const addComment = params => {
   return axios.post(`${base}/comment/add`, params).then(res => res.data);
+};
+
+//添加回复
+export const addReply = params => {
+  return axios.post(`${base}/comment/add-reply`, params).then(res => res.data);
 };

@@ -281,9 +281,9 @@
       //展示页面信息
       routeChange: function () {
 
-        if (sessionStorage.getItem('userInfo')) {
+        if (localStorage.getItem('userInfo')) {
           this.hasLogin = true;
-          this.userInfo = JSON.parse(sessionStorage.getItem('userInfo'));
+          this.userInfo = JSON.parse(localStorage.getItem('userInfo'));
           this.userId = this.userInfo.userId;
           getUserInfo(this.userId, function (msg) {
             this.userInfoObj = msg.data;

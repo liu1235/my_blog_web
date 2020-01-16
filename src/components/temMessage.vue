@@ -39,13 +39,14 @@
       </form>
     </div>
     <div class="msg-comments" ref="listDom">
-      <a href="#" class="msg-comments-tip">活捉 {{commentList?commentList.length:0}} 条</a>
+      <a href="#" class="msg-comments-tip">活捉 {{count}} 条</a>
       <div class="msg-commentShow">
         <ul class="msg-commentList">
           <li class="msg-c-item" v-for="(item,index) in commentList" :key="'comment'+index">
             <article class="">
               <header>
-                <img :src="item.headPhoto" :onerror="$store.state.errorImg">
+                <img :src="item.headPhoto === null ? $store.state.errorImg : item.headPhoto"
+                     :onerror="$store.state.errorImg" alt="">
                 <div class="i-name">
                   {{item.userName}}
                 </div>
@@ -57,38 +58,14 @@
                 </div>
               </header>
               <section>
-                <p v-html="analyzeEmoji(item.content)">{{analyzeEmoji(item.content)}}</p>
+                <p v-html="analyzeEmoji(item.content)"></p>
                 <div v-if="hasLogin" class="msg-replay" @click="respondMsg(item)">
                   回复
                 </div>
               </section>
             </article>
-            <ul v-show="item.child" class="msg-commentList" style="padding-left:60px;">
-              <li class="msg-c-item" v-for="citem in item.ChildsSon" :key="'citem'+citem.id">
-                <article class="">
-                  <header>
-                    <img :src="citem.headPhoto" :onerror="$store.state.errorImg">
-                    <div class="i-name">
-                      {{citem.username}} <span>回复</span> {{citem.replyName}}
-                    </div>
-                    <div class="i-class">
-                      {{citem.label}}
-                    </div>
-                    <div class="i-time">
-                      <time>{{citem.createTime}}</time>
-                    </div>
-                  </header>
-                  <section>
-                    <p v-html="analyzeEmoji(citem.content)">{{citem.content}}</p>
-                    <div v-show="hasLogin" class="msg-replay" @click="respondMsg(citem.comment_id,item.comment_id)">
-                      回复
-                    </div>
-                  </section>
-                </article>
-              </li>
-            </ul>
+            <reply-tree v-if="item != null && item.child !== null" :nodes="item.child"></reply-tree>
           </li>
-
         </ul>
         <h1 v-show='hasMore' class="colors-bg" @click="addMoreFun">查看更多</h1>
         <h1 v-show='!hasMore' class="colors-bg">没有更多</h1>
@@ -98,16 +75,17 @@
 </template>
 
 <script>
-  import {addComment, getCommentList} from '../api/api.js'
+  import {addComment, addReply, getCommentList} from '../api/api.js';
+  import ReplyTree from '@/components/replyTree.vue';
 
   export default {
     data() { //选项 / 数据
       return {
-        respondBox: '',//评论表单
         isRespond: false,
         content: '',//文本框输入内容
         pBody: true,//表情打开控制
         commentList: [],//评论列表数据
+        count: 0, //评论回复数
         pageNum: 1, //当前页码
         pageSize: 10,//页数
         hasMore: true,
@@ -196,7 +174,7 @@
 
       //选择表情包
       choseEmoji: function (inner) {
-        this.textarea += '[' + inner + ']';
+        this.content += '[' + inner + ']';
       },
 
       //编译表情替换成图片展示出来
@@ -205,11 +183,12 @@
         let pattern2 = /\[[\u4e00-\u9fa5]+\]/;
         let content = cont.match(pattern1);
         let str = cont;
+        let src;
         if (content) {
           for (let i = 0; i < content.length; i++) {
             for (let j = 0; j < this.OwOList.length; j++) {
               if ("[" + this.OwOList[j].title + "]" === content[i]) {
-                let src = this.OwOList[j].url;
+                src = this.OwOList[j].url;
                 break;
               }
             }
@@ -223,11 +202,51 @@
       sendMsg: function () {
         if (this.content) {
           //是否是回复（回复是存在父id）
-          if (this.replyId) {
-            this.reply();
+          let replyId = this.replyId;
+          if (replyId != null) {
+            //判断当前用户是否登录
+            this.hasLogin = !!localStorage.getItem('userInfo');
+            if (this.hasLogin) {
+              //replyId为-1时即对评论进行回复
+              if (replyId === -1) {
+                let params = {
+                  commentId: this.replyObj.id,
+                  replyType: 1,
+                  replyId: this.replyObj.id,
+                  content: this.content,
+                  toUserId: this.replyObj.userId,
+                };
+                console.log("reply.....对评论进行回复.....");
+                this.reply(params);
+              } else {
+                let params = {
+                  commentId: this.replyObj.commentId,
+                  replyType: 2,
+                  replyId: this.replyObj.id,
+                  content: this.content,
+                  toUserId: this.replyObj.fromUserId,
+                };
+                console.log("reply.....对回复进行回复.....");
+                this.reply(params);
+              }
+              this.removeRespond();
+            } else {
+              this.$confirm('登录后即可发表评论，是否前往登录页面?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+              }).then(() => {//确定，跳转至登录页面
+                //储存当前页面路径，登录成功后跳回来
+                localStorage.setItem('returnUrl', this.$route.fullPath);
+                this.$router.push({path: '/login?loginStatus=1'});
+              });
+            }
           } else {
             this.add();
+            console.log("add.....添加评论.....")
           }
+
+          this.replyId = null;
         } else {
           let that = this;
           that.sendTip = '内容不能为空~';
@@ -249,40 +268,38 @@
           if (this.GLOBAL.isResponseSuccess(res)) {
             this.sendTip = '咻~~';
             this.content = '';
+            this.commentList = [];
             this.showCommentList();
           }
         });
       },
 
-      //新增评论
-      reply() {
-        let params = {
-          blogId: this.$route.query.bid === undefined ? null : parseInt(this.$route.query.bid),
-          commentId: this.comment.commentId,
-          replyType: this.comment.replyId === 0 ? 1 : 2,
-          replyId: this.comment.id,
-          content: this.content,
-          toUserId: this.content.userId,
-        };
-        addComment(params).then((res) => {
+      //新增回复
+      reply(params) {
+        addReply(params).then((res) => {
           if (this.GLOBAL.isResponseSuccess(res)) {
-            this.sendTip = '咻~~';
             this.content = '';
+            this.sendTip = '发送~~';
+            this.commentList = [];
             this.showCommentList();
           }
         });
       },
 
 
-      //回复留言
-      respondMsg: function (comment) {
+      //打开回复留言
+      respondMsg: function (replyObj) {
+        //判断当前用户是否登录
+        this.hasLogin = !!localStorage.getItem('userInfo');
         if (this.hasLogin) {
           let dom = event.currentTarget;
           dom = dom.parentNode;
           this.isRespond = true;
-          this.replyId = comment.replyId;
-          comment.child = null;
-          this.comment = comment;
+          this.replyId = replyObj.replyId;
+          this.replyObj = replyObj;
+          this.replyObj.child = null;
+          this.content = '';
+          this.sendTip = '回复~';
           dom.appendChild(this.$refs.respondBox);
         } else {
           this.$confirm('登录后即可点赞和收藏，是否前往登录页面?', '提示', {
@@ -291,7 +308,7 @@
             type: 'warning'
           }).then(() => {//确定，跳转至登录页面
             //储存当前页面路径，登录成功后跳回来
-            sessionStorage.setItem('returnUrl', this.$route.fullPath);
+            localStorage.setItem('returnUrl', this.$route.fullPath);
             this.$router.push({path: '/login?loginStatus=1'});
           }).catch(() => {
 
@@ -302,6 +319,8 @@
       //取消回复留言
       removeRespond: function () {
         this.isRespond = false;
+        this.replyId = null;
+        this.content = '';
         this.$refs.tMsgBox.insertBefore(this.$refs.respondBox, this.$refs.listDom);
       },
 
@@ -313,23 +332,22 @@
 
       //评论列表
       showCommentList: function () {
-
         let params = {
           blogId: this.$route.query.bid === undefined ? null : parseInt(this.$route.query.bid),
           type: this.commentType,
           pageNum: this.pageNum,
           pageSize: this.pageSize
         };
-
         getCommentList(params).then((res) => {
           if (this.GLOBAL.isResponseSuccess(res)) {
-            let msg = res.data.list;
+            let msg = res.data.detail.list;
+            this.count = res.data.count;
             if (msg) {
               this.hasMore = !(msg.length > 0 && msg.length < 10);
               this.commentList = this.commentList.concat(msg);
             } else {
               this.hasMore = false;
-              // this.commentList =  this.commentList
+              this.commentList = [];
             }
           }
         });
@@ -339,7 +357,7 @@
     },
 
     components: { //定义组件
-
+      ReplyTree
     },
 
     //生命周期函数
@@ -356,8 +374,7 @@
       } else if (this.$route.name === 'Reward') {
         this.commentType = 5
       }
-      //判断当前用户是否登录
-      this.hasLogin = !!sessionStorage.getItem('userInfo');
+      this.hasLogin = !!localStorage.getItem('userInfo');
       this.showCommentList();
     },
     mounted() {//页面加载完成后

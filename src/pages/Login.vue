@@ -190,11 +190,11 @@
           };
           login(param).then((res) => {
             if (this.GLOBAL.isResponseSuccess(res)) {
-              sessionStorage.setItem('userInfo', JSON.stringify(res.data));
+              localStorage.setItem('userInfo', JSON.stringify(res.data));
               //判断是否存在需要跳转的url
-              let url = sessionStorage.getItem('returnUrl');
+              let url = localStorage.getItem('returnUrl');
               if (url) {
-                sessionStorage.removeItem('returnUrl');
+                localStorage.removeItem('returnUrl');
                 this.$router.push({path: url});
               } else {
                 this.$router.push({path: '/'});

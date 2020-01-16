@@ -32,7 +32,7 @@
               </div>
               <div class="userInfo">
                 <div v-show="!hasLogin" class="noLogin">
-                  <a href="#" @click="loginFun(1)">登录&nbsp;</a>|<a href="#" @click="loginFun(0)">&nbsp;注册</a>
+                  <a href="#" @click="login(1)">登录&nbsp;</a>|<a href="#" @click="login(0)">&nbsp;注册</a>
                 </div>
                 <div v-show="hasLogin" class="hasLogin">
                   <i class="fa fa-fw fa-user-circle userImg"></i>
@@ -47,7 +47,7 @@
                       <a href="/#/likeCollect?like=2">收藏列表</a>
                     </li>
                     <li>
-                      <a href="#" @click="userLogout">退出登录</a>
+                      <a href="javaScript:void(0)" @click="logout">退出登录</a>
                     </li>
                   </ul>
                 </div>
@@ -76,14 +76,14 @@
                   <!--<el-menu-item index="/friendsLink"><i class="fa fa-wa fa-users"></i> 伙伴</el-menu-item>-->
                   <el-menu-item index="/message"><i class="fa fa-wa fa-pencil"></i>留言板</el-menu-item>
                   <el-menu-item index="/about"><i class="fa fa-wa fa-vcard"></i>关于</el-menu-item>
-                  <el-menu-item v-show="!hasLogin" index="" @click="loginFun(1)">登录</el-menu-item>
-                  <el-menu-item v-show="!hasLogin" index="" @click="loginFun(0)">注册</el-menu-item>
+                  <el-menu-item v-show="!hasLogin" index="" @click="login(1)">登录</el-menu-item>
+                  <el-menu-item v-show="!hasLogin" index="" @click="login(0)">注册</el-menu-item>
                   <el-submenu v-show="hasLogin" index="3">
                     <template slot="title"><i class="fa fa-wa fa-user-circle-o"></i>我的</template>
                     <el-menu-item index="/userInfo">个人中心</el-menu-item>
                     <el-menu-item index="/likeCollect?like=1">喜欢的文章</el-menu-item>
                     <el-menu-item index="/likeCollect?like=2">收藏的文章</el-menu-item>
-                    <el-menu-item index="" @click="userLogout">退出登录</el-menu-item>
+                    <el-menu-item index="" @click="logout">退出登录</el-menu-item>
                   </el-submenu>
                 </el-menu>
               </el-collapse-transition>
@@ -154,8 +154,8 @@
       },
 
       //用户登录和注册跳转
-      loginFun: function (msg) {
-        sessionStorage.setItem('returnUrl', this.$route.fullPath);
+      login: function (msg) {
+        localStorage.setItem('returnUrl', this.$route.fullPath);
         if (msg === 0) {
           this.$router.push({
             path: '/login?loginStatus=0'
@@ -168,7 +168,7 @@
       },
 
       // 用户退出登录
-      userLogout: function () {
+      logout: function () {
         this.$confirm('是否确认退出?', '退出提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -176,16 +176,13 @@
         }).then(() => {
           logout().then((res) => {
             if (this.GLOBAL.isResponseSuccess(res)) {
-              sessionStorage.removeItem('userInfo');
+              localStorage.removeItem('userInfo');
               this.hasLogin = false;
-              window.location.reload();
               this.$message({
                 type: 'success',
                 message: '退出成功!'
               });
-              this.$router.push({
-                path: '/'
-              });
+              window.location.reload();
             }
           });
         });
@@ -195,9 +192,9 @@
       routeChange: function () {
         this.pMenu = true;
         this.activeIndex = this.$route.path === '/' ? '/home' : this.$route.path;
-        if (sessionStorage.getItem('userInfo')) { //存储用户信息
+        if (localStorage.getItem('userInfo')) { //存储用户信息
           this.hasLogin = true;
-          this.userInfo = JSON.parse(sessionStorage.getItem('userInfo'));
+          this.userInfo = JSON.parse(localStorage.getItem('userInfo'));
         } else {
           this.hasLogin = false;
         }
@@ -214,14 +211,14 @@
 
       //获取一级分类列表
       getFirstClassList() {
-        let firstClassList = sessionStorage.getItem("first-class-list");
+        let firstClassList = localStorage.getItem("first-class-list");
         if (firstClassList) {
           this.classList = JSON.parse(firstClassList);
         } else {
           getFirstClass({}).then((res) => {
             if (this.GLOBAL.isResponseSuccess(res)) {
               this.classList = res.data;
-              sessionStorage.setItem("first-class-list", JSON.stringify(res.data));
+              localStorage.setItem("first-class-list", JSON.stringify(res.data));
             }
           });
         }
@@ -251,9 +248,7 @@
           document.title = '藏好啦(つд⊂)';
         } else {
           document.title = '被发现啦(*´∇｀*)'; //当前窗口打开
-          if (this.$route.path !== '/detail') {
-            this.hasLogin = !!sessionStorage.getItem('userInfo');
-          }
+          this.hasLogin = !!localStorage.getItem('userInfo');
         }
       };
 

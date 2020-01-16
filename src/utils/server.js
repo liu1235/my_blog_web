@@ -29,15 +29,15 @@ const LoginOut = (token, callback) => {
 
 //文章分类查询
 const ArtClassData = (callback) => {
-  if (sessionStorage.getItem('classList')) {
-    let data = JSON.parse(sessionStorage.getItem('classList'));
+  if (localStorage.getItem('classList')) {
+    let data = JSON.parse(localStorage.getItem('classList'));
     callback && callback(data)
   } else {
     let url = portUrl + 'article/ArtClassData';
     axios.get(url).then(num => {
       // console.log(num);
       if (num.data.code === 1001) {
-        sessionStorage.setItem('classList', JSON.stringify(num.data.data));
+        localStorage.setItem('classList', JSON.stringify(num.data.data));
         callback && callback(num.data.data)
       } else {
         alert("查询失败")
@@ -48,15 +48,15 @@ const ArtClassData = (callback) => {
 
 //实验室 列表项目
 const navMenList = (callback) => {
-  if (sessionStorage.getItem('navMenList')) {
-    let data = JSON.parse(sessionStorage.getItem('navMenList'));
+  if (localStorage.getItem('navMenList')) {
+    let data = JSON.parse(localStorage.getItem('navMenList'));
     callback && callback(data)
   } else {
     let url = portUrl + 'nav/navMenList';
     axios.get(url).then(num => {
       // console.log(num);
       if (num.data.code === 1001) {
-        sessionStorage.setItem('navMenList', JSON.stringify(num.data.data));
+        localStorage.setItem('navMenList', JSON.stringify(num.data.data));
         callback && callback(num.data.data)
       } else {
         alert("查询失败")
@@ -190,14 +190,14 @@ const FriendUrlData = (callback) => {
 
 //查询关于我
 const AboutMeData = (callback) => {
-  if (sessionStorage.getItem('AboutMeData')) {
-    let data = JSON.parse(sessionStorage.getItem('AboutMeData'));
+  if (localStorage.getItem('AboutMeData')) {
+    let data = JSON.parse(localStorage.getItem('AboutMeData'));
     callback && callback(data)
   } else {
     let url = portUrl + 'outh/AboutMeData';
     axios.get(url).then(num => {
       if (num.data.code === 1001) {
-        sessionStorage.setItem('AboutMeData', JSON.stringify(num.data.data));
+        localStorage.setItem('AboutMeData', JSON.stringify(num.data.data));
         callback && callback(num.data.data);
       } else if (num.data.code === 1005) {
 
@@ -312,14 +312,14 @@ const initDate = (oldDate, full) => {
 
 //获取主题信息
 const changeTheme = (callback) => {
-  if (sessionStorage.getItem('changeThemeObj')) {
-    let data = JSON.parse(sessionStorage.getItem('changeThemeObj'));
+  if (localStorage.getItem('changeThemeObj')) {
+    let data = JSON.parse(localStorage.getItem('changeThemeObj'));
     callback && callback(data)
   } else {
     let url = portUrl + 'outh/ThemeMy';
     axios.get(url).then(num => {
       if (num.data.code === 1001) {
-        sessionStorage.setItem('changeThemeObj', JSON.stringify(num.data.data));
+        localStorage.setItem('changeThemeObj', JSON.stringify(num.data.data));
         callback && callback(num.data.data);
       } else {
         alert("查询失败");

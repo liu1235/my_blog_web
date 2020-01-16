@@ -14,8 +14,8 @@
             </span>
           <header>
             <h1>
-              <a href="#">
-                <router-link target="_blank" :to='{path:"/detail",query:{bid: item.id}}'>{{item.title}}</router-link>
+              <a :href="'/#/detail?bid=' + item.id" target="_blank">
+                {{item.title}}
               </a>
             </h1>
             <h2>
@@ -42,10 +42,10 @@
             </p>
           </div>
           <div class="viewDetail">
-            <a class="cancelBtn colors-bg" href="#" @click="cancelLikeCollect(item.id)">取消{{like ===
-              1?'喜欢':'收藏'}}</a>&nbsp;&nbsp;&nbsp;&nbsp;
-            <a class="colors-bg" href="#">
-              <router-link target="_blank" :to='{path:"/detail",query:{bid: item.id}}'>阅读全文>></router-link>
+            <a class="cancelBtn colors-bg" href="#" @click="cancelLikeCollect(item.id)">
+              取消{{like === 1 ? '喜欢' : '收藏'}}</a>&nbsp;&nbsp;&nbsp;&nbsp;
+            <a class="colors-bg" :href="'/#/detail?bid=' + item.id" target="_blank">
+              阅读全文>>
             </a>
           </div>
         </el-col>
@@ -68,7 +68,6 @@
 </template>
 
 <script>
-  import {} from '../api/api.js'
   import {initDate} from '../utils/server.js'
 
   export default {
@@ -100,8 +99,8 @@
       //展示数据
       showLikeCollectList: function (initPage) {
 
-        if (sessionStorage.getItem('userInfo')) {
-          this.userInfo = JSON.parse(sessionStorage.getItem('userInfo'));
+        if (localStorage.getItem('userInfo')) {
+          this.userInfo = JSON.parse(localStorage.getItem('userInfo'));
           this.userId = this.userInfo.userId;
           // console.log(this.userInfo);
         }

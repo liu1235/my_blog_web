@@ -33,7 +33,7 @@
               <a :href="catchMeObj.job" target="_blank"><i class="fa fa-fw fa-file-word-o"></i></a>
             </el-tooltip>
             <el-tooltip class="item" effect="dark" content="更多" placement="top">
-              <a href="/about"><i class="el-icon-more"></i></a>
+              <a href="/#/about"><i class="el-icon-more"></i></a>
             </el-tooltip>
           </div>
         </div>
@@ -54,13 +54,14 @@
         这些人都排着队来跟我说话
       </h2>
       <ul class="rs3-textWidget">
-        <li class="rs3-item" v-for="(item,index) in artCommentList" :key="'artCommentList'+index">
-          <a :href="'/detail?bid='+item.id" target="_blank">
+        <li class="rs3-item" v-for="(item,index) in topBlogCommentList" :key="'topBlogCommentList'+ index">
+          <a :href="'/#/detail?bid='+item.id" target="_blank">
             <div class="rs3-photo">
-              <img :src="item.avatar" :onerror="$store.state.errorImg" alt="">
+              <img :src="item.headPhoto === null ? $store.state.errorImg : item.headPhoto "
+                   :onerror="$store.state.errorImg" alt="">
             </div>
             <div class="rs3-inner">
-              <p class="rs3-author">{{item.nickname}} 在「{{item.title}}」中说:</p>
+              <p class="rs3-author">{{item.userName}} 在「{{item.title}}」中说:</p>
               <p class="rs3-text">{{item.content}}</p>
             </div>
           </a>
@@ -73,9 +74,9 @@
       </h2>
       <ul>
         <li v-for="(item,index) in topBlogList" :key="'topBlogList'+ index">
-          <a href="#" target="_blank">
-            <router-link :to='{path:"/detail", query:{bid: item.id}}'>{{item.title}}</router-link>
-          </a> —— {{item.browse_count}} 次围观
+          <a :href="'/#/detail?bid=' + item.id" target="_blank">
+            {{item.title}}
+          </a> —— {{item.readCount}} 次围观
         </li>
       </ul>
     </section>
@@ -89,7 +90,7 @@
 
 
 <script>
-  import {addLikeMeData, likeMeData, topBlogList} from '../api/api.js'
+  import {addLikeMeData, likeMeData, topBlogCommentList, topBlogList} from '../api/api.js'
 
   export default {
     data() { //选项 / 数据
@@ -97,17 +98,16 @@
         fixDo: false,
         likeMe: false,
         gotoTop: false,//返回顶部
-        topBlogList: '',//浏览量最多
-        artCommentList: '',//评论量最多
+        topBlogList: [],//浏览量最多
+        topBlogCommentList: [],//最新十条评论的博客
         likeNum: 0,//do you like me 点击量
-        initLikeNum: 0,//初始化喜欢数量
         catchMeObj: {//抓住我 个人信息
-          git: 'https://github.com/Aimee1608',
-          qq: 'static/img/aimee/QQ.jpg',
-          sina: 'https://weibo.com/u/2242812941',
-          wechat: 'static/img/aimee/erwm.jpg',
-          csdn: 'http://blog.csdn.net/Aimee1608',
-          job: 'http://aimee.mangoya.cn'
+          git: 'https://github.com/liu1235',
+          qq: '',
+          sina: '',
+          wechat: '',
+          csdn: '',
+          job: ''
         },
       }
     },
@@ -163,13 +163,14 @@
         }
       });
 
-      //查询文章评论量最大的10篇文章
-      // ShowArtCommentCount(function (data) {
-      //   // console.log('评论最多10文章数据',data);
-      //   this.artCommentList = data;
-      // });
+      //获取最新十条评论的博客
+      topBlogCommentList().then((res) => {
+        if (this.GLOBAL.isResponseSuccess(res)) {
+          this.topBlogCommentList = res.data;
+        }
+      });
 
-      //
+      //喜欢我 的数据统计
       likeMeData({}).then((res) => {
         if (this.GLOBAL.isResponseSuccess(res)) {
           this.likeNum = res.data;
