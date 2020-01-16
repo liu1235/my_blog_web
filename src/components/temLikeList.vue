@@ -7,7 +7,7 @@
           <h1 v-show="like ===  1"><i class="fa fa-wa fa-heart"></i>喜欢的文章</h1>
           <h1 v-show="like !== 1"><i class="fa fa-wa fa-star"></i>收藏的文章</h1>
         </div>
-        <el-col :span="24" class="s-item commonBox" v-for="(item,index) in articleList" :key="'like'+index">
+        <el-col :span="24" class="s-item commonBox" v-for="(item,index) in list" :key="'like'+index">
                     <span class="s-round-date">
                 <span class="month" v-html="showInitDate(item.createDate,'month')+'月'"></span>
                 <span class="day" v-html="showInitDate(item.createDate,'date')"></span>
@@ -70,11 +70,13 @@
 <script>
   import {initDate} from '../utils/server.js'
 
+  import {getCollectBlogList, getLikeBlogList} from "../api/api";
+
   export default {
     data() { //选项 / 数据
       return {
-        articleList: '',//文章列表
-        like: 1,//
+        list: '',//文章列表
+        like: 1,
         articleName: '',
         total: 0,//总页数
         pageNum: 1, //当前页码
@@ -87,42 +89,51 @@
         return initDate(oldDate, full)
       },
 
+      //切换页数
+      handleCurrentChange(val) {
+        this.pageNum = val;
+        this.toTopFun();
+        this.showLikeCollectList();
+      },
+      //处理分页条数
+      handleSizeChange(val) {
+        this.pageSize = val;
+        this.toTopFun();
+        this.showLikeCollectList();
+      },
+
       cancelLikeCollect: function (id) {
 
-        // console.log(id);
-        getArtLikeCollect(this.userId, id, this.like, function (msg) {
-          // console.log('取消成功',msg);
-          this.routeChange();
-        })
       },
 
       //展示数据
-      showLikeCollectList: function (initPage) {
-
-        if (localStorage.getItem('userInfo')) {
-          this.userInfo = JSON.parse(localStorage.getItem('userInfo'));
-          this.userId = this.userInfo.userId;
-          // console.log(this.userInfo);
-        }
+      showLikeCollectList: function () {
+        //1喜欢列表 2收藏列表
         this.like = this.$route.query.like === undefined ? 1 : parseInt(this.$route.query.like);
         this.articleName = this.$store.state.keywords;
-        // console.log(this.classId);
-        if (initPage) {//初始化 文章id为0开始
-          this.artId = 0;
-          this.articleList = [];
+        let param = {
+          classId: this.$route.query.classId === undefined ? null : this.$route.query.classId,
+          pageNum: this.pageNum,
+          pageSize: this.pageSize,
+          title: this.$store.state.keywords
+        };
+
+        if (this.like === 1) {
+          getLikeBlogList(param).then((res) => {
+            if (this.GLOBAL.isResponseSuccess(res)) {
+              this.list = res.data.list;
+              this.total = res.data.total;
+            }
+          });
+        } else if (this.like === 2) {
+          getCollectBlogList(param).then((res) => {
+            if (this.GLOBAL.isResponseSuccess(res)) {
+              this.list = res.data.list;
+              this.total = res.data.total;
+            }
+          });
         }
-        getLikeCollectList(this.userId, this.artId, this.articleName, this.like, (result) => {
-          if (result.code === 1001) {
-            let msg = result.data;
-            // console.log(result.data);
-            this.hasMore = !(msg.length > 0 && msg.length < 8);
-            this.articleList = this.articleList.concat(msg);
-            this.artId = msg[msg.length - 1].id;
-            // console.log(this.artId);
-          } else if (result.code === 1003) {
-            this.hasMore = false;
-          }
-        })
+
       },
 
       //查看更多
@@ -132,7 +143,7 @@
 
 
       routeChange: function () {
-        this.showLikeCollectList(true);
+        this.showLikeCollectList();
       }
     },
     components: { //定义组件
@@ -146,8 +157,6 @@
 
     //生命周期函数
     created() {
-      // console.log(this.$route);
-
       this.routeChange();
     }
   }

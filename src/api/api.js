@@ -113,6 +113,17 @@ export const getBlogList = params => {
   return axios.post(`${base}/blog/list`, params).then(res => res.data);
 };
 
+//获取我喜欢的博客列表数据
+export const getLikeBlogList = params => {
+  return axios.post(`${base}/blog/like-blog-list`, params).then(res => res.data);
+};
+
+//获取我收藏的博客列表数据
+export const getCollectBlogList = params => {
+  return axios.post(`${base}/blog/collect-blog-list`, params).then(res => res.data);
+};
+
+
 //获取博客列表详情
 export const getBlogDetail = params => {
   return axios.post(`${base}/blog/detail`, params).then(res => res.data);

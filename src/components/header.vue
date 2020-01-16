@@ -88,8 +88,7 @@
                 </el-menu>
               </el-collapse-transition>
               <div class="searchBox">
-                <el-input placeholder="" v-model="input" @keyup.enter.native="searchEnterFun">
-                  <i slot="suffix" class="el-input__icon el-icon-search"></i>
+                <el-input placeholder="输入文字标题回车搜索" v-model="input" @keyup.enter.native="searchEnterFun">
                 </el-input>
               </div>
             </div>

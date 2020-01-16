@@ -136,7 +136,7 @@
               tip = '已取消收藏';
             }
             let param = {
-              id: this.detailObj.id,
+              blogId: this.detailObj.id,
               status: this.collectArt ? 1 : 0
             };
             collect(param).then((res) => {

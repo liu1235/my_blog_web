@@ -106,7 +106,6 @@
         this.pageSize = val;
         this.toTopFun();
         this.showBlogList();
-
       },
 
       toTopFun: function () {
