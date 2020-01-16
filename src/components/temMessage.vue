@@ -340,11 +340,11 @@
         };
         getCommentList(params).then((res) => {
           if (this.GLOBAL.isResponseSuccess(res)) {
-            let msg = res.data.detail.list;
+            let msg = res.data.detail;
             this.count = res.data.count;
-            if (msg) {
-              this.hasMore = !(msg.length > 0 && msg.length < 10);
-              this.commentList = this.commentList.concat(msg);
+            if (msg || msg.list == null) {
+              this.hasMore = ((msg.pageNum * msg.pageSize) < msg.total);
+              this.commentList = this.commentList.concat(msg.list);
             } else {
               this.hasMore = false;
               this.commentList = [];
