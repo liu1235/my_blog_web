@@ -16,12 +16,12 @@
         <i class="fa fa-fw fa-eye"></i>{{detailObj.readCount}} 次围观 •
         <i class="fa fa-fw fa-comments"></i>活捉 {{detailObj.commentCount}} 条 •
         <span class="rateBox">
-                        <i class="fa fa-fw fa-heart"></i>{{detailObj.likeCount}}点赞
-                        <i class="fa fa-fw fa-star"></i>{{detailObj.collectCount}}收藏
+                        <i class="fa fa-fw fa-heart"></i>{{likeCount}}点赞
+                        <i class="fa fa-fw fa-star"></i>{{collectCount}}收藏
                     </span>
       </h2>
       <div class="ui label">
-        <a :href="'/blog?classId='+detailObj.classId">{{detailObj.className}}</a>
+        <a :href="'/blog?classId=' + detailObj.classId">{{detailObj.className}}</a>
       </div>
     </header>
     <div class="article-content" v-html="detailObj.content"></div>
@@ -32,10 +32,10 @@
       <a href="#" class="ds-wechat fa fa-fw fa-wechat" data-cmd="weixin"></a>
       <div class="dlikeColBox">
         <div class="dlikeBox" @click="likeBlog">
-          <i :class="likeArt?'fa fa-fw fa-heart':'fa fa-fw fa-heart-o'"></i>喜欢 | {{detailObj.likeCount}}
+          <i :class="likeArt?'fa fa-fw fa-heart':'fa fa-fw fa-heart-o'"></i>喜欢 | {{likeCount}}
         </div>
         <div class="dcollectBox" @click="collectBlog">
-          <i :class="collectArt ? 'fa fa-fw fa-star':'fa fa-fw fa-star-o'"></i>收藏 | {{detailObj.collectCount}}
+          <i :class="collectArt ? 'fa fa-fw fa-star':'fa fa-fw fa-star-o'"></i>收藏 | {{collectCount}}
         </div>
       </div>
     </div>
@@ -180,6 +180,10 @@
             this.likeArt = res.data.like.likeStatus === 1;
             //收藏状态(1:收藏；0：未收藏)
             this.collectArt = res.data.like.collectStatus === 1;
+            //点赞数
+            this.likeCount = this.detailObj.likeCount;
+            //收藏数
+            this.collectCount = this.detailObj.collectCount;
           }
         });
       }
@@ -187,7 +191,7 @@
 
     },
     watch: {
-      // 如果路由有变化，会再次执行该方法
+      // 如果路由有变化，会再次执行该方法 用于移动端
       '$route': 'detail'
     },
     components: { //定义组件

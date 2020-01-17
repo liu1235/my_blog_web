@@ -7,26 +7,28 @@
           <!-- pc端导航 -->
           <div class="headBox">
             <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect"
+
                      :router="true">
               <el-menu-item index="/home"><i class="fa fa-wa fa-home"></i> 首页</el-menu-item>
               <el-submenu index="/blog">
                 <template slot="title"><i class="fa fa-wa fa-archive"></i> 分类</template>
-                <el-menu-item v-for="item in classList"
-                              :key="'class' + item.classId"
+                <el-menu-item v-for="(item, index) in classList"
+                              :key="'class' + index"
                               :index="'/blog?classId=' + item.classId">
                   {{item.className}}
                 </el-menu-item>
               </el-submenu>
-              <el-menu-item index="/reward"><i class="fa fa-wa fa-cny"></i> 赞赏</el-menu-item>
-              <!--              <el-menu-item index="/friendsLink"><i class="fa fa-wa fa-users"></i> 伙伴</el-menu-item>-->
+              <el-menu-item index="/archive"><i class="fa fa-wa fa-archive"></i> 归档</el-menu-item>
+<!--              <el-menu-item index="/reward"><i class="fa fa-wa fa-cny"></i> 赞赏</el-menu-item>-->
+<!--              <el-menu-item index="/friendsLink"><i class="fa fa-wa fa-users"></i> 伙伴</el-menu-item>-->
               <el-menu-item index="/message"><i class="fa fa-wa fa-pencil"></i> 留言板</el-menu-item>
               <el-menu-item index="/about"><i class="fa fa-wa fa-vcard"></i> 关于</el-menu-item>
-              <div class="pcSearchBox">
+              <div class="pcSearchBox" v-show="showSearch">
                 <i class="el-icon-search pcSearchIcon"></i>
                 <div class="pcSearchInput" :class="input ? 'hasSearched' : ''">
-                  <el-input placeholder="请按回车搜索" v-model="input"
+                  <el-input placeholder="搜索"
+                            icon="search" v-model="input" :on-icon-click="searchEnterFun"
                             @keyup.enter.native="searchEnterFun">
-                    <i slot="suffix" class="el-input__icon el-icon-search"></i>
                   </el-input>
                 </div>
               </div>
@@ -72,7 +74,7 @@
                                   :index="'/blog?classId='+item.classId">{{item.className}}
                     </el-menu-item>
                   </el-submenu>
-                  <el-menu-item index="/reward"><i class="fa fa-wa fa-cny"></i> 赞赏</el-menu-item>
+<!--                  <el-menu-item index="/reward"><i class="fa fa-wa fa-cny"></i> 赞赏</el-menu-item>-->
                   <!--<el-menu-item index="/friendsLink"><i class="fa fa-wa fa-users"></i> 伙伴</el-menu-item>-->
                   <el-menu-item index="/message"><i class="fa fa-wa fa-pencil"></i>留言板</el-menu-item>
                   <el-menu-item index="/about"><i class="fa fa-wa fa-vcard"></i>关于</el-menu-item>
@@ -87,8 +89,10 @@
                   </el-submenu>
                 </el-menu>
               </el-collapse-transition>
-              <div class="searchBox">
-                <el-input placeholder="输入文字标题回车搜索" v-model="input" @keyup.enter.native="searchEnterFun">
+              <div class="searchBox" v-show="showSearch">
+                <el-input placeholder="搜索"
+                          icon="search" v-model="input" :on-icon-click="searchEnterFun"
+                          @keyup.enter.native="searchEnterFun">
                 </el-input>
               </div>
             </div>
@@ -97,7 +101,7 @@
       </el-row>
     </div>
     <div class="headImgBox"
-         :style="{backgroundImage:'url(static/img/headbg05.jpg)'}">
+         :style="{backgroundImage:'url(static/img/headbg04.jpg)'}">
       <div class="scene">
         <div><span id="luke"></span></div>
       </div>
@@ -127,8 +131,9 @@
         state: '', //icon点击状态
         pMenu: true, //手机端菜单打开
         input: '', //input输入内容
-        headBg: 'url(static/img/headbg05.jpg)', //头部背景图
+        headBg: 'url(static/img/headbg04.jpg)', //头部背景图
         headTou: '', //头像
+        showSearch: false,//是否显示搜索框
       }
     },
 
@@ -200,7 +205,7 @@
         //文章分类
         this.getFirstClassList();
 
-        if ((this.$route.name === "blog" || this.$route.name === "Home") && this.$store.state.keywords) {
+        if ((this.$route.name === "Blog" || this.$route.name === "Home" || this.$route.name === "Home1") && this.$store.state.keywords) {
           this.input = this.$store.state.keywords;
         } else {
           this.input = '';
@@ -235,7 +240,6 @@
 
     created() { //生命周期函数
       //判断当前页面是否被隐藏
-
       let hiddenProperty = 'hidden' in document ? 'hidden' :
         'webkitHidden' in document ? 'webkitHidden' :
           'mozHidden' in document ? 'mozHidden' :
@@ -250,8 +254,11 @@
           this.hasLogin = !!localStorage.getItem('userInfo');
         }
       };
-
       document.addEventListener(visibilityChangeEvent, onVisibilityChange);
+
+      //判断是否显示搜索框
+      this.showSearch = this.$route.name === "Blog" || this.$route.name === "Home" ||
+        this.$route.name === "Home1" || this.$route.name === "LikeCollect";
       this.routeChange();
     },
 
@@ -284,10 +291,10 @@
   }
 
   .headBox li.is-active {
-    background: rgba(73, 69, 107, 0.7);
+    /*background: #999;*/
   }
 
-  .el-menu--horizontal > .el-submenu.is-active .el-submenu__title {
+  .el-menu--horizontal> .el-submenu.is-active .el-submenu__title {
     border-bottom: none !important;
   }
 
@@ -301,7 +308,6 @@
     height: 38px;
     line-height: 38px;
     border-bottom: none !important;
-
   }
 
   .headBox .el-submenu li.el-menu-item {
@@ -329,13 +335,13 @@
 
   .headBox > ul li.el-menu-item:hover,
   .headBox > ul li.el-submenu:hover .el-submenu__title {
-    background: #48456C;
+    background: #999;
     border-bottom: none;
   }
 
   .headBox > ul .el-submenu .el-menu,
   .headBox > ul .el-submenu .el-menu .el-menu-item {
-    background: #48456C;
+    background: rgba(40, 42, 44, 0.6);
   }
 
   .headBox > ul .el-submenu .el-menu .el-menu-item {
@@ -343,7 +349,7 @@
   }
 
   .headBox > ul .el-submenu .el-menu .el-menu-item:hover {
-    background: #64609E;
+    background: #999;
   }
 
   /*pc搜索框*/
@@ -421,7 +427,7 @@
   }
 
   .headBox .userInfo a:hover {
-    color: #48456C;
+    color: #999;
   }
 
   .headBox .noLogin {
@@ -451,7 +457,7 @@
   }
 
   .headBox .hasLogin ul li {
-    border-bottom: 1px solid #48456C;
+    border-bottom: 1px solid #999;
   }
 
   .headBox .hasLogin ul li:last-child {
@@ -482,13 +488,13 @@
     box-sizing: border-box;
     z-index: 999;
     box-shadow: 0 2px 6px 0 rgba(0, 0, 0, .12), 0 0 8px 0 rgba(0, 0, 0, .04);
-    background: #48456C;
+    background: #999;
     color: #fff;
     border-right: none;
   }
 
   .hideMenu .el-submenu .el-menu {
-    background: #64609E;
+    background: #999;
   }
 
   .hideMenu .el-menu-item,

@@ -55,7 +55,7 @@
       </h2>
       <ul class="rs3-textWidget">
         <li class="rs3-item" v-for="(item,index) in topBlogCommentList" :key="'topBlogCommentList'+ index">
-          <a :href="'/#/detail?bid='+item.id" target="_blank">
+          <a :href="'/#/detail?bid='+item.id"  :target="isMobile ? '' : '_blank'" @click = "isMobile ? toTopFun() : ''">
             <div class="rs3-photo">
               <img :src="item.headPhoto === null ? $store.state.errorImg : item.headPhoto "
                    :onerror="$store.state.errorImg" alt="">
@@ -74,7 +74,7 @@
       </h2>
       <ul>
         <li v-for="(item,index) in topBlogList" :key="'topBlogList'+ index">
-          <a :href="'/#/detail?bid=' + item.id" target="_blank">
+          <a :href="'/#/detail?bid=' + item.id" :target="isMobile ? '' : '_blank'" @click = "isMobile ? toTopFun() : ''">
             {{item.title}}
           </a> —— {{item.readCount}} 次围观
         </li>
@@ -83,7 +83,7 @@
     <!-- 右侧上滑小图片 -->
     <div :class="gotoTop ? 'toTop hidden':'toTop goTop hidden'"
          @click="toTopFun">
-      <img src="static/img/scroll.png" alt="">
+      <img src="static/img/long.png" alt="">
     </div>
   </div>
 </template>
@@ -93,8 +93,9 @@
   import {addLikeMeData, likeMeData, topBlogCommentList, topBlogList} from '../api/api.js'
 
   export default {
-    data() { //选项 / 数据
+    data() {
       return {
+        isMobile: false, //是否移动端
         fixDo: false,
         likeMe: false,
         gotoTop: false,//返回顶部
@@ -133,10 +134,11 @@
         this.gotoTop = false;
         let timer = null;
         cancelAnimationFrame(timer);
+        let speed = this.isMobile ? -100 : -50;
         timer = requestAnimationFrame(function fn() {
           let oTop = document.body.scrollTop || document.documentElement.scrollTop;
           if (oTop > 0) {
-            scrollBy(0, -50);
+            scrollBy(0, speed);
             timer = requestAnimationFrame(fn);
           } else {
             cancelAnimationFrame(timer);
@@ -177,6 +179,8 @@
         }
       });
 
+      //判断是否是移动端
+      this.isMobile = (/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i).test(navigator.userAgent);
     }
   }
 </script>
@@ -403,9 +407,9 @@
   .toTop {
     position: fixed;
     right: 40px;
-    top: -150px;
+    top: 1px;
     z-index: 99;
-    width: 70px;
+    width: 80px;
     height: 900px;
     transition: all .5s 0.3s ease-in-out;
     cursor: pointer;

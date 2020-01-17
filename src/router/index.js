@@ -21,11 +21,11 @@ let routes = [
   //分类
   {
     path: '/blog',
-    component: resolve => require(['../pages/Share.vue'], resolve),
+    component: resolve => require(['../pages/Blog.vue'], resolve),
     meta: {
       auth: true
     },
-    name: 'blog'
+    name: 'Blog'
   },
 
   //分享详情
@@ -56,6 +56,16 @@ let routes = [
       auth: true
     },
     name: 'FriendsLink'
+  },
+
+  //留言板
+  {
+    path: '/archive',
+    component: resolve => require(['../pages/Archive.vue'], resolve),
+    meta: {
+      auth: true
+    },
+    name: 'Archive'
   },
 
   //留言板
