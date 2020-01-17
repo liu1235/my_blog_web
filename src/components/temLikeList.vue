@@ -70,7 +70,7 @@
 <script>
   import {initDate} from '../utils/server.js'
 
-  import {getCollectBlogList, getLikeBlogList} from "../api/api";
+  import {getCollectBlogList, getLikeBlogList, like, collect} from "../api/api";
 
   export default {
     data() { //选项 / 数据
@@ -102,7 +102,36 @@
         this.showLikeCollectList();
       },
 
-      cancelLikeCollect: function (id) {
+      //取消收藏或者点赞
+      cancelLikeCollect: function (blogId) {
+        let param = {
+          blogId: blogId,
+          status: 0
+        };
+        //1喜欢列表 2收藏列表
+        if (this.like === 1) {
+          like(param).then((res) => {
+            if (this.GLOBAL.isResponseSuccess(res)) {
+              this.pageNum = 1;
+              this.$message({
+                message: "取消点赞成功",
+                type: 'success'
+              });
+              this.showLikeCollectList();
+            }
+          });
+        } else if (this.like === 2) {
+          collect(param).then((res) => {
+            if (this.GLOBAL.isResponseSuccess(res)) {
+              this.pageNum = 1;
+              this.$message({
+                message: "取消收藏成功",
+                type: 'success'
+              });
+              this.showLikeCollectList();
+            }
+          });
+        }
 
       },
 
@@ -110,12 +139,11 @@
       showLikeCollectList: function () {
         //1喜欢列表 2收藏列表
         this.like = this.$route.query.like === undefined ? 1 : parseInt(this.$route.query.like);
-        this.articleName = this.$store.state.keywords;
         let param = {
           classId: this.$route.query.classId === undefined ? null : this.$route.query.classId,
+          title: this.$store.state.keywords,
           pageNum: this.pageNum,
           pageSize: this.pageSize,
-          title: this.$store.state.keywords
         };
 
         if (this.like === 1) {
@@ -136,11 +164,19 @@
 
       },
 
-      //查看更多
-      addMoreFun: function () {
-        this.showLikeCollectList(false);
+      toTopFun: function () {
+        let timer = null;
+        cancelAnimationFrame(timer);
+        timer = requestAnimationFrame(function fn() {
+          let oTop = document.body.scrollTop || document.documentElement.scrollTop;
+          if (oTop > 0) {
+            scrollBy(0, -50);
+            timer = requestAnimationFrame(fn);
+          } else {
+            cancelAnimationFrame(timer);
+          }
+        });
       },
-
 
       routeChange: function () {
         this.showLikeCollectList();
