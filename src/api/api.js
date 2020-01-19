@@ -123,6 +123,10 @@ export const getCollectBlogList = params => {
   return axios.post(`${base}/blog/collect-blog-list`, params).then(res => res.data);
 };
 
+//获取博客归档数据
+export const getBlogArchiveList = params => {
+  return axios.post(`${base}/blog/archive`, params).then(res => res.data);
+};
 
 //获取博客列表详情
 export const getBlogDetail = params => {

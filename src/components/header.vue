@@ -19,16 +19,16 @@
                 </el-menu-item>
               </el-submenu>
               <el-menu-item index="/archive"><i class="fa fa-wa fa-archive"></i> 归档</el-menu-item>
-<!--              <el-menu-item index="/reward"><i class="fa fa-wa fa-cny"></i> 赞赏</el-menu-item>-->
-<!--              <el-menu-item index="/friendsLink"><i class="fa fa-wa fa-users"></i> 伙伴</el-menu-item>-->
+              <!--              <el-menu-item index="/reward"><i class="fa fa-wa fa-cny"></i> 赞赏</el-menu-item>-->
+              <!--              <el-menu-item index="/friendsLink"><i class="fa fa-wa fa-users"></i> 伙伴</el-menu-item>-->
               <el-menu-item index="/message"><i class="fa fa-wa fa-pencil"></i> 留言板</el-menu-item>
               <el-menu-item index="/about"><i class="fa fa-wa fa-vcard"></i> 关于</el-menu-item>
               <div class="pcSearchBox" v-show="showSearch">
                 <i class="el-icon-search pcSearchIcon"></i>
                 <div class="pcSearchInput" :class="input ? 'hasSearched' : ''">
-                  <el-input placeholder="搜索"
-                            icon="search" v-model="input" :on-icon-click="searchEnterFun"
+                  <el-input placeholder="搜索" v-model="input"
                             @keyup.enter.native="searchEnterFun">
+                    <i slot="suffix" class="el-input__icon el-icon-search" @click="searchEnterFun"></i>
                   </el-input>
                 </div>
               </div>
@@ -74,7 +74,8 @@
                                   :index="'/blog?classId='+item.classId">{{item.className}}
                     </el-menu-item>
                   </el-submenu>
-<!--                  <el-menu-item index="/reward"><i class="fa fa-wa fa-cny"></i> 赞赏</el-menu-item>-->
+                  <el-menu-item index="/archive"><i class="fa fa-wa fa-archive"></i> 归档</el-menu-item>
+                  <!--                  <el-menu-item index="/reward"><i class="fa fa-wa fa-cny"></i> 赞赏</el-menu-item>-->
                   <!--<el-menu-item index="/friendsLink"><i class="fa fa-wa fa-users"></i> 伙伴</el-menu-item>-->
                   <el-menu-item index="/message"><i class="fa fa-wa fa-pencil"></i>留言板</el-menu-item>
                   <el-menu-item index="/about"><i class="fa fa-wa fa-vcard"></i>关于</el-menu-item>
@@ -90,8 +91,7 @@
                 </el-menu>
               </el-collapse-transition>
               <div class="searchBox" v-show="showSearch">
-                <el-input placeholder="搜索"
-                          icon="search" v-model="input" :on-icon-click="searchEnterFun"
+                <el-input placeholder="搜索" v-model="input"
                           @keyup.enter.native="searchEnterFun">
                 </el-input>
               </div>
@@ -291,11 +291,7 @@
   }
 
   .headBox li.is-active {
-    /*background: #999;*/
-  }
-
-  .el-menu--horizontal> .el-submenu.is-active .el-submenu__title {
-    border-bottom: none !important;
+    background: #48576a;
   }
 
   .headBox .el-menu {
@@ -335,22 +331,30 @@
 
   .headBox > ul li.el-menu-item:hover,
   .headBox > ul li.el-submenu:hover .el-submenu__title {
-    background: #999;
+    background: #48576a !important;
+    /*border-bottom: none;*/
+  }
+
+  .el-menu--horizontal > ul.el-menu,
+  .el-menu--horizontal > ul.el-menu .el-menu-item {
+    background: rgba(40, 42, 44, .6);
+    color: #fff;
+  }
+
+  .el-menu--horizontal > ul li.el-menu-item:hover,
+  .el-menu--horizontal > ul li.el-submenu:hover .el-submenu__title {
+    background: #48576a !important;
     border-bottom: none;
   }
 
-  .headBox > ul .el-submenu .el-menu,
-  .headBox > ul .el-submenu .el-menu .el-menu-item {
-    background: rgba(40, 42, 44, 0.6);
+  .el-menu--popup {
+    padding: 0 !important;
   }
 
-  .headBox > ul .el-submenu .el-menu .el-menu-item {
-    min-width: 0;
+  .el-menu--popup-bottom-start {
+    margin-top: 0 !important;
   }
 
-  .headBox > ul .el-submenu .el-menu .el-menu-item:hover {
-    background: #999;
-  }
 
   /*pc搜索框*/
 
@@ -427,7 +431,7 @@
   }
 
   .headBox .userInfo a:hover {
-    color: #999;
+    color: #48576a;
   }
 
   .headBox .noLogin {
@@ -457,7 +461,7 @@
   }
 
   .headBox .hasLogin ul li {
-    border-bottom: 1px solid #999;
+    border-bottom: 1px solid #48576a;
   }
 
   .headBox .hasLogin ul li:last-child {
@@ -470,7 +474,7 @@
     position: relative;
     height: 38px;
     line-height: 38px;
-    color: #fff;
+    /*color: #fff;*/
   }
 
   .hideMenu {
@@ -483,18 +487,18 @@
   .hideMenu ul.listMenu {
     width: 100%;
     position: absolute;
+    background: #48576a;
     left: 0;
     top: 100%;
     box-sizing: border-box;
     z-index: 999;
     box-shadow: 0 2px 6px 0 rgba(0, 0, 0, .12), 0 0 8px 0 rgba(0, 0, 0, .04);
-    background: #999;
     color: #fff;
     border-right: none;
   }
 
   .hideMenu .el-submenu .el-menu {
-    background: #999;
+    background: rgba(40, 42, 44, 0.6);
   }
 
   .hideMenu .el-menu-item,
@@ -546,6 +550,11 @@
     background: #48576a;
   }
 
+  .hideMenu .el-menu-item,
+  .hideMenu .el-submenu__title:hover {
+    color: #fff;
+    background: #48576a;
+  }
 
   /*头部背景图*/
 
@@ -659,18 +668,6 @@
     transform: matrix(1, 0, 0, 1, 0, 0);
     -webkit-transform: matrix(1, 0, 0, 1, 0, 0);
     text-shadow: 1px 1px 0 #ff3f1a, -1px -1px 0 #00a7e0;
-  }
-
-  .saying:after {
-    content: "|";
-    font-family: Arial, sans-serif;
-    font-size: 1em;
-    /*line-height: 0;*/
-    display: inline-block;
-    vertical-align: baseline;
-    opacity: 1;
-    text-shadow: 1px 1px 0 #ff3f1a, -1px -1px 0 #00a7e0;
-    animation: caret 500ms infinite;
   }
 
   @keyframes caret {
