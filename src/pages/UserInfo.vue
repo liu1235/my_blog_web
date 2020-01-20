@@ -19,8 +19,8 @@
                 :show-file-list="false"
                 :on-success="handleAvatarSuccess"
                 :before-upload="beforeAvatarUpload">
-                <img v-if="userInfoObj.avatar"
-                     :src="userInfoObj.avatar ? wwwHost + userInfoObj.avatar : '/static/img/tou.jpg'"
+                <img v-if="userInfo.headPhoto"
+                     :src="userInfo.headPhoto ? wwwHost + userInfo.headPhoto : '/static/img/tou.jpg'"
                      :onerror="$store.state.errorImg" class="avatar" alt="">
                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                 <div slot="tip" class="el-upload__tip">点击上传头像，只能上传jpg/png文件，且不超过1mb</div>
@@ -28,44 +28,47 @@
             </li>
             <li class="username">
               <span class="leftTitle">昵称</span>
-              <el-input v-model="userInfoObj.username" placeholder="昵称"></el-input>
+              <el-input v-model="userInfo.userName" placeholder="昵称"></el-input>
               <i class="fa fa-wa fa-asterisk"></i>
             </li>
             <li>
               <span class="leftTitle">电子邮件</span>
-              <span>{{userInfoObj.email}}</span>
+              <span>{{userInfo.email}}</span>
             </li>
             <li>
               <span class="leftTitle">性别</span>
               <template>
-                <el-radio class="radio" v-model="userInfoObj.sex" label="0">男</el-radio>
-                <el-radio class="radio" v-model="userInfoObj.sex" label="1">女</el-radio>
+                <el-radio-group v-model="userInfo.sex">
+                  <el-radio class="radio" :label="1">男</el-radio>
+                  <el-radio class="radio" :label="0">女</el-radio>
+                </el-radio-group>
               </template>
             </li>
             <li>
               <span class="leftTitle">个性标签</span>
               <template>
-                <el-radio-group v-model="userInfoObj.label">
-                  <el-radio v-for="(item,index) in userTab" :key="'userTab'+index" :label="item">{{item}}</el-radio>
-                </el-radio-group>
+                <el-checkbox-group v-model="userInfo.tags">
+                  <el-checkbox v-for="(item,index) in userTab" :key="'userTab' + index" :label="item">{{item}}
+                  </el-checkbox>
+                </el-checkbox-group>
               </template>
             </li>
             <li>
               <span class="leftTitle">是否展示友链</span>
               <el-switch
                 v-model="state"
-                on-color="#13ce66"
-                off-color="#aaa">
+                active-color="#13ce66"
+                inactive-color="#aaa">
               </el-switch>
             </li>
             <li v-show="state">
               <span class="leftTitle">网站名称</span>
-              <el-input v-model="userInfoObj.name" placeholder="网站名称"></el-input>
+              <el-input v-model="userInfo.websiteName" placeholder="网站名称"></el-input>
               <i v-show="state" class="fa fa-wa fa-asterisk"></i>
             </li>
             <li v-show="state">
               <span class="leftTitle">网站地址</span>
-              <el-input v-model="userInfoObj.url" placeholder="网站" value="userWeb"></el-input>
+              <el-input v-model="userInfo.websiteAddress" placeholder="网站" value="userWeb"></el-input>
               <i v-show="state" class="fa fa-wa fa-asterisk"></i>
             </li>
             <li v-show="state">
@@ -74,7 +77,7 @@
                 type="textarea"
                 :rows="3"
                 placeholder="请输入内容"
-                v-model="userInfoObj.description">
+                v-model="userInfo.websiteIntroduction">
               </el-input>
               <i v-show="state" class="fa fa-wa fa-asterisk"></i>
             </li>
@@ -86,8 +89,8 @@
                 :show-file-list="false"
                 :on-success="handleLogoSuccess"
                 :before-upload="beforeLogoUpload">
-                <img v-if="userInfoObj.image"
-                     :src="userInfoObj.image ? wwwHost + userInfoObj.image : 'static/img/tou.jpg'"
+                <img v-if="userInfo.websiteLogo"
+                     :src="userInfo.websiteLogo ? wwwHost + userInfo.websiteLogo : 'static/img/tou.jpg'"
                      :onerror="$store.state.errorImg" class="avatar" alt="">
                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                 <div slot="tip" class="el-upload__tip">点击上传头像，只能上传jpg/png文件，且不超过1mb</div>
@@ -100,6 +103,7 @@
           </div>
         </section>
       </div>
+
       <div v-show="!isEdit" class="commonBox">
         <header>
           <h1>
@@ -113,26 +117,30 @@
             <li class="avatarList">
               <span class="leftTitle">头像</span>
               <div class="avatar-uploader">
-                <img :src="userInfoObj.avatar ? wwwHost + userInfoObj.avatar : '/static/img/tou.jpg'"
+                <img :src="userInfo.headPhoto ? wwwHost + userInfo.headPhoto : '/static/img/tou.jpg'"
                      :onerror="$store.state.errorImg" class="avatar" alt="">
               </div>
             </li>
             <li class="username">
               <span class="leftTitle">昵称</span>
-              <span>{{userInfoObj.username ? userInfoObj.username : "无"}}</span>
+              <span>{{userInfo.userName}}</span>
 
             </li>
             <li>
               <span class="leftTitle">电子邮件</span>
-              <span>{{userInfoObj.email ? userInfoObj.email : "无"}}</span>
+              <span>{{userInfo.email ? userInfo.email : "无"}}</span>
             </li>
             <li>
               <span class="leftTitle">性别</span>
-              <span>{{userInfoObj.sex === 0 ? '男' : '女'}}</span>
+              <span>{{userInfo.sex === 1 ? '男' : '女'}}</span>
             </li>
             <li>
               <span class="leftTitle">个性标签</span>
-              <span>{{userInfoObj.label ? userInfoObj.label : "未设置"}}</span>
+
+              <span class="i-class" v-for="(tag,index) in userInfo.tags" :key="'tags' + index">
+                    {{tag}}
+              </span>
+
             </li>
             <li>
               <span class="leftTitle">是否展示友链</span>
@@ -143,20 +151,20 @@
             </li>
             <li>
               <span class="leftTitle">网站名称</span>
-              <span>{{userInfoObj.name ? userInfoObj.name : "无"}}</span>
+              <span>{{userInfo.name ? userInfo.websiteName : "无"}}</span>
             </li>
             <li>
               <span class="leftTitle">网站地址</span>
-              <p class="rightInner">{{userInfoObj.url ? userInfoObj.url : "无"}}</p>
+              <p class="rightInner">{{userInfo.websiteAddress ? userInfo.websiteAddress : "无"}}</p>
             </li>
             <li>
               <span class="leftTitle">网站简介</span>
-              <p class="rightInner">{{userInfoObj.description ?userInfoObj.description : "无"}}</p>
+              <p class="rightInner">{{userInfo.websiteIntroduction ? userInfo.websiteIntroduction : "无"}}</p>
             </li>
             <li class="avatarList">
               <span class="leftTitle">网站logo</span>
               <div class="avatar-uploader">
-                <img :src="userInfoObj.image ? wwwHost + userInfoObj.image : '/static/img/tou.jpg'"
+                <img :src="userInfo.websiteLogo ? wwwHost + userInfo.websiteLogo : '/static/img/tou.jpg'"
                      :onerror="$store.state.errorImg" class="avatar" alt="">
               </div>
             </li>
@@ -172,15 +180,24 @@
 <script>
   import header from '../components/header.vue'
   import footer from '../components/footer.vue'
-  import {getUserInfo, UserInfoSave} from '../utils/server.js' //获取用户信息，保存用户信息
+  import {getUserInfo, updateUser} from '../api/api.js' //获取用户信息，保存用户信息
 
   export default {
     name: 'UserInfo',
     data() { //选项 / 数据
       return {
         isEdit: false,
-        userInfo: '',//本地存储的用户信
-        userInfoObj: {},//用户的信息
+        userInfo: { //用户的信息
+          headPhoto: '',
+          sex: null,
+          showFlag: 0,
+          tags: [],
+          userName: '',
+          websiteAddress: '',
+          websiteIntroduction: '',
+          websiteLogo: '',
+          websiteName: ''
+        },
         state: true, //是否展示友链开关
         userTab: [//用户标签
           "天然呆",
@@ -188,7 +205,8 @@
           "学霸",
           "萌萌哒",
           "技术宅",
-          "忠实粉"
+          "忠实粉",
+          "码农",
         ],
         wwwHost: "http://" + window.location.host,//图片域名
       }
@@ -199,8 +217,8 @@
       //上传头像
       handleAvatarSuccess(res, file) {
         if (res.code === 1001) {//存储
-          this.userInfoObj.avatar = res.image_name;
-          this.userInfoObj.head_start = 1;
+          this.userInfo.headPhoto = res.image_name;
+          this.userInfo.head_start = 1;
         } else {
           this.$message.error('上传图片失败');
         }
@@ -223,8 +241,8 @@
       //上传网站logo
       handleLogoSuccess(res, file) {
         if (res.code === 1001) {//存储
-          this.userInfoObj.image = res.image_name;
-          this.userInfoObj.logo_start = 1;
+          this.userInfo.image = res.image_name;
+          this.userInfo.logo_start = 1;
         } else {
           this.$message.error('上传图片失败');
         }
@@ -247,65 +265,57 @@
       //保存编辑的用户信息
       saveInfoFun: function () {
 
-
-        if (!this.userInfoObj.username) { //昵称为必填
+        if (!this.userInfo.userName) { //昵称为必填
           this.$message.error('昵称为必填项，请填写昵称');
           return;
         }
         if (this.state) {
-          let pattern = /(http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?/;
-          // console.log(pattern.test(this.userInfoObj.url));
-          if (!this.userInfoObj.url || !pattern.test(this.userInfoObj.url)) {//如果展示友链 网址为必填项
+          let pattern = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w.-]+)+[\w\-._~:/?#[\]@!$&'\*\+,;=.]+$/;
+
+          if (!this.userInfo.websiteAddress || !pattern.test(this.userInfo.websiteAddress)) {//如果展示友链 网址为必填项
             this.$message.error('请正确填写网址，如http://www.xxx.com');
             return;
           }
-          if (!this.userInfoObj.name) {//如果展示友链 网址为必填项
+          if (!this.userInfo.websiteName) {//如果展示友链 网址为必填项
             this.$message.error('请填写网站名称');
             return;
           }
-          if (!this.userInfoObj.description) {//如果展示友链 网址为必填项
+          if (!this.userInfo.websiteAddress) {//如果展示友链 网址为必填项
             this.$message.error('请填写网站简介');
             return;
           }
-
         }
-        this.userInfoObj.state = Number(this.state);
-        UserInfoSave(this.userInfoObj, function (result) {//保存信息接口，返回展示页
-          this.$message.success('保存成功！');
-          this.isEdit = false;
-          this.routeChange();
+        this.userInfo.showFlag = Number(this.state);
+
+        updateUser(this.userInfo).then((res) => {
+          if (this.GLOBAL.isResponseSuccess(res)) {
+            this.$message({
+              message: '修改成功',
+              type: 'success'
+            });
+            this.isEdit = false;
+            this.routeChange();
+          }
         })
 
       },
 
       //展示页面信息
       routeChange: function () {
-
-        if (localStorage.getItem('userInfo')) {
-          this.hasLogin = true;
-          this.userInfo = JSON.parse(localStorage.getItem('userInfo'));
-          this.userId = this.userInfo.userId;
-          getUserInfo(this.userId, function (msg) {
-            this.userInfoObj = msg.data;
-            this.userInfoObj.head_start = 0;
-            this.userInfoObj.logo_start = 0;
-            this.state = msg.data.state === 1;
-          })
-        } else {
-          this.hasLogin = false;
-        }
-
+        getUserInfo().then(res => {
+          if (this.GLOBAL.isResponseSuccess(res)) {
+            if (res.data) {
+              this.userInfo = res.data;
+              this.state = this.userInfo.showFlag === 1;
+            }
+          }
+        })
       }
     },
 
     components: { //定义组件
       'wbc-nav': header,
       'wbc-footer': footer
-    },
-
-    watch: {
-      // 如果路由有变化，会再次执行该方法
-      '$route': 'routeChange'
     },
 
     created() { //生命周期函数
@@ -419,5 +429,16 @@
 
   .userInfoBox .fa-asterisk {
     color: #DF2050;
+  }
+
+  .i-class {
+    display: inline-block;
+    margin-left: 10px;
+    background: #dff0d8;
+    color: #3c763d;
+    border-radius: 5px;
+    padding: 3px 6px;
+    font-size: 12px;
+    font-weight: 400;
   }
 </style>

@@ -156,14 +156,13 @@
     margin-bottom: 20px;
   }
 
-  /*登录成功*/
+
   .registerSuc {
     padding: 40px;
     margin: 0 auto;
   }
 
   .registerSuc .sucIcon {
-    /*text-align: center;*/
     margin-bottom: 30px;
     padding-left: 60px;
   }
@@ -187,6 +186,11 @@
     border-radius: 5px;
     color: #fff;
     cursor: pointer;
+  }
+
+  /* step 居中*/
+  .el-steps--horizontal {
+    justify-content: center;
   }
 
 

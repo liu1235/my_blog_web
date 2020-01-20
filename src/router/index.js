@@ -3,68 +3,41 @@ let routes = [
   {
     path: '/',
     component: resolve => require(['../pages/Home.vue'], resolve),
-    meta: {
-      auth: true
-    },
     name: 'Home'
   },
   //首页
   {
     path: '/home',
     component: resolve => require(['../pages/Home.vue'], resolve),
-    meta: {
-      auth: true
-    },
     name: 'Home1'
   },
 
-  //分类
+  //博客
   {
     path: '/blog',
     component: resolve => require(['../pages/Blog.vue'], resolve),
-    meta: {
-      auth: true
-    },
     name: 'Blog'
   },
 
-  //分享详情
+  //详情
   {
     path: '/detail',
     component: resolve => require(['../pages/Detail.vue'], resolve),
-    meta: {
-      auth: true
-    },
     name: 'Detail'
   },
 
-  //赞赏
-  {
-    path: '/reward',
-    component: resolve => require(['../pages/Reward.vue'], resolve),
-    meta: {
-      auth: true
-    },
-    name: 'Reward'
-  },
 
   //伙伴
   {
     path: '/friendsLink',
     component: resolve => require(['../pages/FriendsLink.vue'], resolve),
-    meta: {
-      auth: true
-    },
     name: 'FriendsLink'
   },
 
-  //留言板
+  //归档
   {
     path: '/archive',
     component: resolve => require(['../pages/Archive.vue'], resolve),
-    meta: {
-      auth: true
-    },
     name: 'Archive'
   },
 
@@ -72,9 +45,6 @@ let routes = [
   {
     path: '/message',
     component: resolve => require(['../pages/Message.vue'], resolve),
-    meta: {
-      auth: true
-    },
     name: 'Message'
   },
 
@@ -82,9 +52,6 @@ let routes = [
   {
     path: '/about',
     component: resolve => require(['../pages/About.vue'], resolve),
-    meta: {
-      auth: true
-    },
     name: 'About'
   },
 
@@ -92,9 +59,6 @@ let routes = [
   {
     path: '/login',
     component: resolve => require(['../pages/Login.vue'], resolve),
-    meta: {
-      auth: false
-    },
     name: 'Login'
   },
 
@@ -102,9 +66,6 @@ let routes = [
   {
     path: '/msg',
     component: resolve => require(['../pages/Msg.vue'], resolve),
-    meta: {
-      auth: false
-    },
     name: 'Msg'
   },
 
@@ -112,9 +73,6 @@ let routes = [
   {
     path: '/userInfo',
     component: resolve => require(['../pages/UserInfo.vue'], resolve),
-    meta: {
-      auth: true
-    },
     name: 'UserInfo'
   },
 
@@ -122,13 +80,10 @@ let routes = [
   {
     path: '/likeCollect',
     component: resolve => require(['../pages/LikeCollect.vue'], resolve),
-    meta: {
-      auth: true
-    },
     name: 'LikeCollect'
   },
 
-  {path: '*', redirect: {path: '/404'}}
+  {path: '*', redirect: {path: '/'}}
 ];
 
 export default routes;

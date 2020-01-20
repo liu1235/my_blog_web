@@ -8,26 +8,28 @@ const router = new VueRouter({
   routes
 });
 
-let routerApi = ['/userInfo'];
+let routerApi = ['/userinfo'];
 
 router.beforeEach((to, from, next) => {
   let user = JSON.parse(localStorage.getItem('userInfo'));
-  if (to.path === '/login') {
-    localStorage.removeItem('userInfo');
-  }
-  if (!user && to.path !== '/login') {
-    if(routerApi.indexOf(to.path) > -1) {
-      next({ path: '/login' });
+
+  if (routerApi.indexOf(to.path.toLowerCase()) > -1) {
+    if (user === null) {
+      next({path: '/login'});
     } else {
       next();
     }
   } else {
-      if (to.path) {
-        next();
-      } else {
-        next({ path: '/404' });
-      }
+    if (to.path === '/login') {
+      localStorage.removeItem('userInfo');
+    }
+    if (to.path) {
+      next();
+    } else {
+      next({path: '/404'});
+    }
   }
+
 });
 
 export default router;

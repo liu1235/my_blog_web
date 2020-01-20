@@ -1,6 +1,6 @@
 import axios from 'axios'
 import {Message} from 'element-ui'
-import router from '../router/index'
+import router from '../router/route'
 import global from '../Global'
 
 let base = "/api";
@@ -57,7 +57,7 @@ export function processResponseData(data) {
   if (data.code === global.RESP_CODE.LOGIN_FAIL) { //没有登录
     localStorage.removeItem('userInfo');
     Message.error(data.message);
-    router.replace({path: '/login'})
+    router.replace({path: '/login'});
   } else if (data.code === global.RESP_CODE.ERROR) { //错误
     Message.error(data.message);
   } else if (data.code === global.RESP_CODE.VALID_FAIL) { //验证失败
@@ -187,4 +187,16 @@ export const addComment = params => {
 //添加回复
 export const addReply = params => {
   return axios.post(`${base}/comment/add-reply`, params).then(res => res.data);
+};
+
+
+//查看用户详情
+export const getUserInfo = params => {
+  return axios.post(`${base}/user/detail`, params).then(res => res.data);
+};
+
+
+//修改用户信息
+export const updateUser = params => {
+  return axios.post(`${base}/user/update`, params).then(res => res.data);
 };
