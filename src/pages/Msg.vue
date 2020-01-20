@@ -156,53 +156,6 @@
     margin-bottom: 20px;
   }
 
-
-  .lr-title h1 {
-    font-size: 24px;
-    color: #666;
-    font-weight: bold;
-    /*width:50%;*/
-  }
-
-  .lr-title p {
-    font-size: 12px;
-    color: #999;
-    position: absolute;
-    right: 0;
-    top: 0;
-  }
-
-  .loginBox .el-input input, .registerBox .el-input input {
-    border-radius: 4px;
-  }
-
-  .loginBox h3, .registerBox h3 {
-    text-align: right;
-    margin-bottom: 20px;
-  }
-
-  .loginBox h3 a, .registerBox h3 a {
-    font-size: 13px;
-    /*color: #999;*/
-  }
-
-  .loginBox .otherLogin p {
-    margin-bottom: 20px;
-    font-size: 16px;
-  }
-
-  .loginBox .otherLogin a i {
-    display: inline-block;
-    width: 42px;
-    height: 42px;
-    line-height: 42px;
-    font-size: 18px;
-    border-radius: 50%;
-    color: #fff;
-    margin: 0 10px;
-  }
-
-
   /*登录成功*/
   .registerSuc {
     padding: 40px;
@@ -210,7 +163,7 @@
   }
 
   .registerSuc .sucIcon {
-    text-align: center;
+    /*text-align: center;*/
     margin-bottom: 30px;
     padding-left: 60px;
   }
