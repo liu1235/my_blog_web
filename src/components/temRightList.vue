@@ -420,7 +420,7 @@
   }
 
   .toTop img {
-    width: 100%;
+    width: 80%;
     height: auto;
   }
 

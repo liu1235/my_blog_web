@@ -19,9 +19,9 @@
                 </el-menu-item>
               </el-submenu>
               <el-menu-item index="/archive"><i class="fa fa-wa fa-archive"></i> 归档</el-menu-item>
-              <!--              <el-menu-item index="/friendsLink"><i class="fa fa-wa fa-users"></i> 伙伴</el-menu-item>-->
+                            <el-menu-item index="/friendsLink"><i class="fa fa-wa fa-users"></i> 伙伴</el-menu-item>
               <el-menu-item index="/message"><i class="fa fa-wa fa-pencil"></i> 留言板</el-menu-item>
-              <el-menu-item index="/about"><i class="fa fa-wa fa-vcard"></i> 关于</el-menu-item>
+              <el-menu-item index="/about"><i class="fa fa-wa fa-vcard"></i> 关于我</el-menu-item>
               <div class="pcSearchBox" v-show="showSearch">
                 <i class="el-icon-search pcSearchIcon"></i>
                 <div class="pcSearchInput" :class="input ? 'hasSearched' : ''">
@@ -74,9 +74,9 @@
                     </el-menu-item>
                   </el-submenu>
                   <el-menu-item index="/archive"><i class="fa fa-wa fa-archive"></i> 归档</el-menu-item>
-                  <!--<el-menu-item index="/friendsLink"><i class="fa fa-wa fa-users"></i> 伙伴</el-menu-item>-->
+                  <el-menu-item index="/friendsLink"><i class="fa fa-wa fa-users"></i> 伙伴</el-menu-item>
                   <el-menu-item index="/message"><i class="fa fa-wa fa-pencil"></i>留言板</el-menu-item>
-                  <el-menu-item index="/about"><i class="fa fa-wa fa-vcard"></i>关于</el-menu-item>
+                  <el-menu-item index="/about"><i class="fa fa-wa fa-vcard"></i>关于我</el-menu-item>
                   <el-menu-item v-show="!hasLogin" index="" @click="login(1)">登录</el-menu-item>
                   <el-menu-item v-show="!hasLogin" index="" @click="login(0)">注册</el-menu-item>
                   <el-submenu v-show="hasLogin" index="3">
