@@ -3,7 +3,6 @@ const path = require('path')
 const utils = require('./utils')
 const config = require('../config')
 const vueLoaderConfig = require('./vue-loader.conf')
-const VueLoaderPlugin = require('vue-loader/lib/plugin');
 
 function resolve (dir) {
   return path.join(__dirname, '..', dir)
@@ -21,10 +20,6 @@ module.exports = {
       ? config.build.assetsPublicPath
       : config.dev.assetsPublicPath
   },
-  plugins: [
-    // make sure to include the plugin for the magic
-    new VueLoaderPlugin()
-  ],
   resolve: {
     extensions: ['.js', '.vue', '.json'],
     alias: {
@@ -50,7 +45,7 @@ module.exports = {
         options: {
           limit: 1,
           name: utils.assetsPath('img/[name].[ext]?v=[hash:7]')
-       }
+        }
       },
       {
         test: /\.(mp4|webm|ogg|mp3|wav|flac|aac)(\?.*)?$/,
@@ -75,7 +70,7 @@ module.exports = {
     // source contains it (although only uses it if it's native).
     setImmediate: false,
     // prevent webpack from injecting mocks to Node native modules
-    // this does not make sense for the client
+    // that does not make sense for the client
     dgram: 'empty',
     fs: 'empty',
     net: 'empty',
