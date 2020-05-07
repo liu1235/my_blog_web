@@ -3,11 +3,11 @@
 <div class="tFriendsBox">
     <h1>棒棒哒</h1>
     <el-row>
-        <el-col :span="12" class="tf-item" v-for="(item,index) in friendslink" :key="'f'+index">
-            <a :href="item.url" target="_blank">
-                <img :src="item.image ? item.image : '/static/img/tou.jpg'"  :onerror="$store.state.errorImg" alt="">
-                <h4>{{item.name}}</h4>
-                <p>{{item.description}}</p>
+        <el-col :span="12" class="tf-item" v-for="(item, index) in list" :key="'f' + index">
+            <a :href="item.websiteAddress" target="_blank">
+                <img :src="item.websiteLogo ? item.websiteLogo : '/static/img/tou.jpg'"  :onerror="$store.state.errorImg" alt="">
+                <h4>{{item.websiteName}}</h4>
+                <p>{{item.websiteIntroduction}}</p>
             </a>
         </el-col>
     </el-row>
@@ -15,11 +15,11 @@
 </template>
 
 <script>
-import {FriendUrlData} from '../utils/server.js'
+import {friendsLink} from '../api/api.js'
 export default {
     data() { //选项 / 数据
         return {
-            friendsLink:''//友情链接
+            list:''//友情链接
         }
     },
     methods: { //事件处理器
@@ -28,12 +28,15 @@ export default {
     components: { //定义组件
 
     },
-    created() { //生命周期函数
 
-        FriendUrlData(function(msg){
-            // console.log(msg);
-            this.friendsLink = msg;
-        })
+
+    created() { //生命周期函数
+      friendsLink({}).then((res) => {
+        if (this.GLOBAL.isResponseSuccess(res)) {
+          this.list = res.data;
+        }
+      })
+
     }
 }
 </script>

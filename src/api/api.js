@@ -200,3 +200,8 @@ export const getUserInfo = params => {
 export const updateUser = params => {
   return axios.post(`${base}/user/update`, params).then(res => res.data);
 };
+
+//获取友链
+export const friendsLink = params => {
+  return axios.post(`${base}/user/friends-link`, params).then(res => res.data);
+};
