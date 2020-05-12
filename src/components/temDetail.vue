@@ -29,10 +29,10 @@
     </div>
 
     <div class="dShareBox bdsharebuttonbox" data-tag="share_1">
-      分享到:
-      <a href="" class="ds-weibo fa fa-fw fa-weibo" data-cmd="tsina"></a>
-      <a href="#" class="ds-qq fa fa-fw fa-qq" data-cmd="tqq"></a>
-      <a href="#" class="ds-wechat fa fa-fw fa-wechat" data-cmd="weixin"></a>
+<!--      分享到:-->
+<!--      <a href="" class="ds-weibo fa fa-fw fa-weibo" data-cmd="tsina"></a>-->
+<!--      <a href="#" class="ds-qq fa fa-fw fa-qq" data-cmd="tqq"></a>-->
+<!--      <a href="#" class="ds-wechat fa fa-fw fa-wechat" data-cmd="weixin"></a>-->
       <div class="dlikeColBox">
         <div class="dlikeBox" @click="likeBlog">
           <i :class="likeArt?'fa fa-fw fa-heart':'fa fa-fw fa-heart-o'"></i>喜欢 | {{likeCount}}
