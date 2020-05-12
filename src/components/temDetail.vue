@@ -24,7 +24,10 @@
         <a :href="'/blog?classId=' + detailObj.classId">{{detailObj.className}}</a>
       </div>
     </header>
-    <div class="article-content" v-html="detailObj.content"></div>
+    <div>
+      <article class="markdown-body" style="text-align:left" v-html="detailObj.content"></article>
+    </div>
+
     <div class="dShareBox bdsharebuttonbox" data-tag="share_1">
       分享到:
       <a href="" class="ds-weibo fa fa-fw fa-weibo" data-cmd="tsina"></a>
@@ -66,8 +69,10 @@
 <script>
   import {initDate} from '../utils/server.js'
   import {getBlogDetail, like, collect} from '../api/api.js'
+  import 'github-markdown-css/github-markdown.css'  //导入
 
   export default {
+
     data() { //选项 / 数据
       return {
         // pdonate: true,//打开赞赏控制,
@@ -78,6 +83,7 @@
         collectArt: false,//是否收藏
       }
     },
+
     methods: { //事件处理器
 
       showInitDate: function (date, full) {//年月日的编辑
@@ -194,9 +200,7 @@
       // 如果路由有变化，会再次执行该方法 用于移动端
       '$route': 'detail'
     },
-    components: { //定义组件
 
-    },
     created() { //生命周期函数
       this.detail();
     },

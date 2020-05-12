@@ -45,7 +45,7 @@
           <li class="msg-c-item" v-for="(item,index) in commentList" :key="'comment'+index">
             <article class="">
               <header>
-                <img :src="item.headPhoto === null ? $store.state.errorImg : item.headPhoto"
+                <img :src="(item == null || item.headPhoto == null) ? $store.state.errorImg : item.headPhoto"
                      :onerror="$store.state.errorImg" alt="">
                 <div class="i-name">
                   {{item.userName}}
@@ -84,7 +84,14 @@
         isRespond: false,
         content: '',//文本框输入内容
         pBody: true,//表情打开控制
-        commentList: [],//评论列表数据
+        commentList: [{
+          headPhoto: '',
+          createTime: '',
+          userName: '',
+          labels: null,
+          content: '',
+          child: null,
+        }],//评论列表数据
         count: 0, //评论回复数
         pageNum: 1, //当前页码
         pageSize: 10,//页数
@@ -340,14 +347,14 @@
         };
         getCommentList(params).then((res) => {
           if (this.GLOBAL.isResponseSuccess(res)) {
-            let msg = res.data.detail;
-            this.count = res.data.count;
-            if (msg || msg.list == null) {
+            let msg = res.data;
+            if (msg != null && msg.length > 0) {
+              this.count = res.data.count;
               this.hasMore = ((msg.pageNum * msg.pageSize) < msg.total);
               this.commentList = this.commentList.concat(msg.list);
             } else {
               this.hasMore = false;
-              this.commentList = [];
+              this.commentList = null;
             }
           }
         });

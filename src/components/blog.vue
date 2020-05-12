@@ -19,7 +19,7 @@
                 <span class="day" v-html="showInitDate(item.releaseTime,'date')"></span>
             </span>
       <header>
-        <h1>
+        <h1 @click="updateReadCount(item.id)">
           <a :href="'/#/detail?bid='+item.id" target="_blank">
             {{item.title}}
           </a>
@@ -47,8 +47,8 @@
           <img :src="item.image" alt="" class="maxW">
         </p>
       </div>
-      <div class="viewDetail">
-        <a class="colors-bg" :href="'/#/detail?bid='+item.id" target="_blank">
+      <div class="viewDetail" @click="updateReadCount(item.id)">
+        <a class="colors-bg"  :href="'/#/detail?bid='+item.id" target="_blank">
           阅读全文>>
         </a>
       </div>
@@ -72,7 +72,7 @@
 
 <script>
   import {initDate} from '../utils/server.js'
-  import {getBlogList, getSecondClass} from '../api/api.js'
+  import {getBlogList, getSecondClass, updateReadCount} from '../api/api.js'
 
   export default {
     name: 'blog',
@@ -152,6 +152,12 @@
             this.list = res.data.list;
             this.total = res.data.total;
           }
+        });
+      },
+
+      updateReadCount: function(id) {
+        updateReadCount({id: id}).then(res =>{
+
         });
       },
 

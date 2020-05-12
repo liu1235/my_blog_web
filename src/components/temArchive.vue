@@ -2,14 +2,14 @@
 <template>
   <div class="archive">
     <section>
-      <h2 style="">总共有{{list.length}}条</h2>
+      <h2 style="">总共有{{total}}条</h2>
       <el-timeline>
         <div>
           <el-timeline-item
             v-for="(item, index) in list"
             :key="index"
             :placement="item.id !== null ? 'top' : ''"
-            :timestamp="item.id !== null ? showInitDate(item.createDate,'month') + '月' + showInitDate(item.createDate,'date') + '日' : ''">
+            :timestamp="item.id !== null ? showInitDate(item.releaseTime,'month') + '月' + showInitDate(item.releaseTime,'date') + '日' : ''">
             <header>
               <el-card v-if="item.id !== null">
                 <h3>
@@ -27,7 +27,7 @@
                 </div>
               </el-card>
               <h1 v-else>
-                {{item.createDate}}
+                {{item.releaseTime}}
               </h1>
             </header>
           </el-timeline-item>
@@ -46,7 +46,8 @@
   export default {
     data() { //选项 / 数据
       return {
-        list: [] //归档数据
+        list: [], //归档数据
+        total: 0,
       }
     },
     methods: { //事件处理器
@@ -59,6 +60,13 @@
         getBlogArchiveList().then((res) => {
           if (this.GLOBAL.isResponseSuccess(res)) {
             this.list = res.data;
+            let index = 0;
+            this.list.forEach(v => {
+               if (v.id !== null) {
+                 index++;
+               }
+            })
+            this.total = index;
           }
         })
       }
@@ -114,13 +122,13 @@
     line-height: 30px;
   }
 
-   .viewDetail {
+  .viewDetail {
     margin: 10px 0;
     line-height: 24px;
     text-align: right;
   }
 
-   .viewDetail a {
+  .viewDetail a {
     color: #fff;
     font-size: 12px;
     padding: 5px 10px;

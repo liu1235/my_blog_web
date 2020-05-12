@@ -133,6 +133,11 @@ export const getBlogDetail = params => {
   return axios.post(`${base}/blog/detail`, params).then(res => res.data);
 };
 
+//更新阅读次数
+export const updateReadCount = params => {
+  return axios.post(`${base}/blog/updateReadCount`, params).then(res => res.data);
+};
+
 //获取最热的十条博客
 export const topBlogList = params => {
   return axios.post(`${base}/blog/top-blog-list`, params).then(res => res.data);

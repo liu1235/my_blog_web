@@ -9,12 +9,12 @@ import './assets/css/style.less'
 import store from './store'
 import global from './Global'
 
-Vue.config.productionTip = false
+
+Vue.config.productionTip = false;
 
 Vue.prototype.GLOBAL = global;
-Vue.use(ElementUI)
+Vue.use(ElementUI);
 
-/* eslint-disable no-new */
 new Vue({
   el: '#app',
   router,
