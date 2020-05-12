@@ -15,8 +15,8 @@
 
     <el-col :span="24" class="s-item commonBox" v-for="(item, index) in list" :key="'blog' + index">
             <span class="s-round-date">
-                <span class="month" v-html="showInitDate(item.createDate,'month')+'月'"></span>
-                <span class="day" v-html="showInitDate(item.createDate,'date')"></span>
+                <span class="month" v-html="showInitDate(item.releaseTime,'month')+'月'"></span>
+                <span class="day" v-html="showInitDate(item.releaseTime,'date')"></span>
             </span>
       <header>
         <h1>
@@ -27,7 +27,7 @@
         <h2>
           <i class="fa fa-fw fa-user"></i>发表于
           <i class="fa fa-fw fa-clock-o"></i>
-          <span>{{showInitDate(item.createDate,'all')}}</span> •
+          <span>{{showInitDate(item.releaseTime,'all')}}</span> •
           <i class="fa fa-fw fa-eye"></i>{{item.readCount}} 次围观 •
           <i class="fa fa-fw fa-comments"></i>活捉 {{item.commentCount}} 条 •
           <span class="rateBox">

@@ -1,9 +1,9 @@
-<!-- 文章详情模块 -->
+<!-- 博客详情模块 -->
 <template>
   <div class="detailBox commonBox">
             <span class="s-round-date">
-                <span class="month" v-html="showInitDate(detailObj.createDate,'month')+'月'"></span>
-                <span class="day" v-html="showInitDate(detailObj.createDate,'date')"></span>
+                <span class="month" v-html="showInitDate(detailObj.releaseTime,'month')+'月'"></span>
+                <span class="day" v-html="showInitDate(detailObj.releaseTime,'date')"></span>
             </span>
     <header>
       <h1>
@@ -12,7 +12,7 @@
         </a>
       </h1>
       <h2>
-        <i class="fa fa-fw fa-user"></i>发表于 <span>{{detailObj.createDate}}</span> •
+        <i class="fa fa-fw fa-user"></i>发表于 <span>{{detailObj.releaseTime}}</span> •
         <i class="fa fa-fw fa-eye"></i>{{detailObj.readCount}} 次围观 •
         <i class="fa fa-fw fa-comments"></i>活捉 {{detailObj.commentCount}} 条 •
         <span class="rateBox">
