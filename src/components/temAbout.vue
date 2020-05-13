@@ -15,16 +15,16 @@
       </p>
       <p>&nbsp; &nbsp; &nbsp; &nbsp;
         欢迎来到我的博客！我是
-        <i><b>liuzw</b></i>，是一个程序猿，喜欢各种有趣的事物</p>
-      <p>&nbsp; &nbsp; &nbsp; &nbsp;</p>
-      <p><i>&nbsp; &nbsp; &nbsp; &nbsp;</i>爱美食，爱动手做美食，想长胖的尽管来。</p>
+        <i><b>liuzw</b></i>，是一个JAVA程序猿，喜欢各种有趣的事物</p>
+      <p></p>
+      <p>&nbsp; &nbsp; &nbsp; &nbsp;爱美食，爱看电影，爱听歌和打游戏，当然不能少了代码。</p>
 
-      <p>&nbsp; &nbsp; &nbsp; ==========================</p>
+      <p>&nbsp; &nbsp; &nbsp;&nbsp; ==========================</p>
       <p>&nbsp; &nbsp; &nbsp; &nbsp;
         <i>
           <a target="_blank" href="https://github.com/liu1235">Github</a>&nbsp; &nbsp; &nbsp;&nbsp;
-          <a target="_blank" href="http://aimee.mangoya.cn/">Resume</a>&nbsp; &nbsp;
-          <a target="_blank" href="http://blog.csdn.net/Aimee1608">CSDN</a>
+          <a target="_blank" href="">Resume</a>&nbsp; &nbsp;
+          <a target="_blank" href="">CSDN</a>
         </i>
       </p>
       <p>

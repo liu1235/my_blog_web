@@ -246,9 +246,9 @@
 
       let onVisibilityChange = function () {
         if (document[hiddenProperty]) { //被隐藏
-          document.title = '藏好啦(つд⊂)';
+          document.title = '休息啦(つд⊂)';
         } else {
-          document.title = '被发现啦(*´∇｀*)'; //当前窗口打开
+          document.title = '开始搬砖啦(*´∇｀*)'; //当前窗口打开
           this.hasLogin = !!localStorage.getItem('userInfo');
         }
       };

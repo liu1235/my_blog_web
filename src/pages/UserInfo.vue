@@ -20,7 +20,7 @@
                 :on-success="handleAvatarSuccess"
                 :before-upload="beforeAvatarUpload">
                 <img v-if="userInfo.headPhoto"
-                  :src="userInfo.headPhoto ? userInfo.headPhoto : '/static/img/tou.jpg'"
+                     :src="userInfo.headPhoto ? userInfo.headPhoto : '/static/img/tou.jpg'"
                      :onerror="$store.state.errorImg" class="avatar" alt="">
                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                 <div slot="tip" class="el-upload__tip">点击上传头像，只能上传jpg/png文件，且不超过1mb</div>
@@ -117,7 +117,7 @@
             <li class="avatarList">
               <span class="leftTitle">头像</span>
               <div class="avatar-uploader">
-                <img :src="userInfo.headPhoto ? userInfo.headPhoto : '/static/img/tou.jpg'"
+                <img :src="userInfo.headPhoto ? getImageUrl(userInfo.headPhoto) : '/static/img/tou.jpg'"
                      :onerror="$store.state.errorImg" class="avatar" alt="">
               </div>
             </li>
@@ -164,7 +164,7 @@
             <li class="avatarList">
               <span class="leftTitle">网站logo</span>
               <div class="avatar-uploader">
-                <img :src="userInfo.websiteLogo ? userInfo.websiteLogo : '/static/img/tou.jpg'"
+                <img :src="userInfo.websiteLogo ?  getImageUrl(userInfo.websiteLogo) : '/static/img/tou.jpg'"
                      :onerror="$store.state.errorImg" class="avatar" alt="">
               </div>
             </li>
@@ -180,7 +180,7 @@
 <script>
   import header from '../components/header.vue'
   import footer from '../components/footer.vue'
-  import {getUserInfo, updateUser, download} from '../api/api.js' //获取用户信息，保存用户信息
+  import {download, getUserInfo, updateUser} from '../api/api.js' //获取用户信息，保存用户信息
 
   export default {
     name: 'UserInfo',
@@ -213,10 +213,15 @@
 
     methods: {
 
+      //获取头像地址
+      getImageUrl(url) {
+        return download(url)
+      },
+
       //上传头像
       handleAvatarSuccess(res, file) {
         if (this.GLOBAL.isResponseSuccess(res)) {
-          this.userInfo.headPhoto = download(res.data);
+          this.userInfo.headPhoto = res.data;
         } else {
           this.$message.error('上传图片失败');
         }
@@ -238,7 +243,7 @@
       //上传网站logo
       handleLogoSuccess(res, file) {
         if (this.GLOBAL.isResponseSuccess(res)) {
-          this.userInfo.websiteLogo = download(res.data);
+          this.userInfo.websiteLogo = res.data;
         } else {
           this.$message.error('上传图片失败');
         }
