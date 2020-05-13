@@ -99,7 +99,6 @@
         fixDo: false,
         likeMe: false,
         gotoTop: false,//返回顶部
-        going: false, //是否正在执行上滑动作
         topBlogList: [],//浏览量最多
         topBlogCommentList: [],//最新十条评论的博客
         likeNum: 0,//do you like me 点击量
@@ -131,40 +130,21 @@
 
       },
 
-      // toTopFun: function () {
-      //   this.gotoTop = false;
-      //   let timer = null;
-      //   cancelAnimationFrame(timer);
-      //   let speed = this.isMobile ? -100 : -50;
-      //   timer = requestAnimationFrame(function fn() {
-      //     let oTop = document.body.scrollTop || document.documentElement.scrollTop;
-      //     if (oTop > 0) {
-      //       scrollBy(0, speed);
-      //       timer = requestAnimationFrame(fn);
-      //     } else {
-      //       cancelAnimationFrame(timer);
-      //     }
-      //   });
-      // },
-
       toTopFun: function () {
-        let that = this;
         this.gotoTop = false;
-        this.going = true;
-        let timer = setInterval(function () {
-          //获取滚动条距离顶部高度
-          let osTop = document.documentElement.scrollTop || document.body.scrollTop;
-          let speed = this.isMobile ? -100 : -50;
-          document.documentElement.scrollTop = document.body.scrollTop = osTop + speed;
-          //到达顶部，清除定时器
-          if (osTop === 0) {
-            that.going = false;
-            clearInterval(timer);
-            timer = null;
+        let timer = null;
+        cancelAnimationFrame(timer);
+        let speed = this.isMobile ? -100 : -50;
+        timer = requestAnimationFrame(function fn() {
+          let oTop = document.body.scrollTop || document.documentElement.scrollTop;
+          if (oTop > 500) {
+            scrollBy(0, speed);
+            timer = requestAnimationFrame(fn);
+          } else {
+            cancelAnimationFrame(timer);
           }
-        }, 30);
+        });
       },
-
     },
     components: { //定义组件
 
@@ -174,9 +154,7 @@
       let that = this;
       window.onscroll = function () {
         let t = document.documentElement.scrollTop || document.body.scrollTop;
-        if (!that.going) {
-          that.gotoTop = t > 600;
-        }
+        that.gotoTop = t > 800;
         that.fixDo = t > 1200;
       };
 
