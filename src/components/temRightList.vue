@@ -3,7 +3,7 @@
   <div class="rightListBox">
     <section>
       <div class="r1-head">
-        <img src="static/img/headtou02.jpg" alt="">
+        <img src="static/img/longmao.jpg" alt="">
         <h1>
           <span>liuzw</span>
         </h1>
@@ -55,7 +55,7 @@
       </h2>
       <ul class="rs3-textWidget">
         <li class="rs3-item" v-for="(item,index) in topBlogCommentList" :key="'topBlogCommentList'+ index">
-          <a :href="'/#/detail?bid='+item.id"  :target="isMobile ? '' : '_blank'" @click = "isMobile ? toTopFun() : ''">
+          <a :href="'/#/detail?bid='+item.id" :target="isMobile ? '' : '_blank'" @click="isMobile ? toTopFun() : ''">
             <div class="rs3-photo">
               <img :src="item.headPhoto === null ? $store.state.errorImg : item.headPhoto "
                    :onerror="$store.state.errorImg" alt="">
@@ -74,7 +74,7 @@
       </h2>
       <ul>
         <li v-for="(item,index) in topBlogList" :key="'topBlogList'+ index">
-          <a :href="'/#/detail?bid=' + item.id" :target="isMobile ? '' : '_blank'" @click = "isMobile ? toTopFun() : ''">
+          <a :href="'/#/detail?bid=' + item.id" :target="isMobile ? '' : '_blank'" @click="isMobile ? toTopFun() : ''">
             {{item.title}}
           </a> —— {{item.readCount}} 次围观
         </li>
@@ -99,6 +99,7 @@
         fixDo: false,
         likeMe: false,
         gotoTop: false,//返回顶部
+        going: false, //是否正在执行上滑动作
         topBlogList: [],//浏览量最多
         topBlogCommentList: [],//最新十条评论的博客
         likeNum: 0,//do you like me 点击量
@@ -130,21 +131,40 @@
 
       },
 
+      // toTopFun: function () {
+      //   this.gotoTop = false;
+      //   let timer = null;
+      //   cancelAnimationFrame(timer);
+      //   let speed = this.isMobile ? -100 : -50;
+      //   timer = requestAnimationFrame(function fn() {
+      //     let oTop = document.body.scrollTop || document.documentElement.scrollTop;
+      //     if (oTop > 0) {
+      //       scrollBy(0, speed);
+      //       timer = requestAnimationFrame(fn);
+      //     } else {
+      //       cancelAnimationFrame(timer);
+      //     }
+      //   });
+      // },
+
       toTopFun: function () {
+        let that = this;
         this.gotoTop = false;
-        let timer = null;
-        cancelAnimationFrame(timer);
-        let speed = this.isMobile ? -100 : -50;
-        timer = requestAnimationFrame(function fn() {
-          let oTop = document.body.scrollTop || document.documentElement.scrollTop;
-          if (oTop > 0) {
-            scrollBy(0, speed);
-            timer = requestAnimationFrame(fn);
-          } else {
-            cancelAnimationFrame(timer);
+        this.going = true;
+        let timer = setInterval(function () {
+          //获取滚动条距离顶部高度
+          let osTop = document.documentElement.scrollTop || document.body.scrollTop;
+          let speed = this.isMobile ? -100 : -50;
+          document.documentElement.scrollTop = document.body.scrollTop = osTop + speed;
+          //到达顶部，清除定时器
+          if (osTop === 0) {
+            that.going = false;
+            clearInterval(timer);
+            timer = null;
           }
-        });
+        }, 30);
       },
+
     },
     components: { //定义组件
 
@@ -154,7 +174,9 @@
       let that = this;
       window.onscroll = function () {
         let t = document.documentElement.scrollTop || document.body.scrollTop;
-        that.gotoTop = t > 1000;
+        if (!that.going) {
+          that.gotoTop = t > 600;
+        }
         that.fixDo = t > 1200;
       };
 
@@ -413,6 +435,22 @@
     height: 900px;
     transition: all .5s 0.3s ease-in-out;
     cursor: pointer;
+    animation: toflow 2s ease-in-out infinite;
+  }
+
+  @keyframes toflow {
+    0% {
+      /*top:400px;*/
+      transform: scale(0.95) translate(0, 10px);
+    }
+    50% {
+      /*top:410px;*/
+      transform: scale(1) translate(0, 0px);
+    }
+    100% {
+      /*top:400px;*/
+      transform: scale(0.95) translate(0, 10px);
+    }
   }
 
   .goTop {
@@ -420,7 +458,7 @@
   }
 
   .toTop img {
-    width: 80%;
+    width: 100%;
     height: auto;
   }
 

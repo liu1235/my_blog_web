@@ -99,7 +99,7 @@
       </el-row>
     </div>
     <div class="headImgBox"
-         :style="{backgroundImage:'url(static/img/headbg04.jpg)'}">
+         :style="{backgroundImage:'url(static/img/headbg01.jpg)'}">
       <div class="scene">
         <div><span id="luke"></span></div>
       </div>
@@ -129,7 +129,6 @@
         state: '', //icon点击状态
         pMenu: true, //手机端菜单打开
         input: '', //input输入内容
-        headBg: 'url(static/img/headbg04.jpg)', //头部背景图
         headTou: '', //头像
         showSearch: false,//是否显示搜索框
       }

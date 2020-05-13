@@ -156,9 +156,7 @@
       },
 
       updateReadCount: function(id) {
-        updateReadCount({id: id}).then(res =>{
-
-        });
+        updateReadCount({id: id}).then(res =>{ });
       },
 
 
