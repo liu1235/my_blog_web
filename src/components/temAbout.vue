@@ -10,10 +10,33 @@
     </header>
     <section>
       <p class="">
-        <img :src="this.$store.state.aboutMeObj.image?this.$store.state.aboutMeObj.image:'static/img/maoto.png'" alt=""
-             onerror="this.onerror=null;this.src= 'static/img/maoto.png'" class="aboutImg">
+        <img src="static/img/maoto.png" alt=""
+             onerror="'static/img/maoto.png'" class="aboutImg">
       </p>
-      <p v-html="this.$store.state.aboutMeObj.brief">{{this.$store.state.aboutMeObj.brief}}</p>
+      <p>&nbsp; &nbsp; &nbsp; &nbsp;
+        欢迎来到我的博客！我是
+        <i><b>liuzw</b></i>，是一个程序猿，喜欢各种有趣的事物</p>
+      <p>&nbsp; &nbsp; &nbsp; &nbsp;</p>
+      <p><i>&nbsp; &nbsp; &nbsp; &nbsp;</i>爱美食，爱动手做美食，想长胖的尽管来。</p>
+
+      <p>&nbsp; &nbsp; &nbsp; ==========================</p>
+      <p>&nbsp; &nbsp; &nbsp; &nbsp;
+        <i>
+          <a target="_blank" href="https://github.com/liu1235">Github</a>&nbsp; &nbsp; &nbsp;&nbsp;
+          <a target="_blank" href="http://aimee.mangoya.cn/">Resume</a>&nbsp; &nbsp;
+          <a target="_blank" href="http://blog.csdn.net/Aimee1608">CSDN</a>
+        </i>
+      </p>
+      <p>
+        <i>&nbsp; &nbsp; &nbsp; &nbsp;
+          <a target="_blank" href="/static/img/wechat.jpg">微信</a>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+          <a target="_blank" href="">公众号</a>&nbsp; &nbsp; &nbsp;&nbsp;
+        </i>
+        <i>&nbsp;
+          <a target="_blank" href="/static/img/QQ.jpg">QQ</a>
+        </i>
+      </p>
+      <p>&nbsp; &nbsp; &nbsp;&nbsp;</p>
     </section>
   </div>
 </template>

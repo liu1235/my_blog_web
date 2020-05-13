@@ -70,8 +70,9 @@ export function processResponseData(data) {
 }
 
 
-export function getUploadImgUrl() {
-  return base + '/file/uploadImgNormal?token=' + getUserToken();
+// 下载文件
+export function download(filename) {
+  return `/api/download?filename=` + filename;
 }
 
 

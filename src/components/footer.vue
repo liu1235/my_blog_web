@@ -32,7 +32,7 @@
 
       runTime() {//运行倒计时
         let that = this;
-        let oldTime = new Date('2020/01/01 00:00:00');
+        let oldTime = new Date( "2020-05-13 00:00:00");
         setInterval(function () {
           let nowTime = new Date();
           let time = nowTime - oldTime;

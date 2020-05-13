@@ -29,10 +29,10 @@
     </div>
 
     <div class="dShareBox bdsharebuttonbox" data-tag="share_1">
-<!--      分享到:-->
-<!--      <a href="" class="ds-weibo fa fa-fw fa-weibo" data-cmd="tsina"></a>-->
-<!--      <a href="#" class="ds-qq fa fa-fw fa-qq" data-cmd="tqq"></a>-->
-<!--      <a href="#" class="ds-wechat fa fa-fw fa-wechat" data-cmd="weixin"></a>-->
+      分享到:
+<!--      <a class="ds-weibo fa fa-fw fa-weibo" @click="share('sina')"></a>-->
+      <a class="ds-qq fa fa-fw fa-qq" @click="share('QQ')"></a>
+      <a class="ds-wechat fa fa-fw fa-weixin" @click="share('wechat')"></a>
       <div class="dlikeColBox">
         <div class="dlikeBox" @click="likeBlog">
           <i :class="likeArt?'fa fa-fw fa-heart':'fa fa-fw fa-heart-o'"></i>喜欢 | {{likeCount}}
@@ -42,34 +42,13 @@
         </div>
       </div>
     </div>
-<!--    <div class="donate">-->
-<!--      <div class="donate-word">-->
-<!--        <span @click="pdonate=!pdonate">赞赏</span>-->
-<!--      </div>-->
-<!--      <el-row :class="pdonate?'donate-body':'donate-body donate-body-show'" :gutter="30">-->
-<!--        <el-col :span="12" class="donate-item">-->
-<!--          <div class="donate-tip">-->
-<!--            <img :src="detailObj.wechat_image?detailObj.wechat_image: 'static/img/tou.jpg'"-->
-<!--                 :onerror="$store.state.errorImg"/>-->
-<!--            <span>微信扫一扫，向我赞赏</span>-->
-<!--          </div>-->
-<!--        </el-col>-->
-<!--        <el-col :span="12" class="donate-item">-->
-<!--          <div class="donate-tip">-->
-<!--            <img :src="detailObj.alipay_image?detailObj.alipay_image:'static/img/tou.jpg'"-->
-<!--                 :onerror="$store.state.errorImg"/>-->
-<!--            <span>支付宝扫一扫，向我赞赏</span>-->
-<!--          </div>-->
-<!--        </el-col>-->
-<!--      </el-row>-->
-<!--    </div>-->
   </div>
 </template>
 
 <script>
   import {initDate} from '../utils/server.js'
-  import {getBlogDetail, like, collect} from '../api/api.js'
-  import 'github-markdown-css/github-markdown.css'  //导入
+  import {collect, getBlogDetail, like} from '../api/api.js'
+  import 'github-markdown-css/github-markdown.css' //导入
 
   export default {
 
@@ -90,6 +69,22 @@
         return initDate(date, full);
       },
 
+      share: function (type) {
+        let param = encodeURIComponent(document.location.href) + "&title=" + this.detailObj.title + "&pics=&summary=" + this.detailObj.description;
+        //qq空间分享接口
+        if (type === 'qzone') {
+          window.open('https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=' + param)
+        } else if (type === 'sina') { //新浪微博接口的传参
+          let para = document.location.href + "&title=" + this.detailObj.description + "&pics=";
+          window.open('http://service.weibo.com/share/share.php?url=' + para);
+        } else if (type === 'QQ') {  //qq好友接口的传参
+          window.open('http://connect.qq.com/widget/shareqq/index.html?url=' + param)
+        } else if (type === 'wechat') {
+          let encodePath = encodeURIComponent(window.location.href);
+          let targetUrl = 'http://qr.liantu.com/api.php?text=' + encodePath;
+          window.open(targetUrl, 'weixin', 'height=320, width=320')
+        }
+      },
 
       /**
        * 点赞
@@ -132,27 +127,27 @@
         //判断是否登录
         if (localStorage.getItem('userInfo')) {
           let tip = '';
-            if (!this.collectArt) {
-              this.collectCount += 1;
-              this.collectArt = true;
-              tip = '已收藏';
-            } else {
-              this.collectCount -= 1;
-              this.collectArt = false;
-              tip = '已取消收藏';
+          if (!this.collectArt) {
+            this.collectCount += 1;
+            this.collectArt = true;
+            tip = '已收藏';
+          } else {
+            this.collectCount -= 1;
+            this.collectArt = false;
+            tip = '已取消收藏';
+          }
+          let param = {
+            blogId: this.detailObj.id,
+            status: this.collectArt ? 1 : 0
+          };
+          collect(param).then((res) => {
+            if (this.GLOBAL.isResponseSuccess(res)) {
+              this.$message({
+                message: tip,
+                type: 'success'
+              });
             }
-            let param = {
-              blogId: this.detailObj.id,
-              status: this.collectArt ? 1 : 0
-            };
-            collect(param).then((res) => {
-              if (this.GLOBAL.isResponseSuccess(res)) {
-                this.$message({
-                  message: tip,
-                  type: 'success'
-                });
-              }
-            });
+          });
         } else {//未登录 前去登录。
           this.noLogin();
         }
@@ -195,15 +190,19 @@
       }
 
 
-    },
+    }
+    ,
     watch: {
       // 如果路由有变化，会再次执行该方法 用于移动端
-      '$route': 'detail'
-    },
+      '$route':
+        'detail'
+    }
+    ,
 
     created() { //生命周期函数
       this.detail();
-    },
+    }
+    ,
 
   }
 </script>
@@ -319,6 +318,16 @@
   }
 
   .dShareBox .ds-qq:hover {
+    color: #fff;
+    background: #56b6e7;
+  }
+
+  .dShareBox .ds-qzone {
+    color: #56b6e7;
+    border: 1px solid #56b6e7;
+  }
+
+  .dShareBox .ds-qzone:hover {
     color: #fff;
     background: #56b6e7;
   }

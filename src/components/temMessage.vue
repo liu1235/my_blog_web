@@ -84,14 +84,7 @@
         isRespond: false,
         content: '',//文本框输入内容
         pBody: true,//表情打开控制
-        commentList: [{
-          headPhoto: '',
-          createTime: '',
-          userName: '',
-          labels: null,
-          content: '',
-          child: null,
-        }],//评论列表数据
+        commentList: [],//评论列表数据
         count: 0, //评论回复数
         pageNum: 1, //当前页码
         pageSize: 10,//页数
@@ -348,13 +341,13 @@
         getCommentList(params).then((res) => {
           if (this.GLOBAL.isResponseSuccess(res)) {
             let msg = res.data;
-            if (msg != null && msg.length > 0) {
-              this.count = res.data.count;
+            if (msg != null && msg.detail != null) {
+              this.count = msg.count;
               this.hasMore = ((msg.pageNum * msg.pageSize) < msg.total);
-              this.commentList = this.commentList.concat(msg.list);
+              this.commentList = this.commentList.concat(msg.detail.list);
             } else {
               this.hasMore = false;
-              this.commentList = null;
+              this.commentList = [];
             }
           }
         });

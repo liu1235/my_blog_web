@@ -15,12 +15,12 @@
               <span class="leftTitle">头像</span>
               <el-upload
                 class="avatar-uploader"
-                :action="this.$store.state.host+'Userinfo/UploadImg'"
+                action="/api/upload"
                 :show-file-list="false"
                 :on-success="handleAvatarSuccess"
                 :before-upload="beforeAvatarUpload">
                 <img v-if="userInfo.headPhoto"
-                     :src="userInfo.headPhoto ? wwwHost + userInfo.headPhoto : '/static/img/tou.jpg'"
+                  :src="userInfo.headPhoto ? userInfo.headPhoto : '/static/img/tou.jpg'"
                      :onerror="$store.state.errorImg" class="avatar" alt="">
                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                 <div slot="tip" class="el-upload__tip">点击上传头像，只能上传jpg/png文件，且不超过1mb</div>
@@ -85,12 +85,12 @@
               <span class="leftTitle">网站logo</span>
               <el-upload
                 class="avatar-uploader"
-                :action="this.$store.state.host+'Userinfo/UploadImg'"
+                action="/api/upload"
                 :show-file-list="false"
                 :on-success="handleLogoSuccess"
                 :before-upload="beforeLogoUpload">
                 <img v-if="userInfo.websiteLogo"
-                     :src="userInfo.websiteLogo ? wwwHost + userInfo.websiteLogo : 'static/img/tou.jpg'"
+                     :src="userInfo.websiteLogo ? userInfo.websiteLogo : 'static/img/tou.jpg'"
                      :onerror="$store.state.errorImg" class="avatar" alt="">
                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                 <div slot="tip" class="el-upload__tip">点击上传头像，只能上传jpg/png文件，且不超过1mb</div>
@@ -117,7 +117,7 @@
             <li class="avatarList">
               <span class="leftTitle">头像</span>
               <div class="avatar-uploader">
-                <img :src="userInfo.headPhoto ? wwwHost + userInfo.headPhoto : '/static/img/tou.jpg'"
+                <img :src="userInfo.headPhoto ? userInfo.headPhoto : '/static/img/tou.jpg'"
                      :onerror="$store.state.errorImg" class="avatar" alt="">
               </div>
             </li>
@@ -164,7 +164,7 @@
             <li class="avatarList">
               <span class="leftTitle">网站logo</span>
               <div class="avatar-uploader">
-                <img :src="userInfo.websiteLogo ? wwwHost + userInfo.websiteLogo : '/static/img/tou.jpg'"
+                <img :src="userInfo.websiteLogo ? userInfo.websiteLogo : '/static/img/tou.jpg'"
                      :onerror="$store.state.errorImg" class="avatar" alt="">
               </div>
             </li>
@@ -180,7 +180,7 @@
 <script>
   import header from '../components/header.vue'
   import footer from '../components/footer.vue'
-  import {getUserInfo, updateUser} from '../api/api.js' //获取用户信息，保存用户信息
+  import {getUserInfo, updateUser, download} from '../api/api.js' //获取用户信息，保存用户信息
 
   export default {
     name: 'UserInfo',
@@ -208,7 +208,6 @@
           "忠实粉",
           "码农",
         ],
-        wwwHost: "http://" + window.location.host,//图片域名
       }
     },
 
@@ -216,13 +215,11 @@
 
       //上传头像
       handleAvatarSuccess(res, file) {
-        if (res.code === 1001) {//存储
-          this.userInfo.headPhoto = res.image_name;
-          this.userInfo.head_start = 1;
+        if (this.GLOBAL.isResponseSuccess(res)) {
+          this.userInfo.headPhoto = download(res.data);
         } else {
           this.$message.error('上传图片失败');
         }
-
       },
 
       //判断头像大小
@@ -240,9 +237,8 @@
 
       //上传网站logo
       handleLogoSuccess(res, file) {
-        if (res.code === 1001) {//存储
-          this.userInfo.image = res.image_name;
-          this.userInfo.logo_start = 1;
+        if (this.GLOBAL.isResponseSuccess(res)) {
+          this.userInfo.websiteLogo = download(res.data);
         } else {
           this.$message.error('上传图片失败');
         }
@@ -270,7 +266,7 @@
           return;
         }
         if (this.state) {
-          let pattern = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w.-]+)+[\w\-._~:/?#[\]@!$&'\*\+,;=.]+$/;
+          let pattern = /^(http(s)?:\/\/)[\w.-]+(?:\.[\w.-]+)+[\w\-._~:/?#[\]@!$&'\*\+,;=.]+$/;
 
           if (!this.userInfo.websiteAddress || !pattern.test(this.userInfo.websiteAddress)) {//如果展示友链 网址为必填项
             this.$message.error('请正确填写网址，如http://www.xxx.com');
@@ -306,6 +302,9 @@
           if (this.GLOBAL.isResponseSuccess(res)) {
             if (res.data) {
               this.userInfo = res.data;
+              if (this.userInfo.tags == null) {
+                this.userInfo.tags = [];
+              }
               this.state = this.userInfo.showFlag === 1;
             }
           }

@@ -33,7 +33,7 @@
               <a :href="catchMeObj.job" target="_blank"><i class="fa fa-fw fa-file-word-o"></i></a>
             </el-tooltip>
             <el-tooltip class="item" effect="dark" content="更多" placement="top">
-              <a href="/#/about"><i class="el-icon-more"></i></a>
+              <a href="/about"><i class="el-icon-more"></i></a>
             </el-tooltip>
           </div>
         </div>
@@ -104,9 +104,9 @@
         likeNum: 0,//do you like me 点击量
         catchMeObj: {//抓住我 个人信息
           git: 'https://github.com/liu1235',
-          qq: '',
+          qq: '/static/img/QQ.jpg',
           sina: '',
-          wechat: '',
+          wechat: '/static/img/wechat.jpg',
           csdn: '',
           job: ''
         },
