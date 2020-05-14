@@ -1,6 +1,6 @@
 <!-- 博客详情模块 -->
 <template>
-  <div class="detailBox commonBox">
+  <div class="detailBox commonBox" v-if="detailFlag">
             <span class="s-round-date">
                 <span class="month" v-html="showInitDate(detailObj.releaseTime,'month')+'月'"></span>
                 <span class="day" v-html="showInitDate(detailObj.releaseTime,'date')"></span>
@@ -30,7 +30,7 @@
 
     <div class="dShareBox bdsharebuttonbox" data-tag="share_1">
       分享到:
-<!--      <a class="ds-weibo fa fa-fw fa-weibo" @click="share('sina')"></a>-->
+      <!--      <a class="ds-weibo fa fa-fw fa-weibo" @click="share('sina')"></a>-->
       <a class="ds-qq fa fa-fw fa-qq" @click="share('QQ')"></a>
       <a class="ds-wechat fa fa-fw fa-weixin" @click="share('wechat')"></a>
       <div class="dlikeColBox">
@@ -42,6 +42,11 @@
         </div>
       </div>
     </div>
+  </div>
+  <div class="detailBox commonBox" v-else>
+    <header>
+        <h1>博客被系统吞啦（；´д｀）ゞ.....</h1>
+    </header>
   </div>
 </template>
 
@@ -60,6 +65,7 @@
         likeCount: 0,//点赞数量
         collectCount: 0,//收藏数量
         collectArt: false,//是否收藏
+        detailFlag: false,//是否获取到内容
       }
     },
 
@@ -185,6 +191,9 @@
             this.likeCount = this.detailObj.likeCount;
             //收藏数
             this.collectCount = this.detailObj.collectCount;
+            this.detailFlag = true;
+          } else {
+            this.detailFlag = false;
           }
         });
       }
