@@ -3,7 +3,7 @@
   <el-row class="shareListBox">
     <div class="shareTitle" v-if="className !== ''">
       <div class="ui label">
-        <a href="#" @click="searchByClassId()">{{className}}</a>
+        <a href="#" @click="searchByClassId(classId)">{{className}}</a>
       </div>
       <ul class="shareClassTwo">
         <li v-for="item in sonClassList">
