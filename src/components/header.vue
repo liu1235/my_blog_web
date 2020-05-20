@@ -212,17 +212,11 @@
 
       //获取一级分类列表
       getFirstClassList() {
-        let firstClassList = localStorage.getItem("first-class-list");
-        if (firstClassList) {
-          this.classList = JSON.parse(firstClassList);
-        } else {
           getFirstClass({}).then((res) => {
             if (this.GLOBAL.isResponseSuccess(res)) {
               this.classList = res.data;
-              localStorage.setItem("first-class-list", JSON.stringify(res.data));
             }
           });
-        }
       }
 
     },

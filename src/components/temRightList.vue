@@ -73,7 +73,7 @@
         大家都排队来看这些
       </h2>
       <ul>
-        <li v-for="(item,index) in topBlogList" :key="'topBlogList'+ index">
+        <li v-for="(item,index) in topBlogList" :key="'topBlogList'+ index" @click="updateReadCount(item.id)">
           <a :href="'/#/detail?bid=' + item.id" :target="isMobile ? '' : '_blank'" @click="isMobile ? toTopFun() : ''">
             {{item.title}}
           </a> —— {{item.readCount}} 次围观
@@ -91,6 +91,7 @@
 
 <script>
   import {addLikeMeData, likeMeData, topBlogCommentList, topBlogList} from '../api/api.js'
+  import {updateReadCount} from "../api/api";
 
   export default {
     data() {
@@ -114,6 +115,11 @@
     },
 
     methods: { //事件处理器
+
+      updateReadCount: function(id) {
+        updateReadCount({id: id}).then(res =>{ });
+      },
+
       //do you like me  点击
       likeMeFun: function () {
         if (!this.likeMe) {
@@ -133,11 +139,12 @@
       toTopFun: function () {
         this.gotoTop = false;
         let timer = null;
+        let that = this;
         cancelAnimationFrame(timer);
         let speed = this.isMobile ? -100 : -50;
         timer = requestAnimationFrame(function fn() {
           let oTop = document.body.scrollTop || document.documentElement.scrollTop;
-          if (oTop > 500) {
+          if (oTop > (that.isMobile ? 0 : 500)) {
             scrollBy(0, speed);
             timer = requestAnimationFrame(fn);
           } else {

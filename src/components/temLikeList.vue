@@ -9,11 +9,11 @@
         </div>
         <el-col :span="24" class="s-item commonBox" v-for="(item,index) in list" :key="'like'+index">
                     <span class="s-round-date">
-                <span class="month" v-html="showInitDate(item.createDate,'month')+'月'"></span>
-                <span class="day" v-html="showInitDate(item.createDate,'date')"></span>
+                <span class="month" v-html="showInitDate(item.releaseTime,'month')+'月'"></span>
+                <span class="day" v-html="showInitDate(item.releaseTime,'date')"></span>
             </span>
           <header>
-            <h1>
+            <h1 @click="updateReadCount(item.id)">
               <a :href="'/#/detail?bid=' + item.id" target="_blank">
                 {{item.title}}
               </a>
@@ -21,7 +21,7 @@
             <h2>
               <i class="fa fa-fw fa-user"></i>发表于
               <i class="fa fa-fw fa-clock-o"></i>
-              <span>{{showInitDate(item.createDate,'all')}}</span>•
+              <span>{{showInitDate(item.releaseTime, 'all')}}</span>•
               <i class="fa fa-fw fa-eye"></i>{{item.readCount}} 次围观 •
               <i class="fa fa-fw fa-comments"></i>活捉 {{item.commentCount}} 条 •
               <span class="rateBox">
@@ -44,9 +44,9 @@
           <div class="viewDetail">
             <a class="cancelBtn colors-bg" href="#" @click="cancelLikeCollect(item.id)">
               取消{{like === 1 ? '喜欢' : '收藏'}}</a>&nbsp;&nbsp;&nbsp;&nbsp;
-            <a class="colors-bg" :href="'/#/detail?bid=' + item.id" target="_blank">
-              阅读全文>>
-            </a>
+              <a class="colors-bg" :href="'/#/detail?bid=' + item.id" target="_blank">
+                <span @click="updateReadCount(item.id)">阅读全文>></span>
+              </a>
           </div>
         </el-col>
         <el-col class="page">
@@ -70,7 +70,7 @@
 <script>
   import {initDate} from '../utils/server.js'
 
-  import {getCollectBlogList, getLikeBlogList, like, collect} from "../api/api";
+  import {getCollectBlogList, getLikeBlogList, like, collect, updateReadCount} from "../api/api";
 
   export default {
     data() { //选项 / 数据
@@ -101,6 +101,16 @@
         this.toTopFun();
         this.showLikeCollectList();
       },
+
+      updateReadCount: function(id) {
+        updateReadCount({id: id}).then(res =>{ });
+      },
+
+      //根据分类id获取数据
+      searchByClassId(classId) {
+        this.$router.push({path: '/blog?classId=' + classId});
+      },
+
 
       //取消收藏或者点赞
       cancelLikeCollect: function (blogId) {
