@@ -1,5 +1,5 @@
-# blog(未完成)
-    个人博客
+# blog
+    个人博客web端 
 
 ## Build Setup
 
