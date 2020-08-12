@@ -1,5 +1,7 @@
 # blog
-    个人博客web端 
+   个人博客web端
+   博客后端地址: <https://github.com/liu1235/my_blog_web>
+   博客后端管理页面地址: <https://github.com/liu1235/my_blog_web_admin>
 
 ## Build Setup
 
@@ -19,6 +21,6 @@ npm run build --report
 
 ## 备注
 
- 此前端模板借鉴 Aimee    
- git地址: <https://github.com/Aimee1608>    
+ 此前端模板借鉴 Aimee
+ git地址: <https://github.com/Aimee1608>
  csdn: <http://blog.csdn.net/Aimee1608>
