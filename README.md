@@ -1,6 +1,8 @@
 # blog
    个人博客web端
-   博客后端地址: <https://github.com/liu1235/my_blog_web>
+
+   博客后端地址: <https://github.com/liu1235/my_blog_scm>
+
    博客后端管理页面地址: <https://github.com/liu1235/my_blog_web_admin>
 
 ## Build Setup
